@@ -9,9 +9,9 @@ Synthetic data only (seeded random walks), not market data.
 Run: python vectors/gen_market_scenarios.py
 """
 import json
-import math
 import random
 import sys
+from decimal import Decimal, localcontext
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,19 +35,28 @@ PARAMS = {
 REPORT_KS = list(range(12, 2005, 12)) + list(range(2005, 2017))   # replay cadence (R §5.1): 167 x 12 + 12 x 1
 
 
-def walk(seed: int, rho: float, sigma: float = 0.0025):
+def _normal(rng: random.Random) -> Decimal:
+    """Irwin-Hall approximation of N(0,1) from 12 integer uniforms: exact, platform-independent arithmetic."""
+    return Decimal(sum(rng.randrange(1 << 32) for _ in range(12))) / Decimal(1 << 32) - 6
+
+
+def walk(seed: int, rho: str, sigma: str = "0.0025"):
+    """Correlated log-price walks in WAD. Only integer RNG draws and decimal arithmetic (correctly rounded exp and
+    sqrt at 50 digits) are used, so the output is byte-identical on every platform (CI checks this)."""
     rng = random.Random(seed)
-    pa, pb = [3000.0], [60000.0]
-    for _ in range(N):
-        z1, z2 = rng.gauss(0, 1), rng.gauss(0, 1)
-        ea = sigma * z1 * (8 if rng.random() < 0.002 else 1)      # rare fat tails exercise winsorize
-        eb = sigma * (rho * z1 + math.sqrt(1 - rho * rho) * z2)
-        pa.append(pa[-1] * math.exp(ea))
-        pb.append(pb[-1] * math.exp(eb))
-    return [int(x * WAD) for x in pa], [int(x * WAD) for x in pb]
+    with localcontext(prec=50):
+        r, sg = Decimal(rho), Decimal(sigma)
+        mix = (1 - r * r).sqrt()
+        pa, pb = [Decimal(3000)], [Decimal(60000)]
+        for _ in range(N):
+            z1, z2 = _normal(rng), _normal(rng)
+            fat = 8 if rng.randrange(1000) < 2 else 1                 # rare fat tails exercise winsorize
+            pa.append(pa[-1] * (sg * z1 * fat).exp())
+            pb.append(pb[-1] * (sg * (r * z1 + mix * z2)).exp())
+        return [int(x * WAD) for x in pa], [int(x * WAD) for x in pb]
 
 
-def build(name: str, seed: int, rho: float, invalid: dict, missing: set, report_ks: list):
+def build(name: str, seed: int, rho: str, invalid: dict, missing: set, report_ks: list):
     """invalid: {k: 'A'|'B'|'AB'} marks price point k invalid for those assets; missing: never posted."""
     pa, pb = walk(seed, rho)
     points = []
@@ -112,10 +121,10 @@ def main():
     rng = random.Random(3)
     void_points = sorted(rng.sample(range(2, N - 20, 2), 15))     # 15 non-adjacent price points (R §6.3)
     scenarios = [
-        build("normal", 101, 0.75, {40: "A", 41: "B", 700: "AB"}, set(), REPORT_KS),
-        build("void", 202, 0.6, {k: "AB" for k in void_points}, set(), REPORT_KS),
+        build("normal", 101, "0.75", {40: "A", 41: "B", 700: "AB"}, set(), REPORT_KS),
+        build("void", 202, "0.6", {k: "AB" for k in void_points}, set(), REPORT_KS),
         # never-posted points; bars around them only become (invalid) after obsEnd + 48 h. No reports.
-        build("grace", 303, 0.7, {}, {100, 2016}, []),
+        build("grace", 303, "0.7", {}, {100, 2016}, []),
     ]
     out = {"params": {k: ([str(x) for x in v] if isinstance(v, list) else str(v)) for k, v in PARAMS.items()},
            "hFloor": H_FLOOR, "n": N, "nMin": N_MIN, "scenarios": scenarios}
