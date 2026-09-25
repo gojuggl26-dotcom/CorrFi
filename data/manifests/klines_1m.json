@@ -1,0 +1,6824 @@
+{
+ "files": {
+  "binance/BTCUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:00Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "c7d64d2360a7e669addfaf504d2164826e8701c52a08777625c1a96e6a7c7bf7",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:31:21Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "99ec9eff4aee364cf7a5576d04b6e9d4eda25efb62bc8d390f1b10d2e7fd207b",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:43Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "c777297b1dd4e81b0c8d01ce8e4a987afb5aa332a6d64ccbc3f1552d09a724d8",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:03Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "9a42c619925c5da0ec387385a59108bbaa6481cb23aa831816a372fb384b707c",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:25Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "6843c5650bbd8b3aded30b3f5cee32558d0bd6fb6e567683cabd413e2b34df7f",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:47Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "857d99d9aef88f43d3dcae6ef0f7fe0bd6ca7539e0fa44ef0ea2debf814729f5",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:33:07Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "a39485bf16ab59c9f62130922b049e6434398d6995f8f15ed1e5ff8c79685446",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:29Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "caf81e7dc2e1e8df0c46391f7fc102684a3d1d0b494fa424830432fee3aca844",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:33:50Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "e66a7203646980b94771fd7dfd275bc3b66e34b2a1b57382ad8172e4c5006df3",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:12Z",
+   "file": "data/store/1m/binance/BTCUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "5c3435de462e923d1452d8aa30db1eadfb26778dfc6986ba504d9ab4881be3b0",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:34Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "27fbd3f1a08dca766adc42d4095ed16092352a81ed8d25f55289a7bae28a681f",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:34:54Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "69b95f91accc1a8c55ce1fbba9958b87191cad2cef5fb9568eacaf15a29c630d",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:16Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "53930df5652b3208fcbe3eb8a4ab9d7b076b3265d2aee6c2d1be6f93cffc256a",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:35:37Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "ccf8690762441c946c78fe2caab6b4a8c7757cb8fedabca129ea4349140eb8d7",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:58Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "068b2a3a8bb0f30a916285934e7a3950ac8dd59d0f16877d304a8a9aacc8a677",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:36:18Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "99a7fa208b6be870064c6e3822bbe09fffa68e3839465d7861b5dd87aa33a99d",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:40Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "d7bb260d34768798df4d53f49ee329e9d0ef4782d0423da0ebcc9f2d5957941c",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:37:02Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "7f09def36015cb93160ea69cae2c73c4a6b16738e798ac573af6dd846a463ec3",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:37:22Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "1ddd378b4efd7712665f6ad597b4737213f1883c464d361c2a5d822e63a378a5",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:37:44Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "a0024e152a73059366b79a14808219afe60fa7df27aa0208aa3d4578990a5f37",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:38:03Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "f10a4edd58ad7638f8065ff69e489c5d7e50a293b02c8238a790ef95dd2140ca",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:38:26Z",
+   "file": "data/store/1m/binance/BTCUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "ba3672812ba90b9f68ce6d9f2c6285ab415b411762e445643fde5c6483ab3d9f",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:38:47Z",
+   "file": "data/store/1m/binance/BTCUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "621ca003e50bdb4acca27fee5c41c9840fda7731785d1a9d9a961fd22e97fea6",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:39:08Z",
+   "file": "data/store/1m/binance/BTCUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "435e32c362fc4b5d3a255e0391dc756f5d5d58ee095d4fd8999957d680a27b51",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:39:29Z",
+   "file": "data/store/1m/binance/BTCUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "c85a500067a46f2de8321855e6586ad476d7f2fd9b98cdb294cb356df974a6a2",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:39:49Z",
+   "file": "data/store/1m/binance/BTCUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "88280c8a111b069286e2e549b41cc6e0d8464f6368c79ac3937bae3ee6cf2bbf",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:40:11Z",
+   "file": "data/store/1m/binance/BTCUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "14afbc51148d6aab84f1bceafffb2ae666b6a4d4f9917446dbb2fa5a4a8b2d7a",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:40:31Z",
+   "file": "data/store/1m/binance/BTCUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "45aee0b342bdae1c45324e5648d560b605968c74455e92efa18fa75accbd0c31",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:40:51Z",
+   "file": "data/store/1m/binance/BTCUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "52ef8fe743a8a425b997ec24cadc07c695d1c0aeaa600516845b583eb6503dd2",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:41:11Z",
+   "file": "data/store/1m/binance/BTCUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "e64b9f9fc9fc6b2dd7c630468c65dd0a4027b01960c3c063b99fcb29b65cef98",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "binance/BTCUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T14:41:26Z",
+   "file": "data/store/1m/binance/BTCUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "ca74dafb27114fae9cee20331a51c41f51b561a20f26d86eafea9d83f2136eaf",
+   "symbol": "BTCUSDT",
+   "venue": "binance",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:28:53Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "31132b04039e75dfd743a27aead5aff8be51cf608162c72c03e9e14954830ad9",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:29:15Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "4537b481a21b00f1dde900363b9ded400a7d601c63c8e507c5c761bc4813e769",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:29:37Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "238f689a71679414de1195c06f7050037dc9fac3d0c8d791c1f8c42915a1772d",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:29:57Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "97d1cbce5077d993bc543e5cf1f818fb841d11f5046b988ed75bcc1e02f50a87",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:30:21Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "efa14334b296f47a196786af5bed9642bb9c4514c9372f3823117f8979064917",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:01Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "13e3b529fa51d0a7122070377b144ade9093c25e78dbe6cda2ed9fc8f4afa011",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:31:23Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "a8ef2c4cf271b944a5e0bed3535625d0713f2f5435b60d0033e78856f6872d05",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:46Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "63f3d5a709cc91c26b6713aa5d432919c4af740418ae8dbc18310c0bf1aaf13b",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:06Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "c4629e91db662b61a961d038b120a2a3ddcbd7d34a58fe37b4cc1a7f4601be4f",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:30Z",
+   "file": "data/store/1m/binance/ETHUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "89b12917c06b0912a7f0396fe5ee95bf8d2337184f2df5960f0dcc0782db83ab",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:53Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "e62b6d7984c4d352ccef9099d48859eb98242aaf054e29948ba566a4e044e6c8",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:33:13Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "99411cc1e8646fbc0532453e0cf80ab303354223f27f285d02d4c35cfa922c26",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:36Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "15f7cb45bf2fb3ab98954b8624f7e37deb306e07bd142c95c0b441d8357f2c89",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:33:57Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "def63ff3100e950efecdb3800cedab2eba41fa0259d21320f108fc525ca21c27",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:21Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "fa9a088ef7dfbb40a6116d24daa56816783d33cfef6772576cd61c045b8c17bf",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:34:43Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "6101018fbb0c77a270b8505fd18a6f3811c14fd2373c7252d08efe57ca95dd08",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:05Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "b4910b2df5400a953a448818c1bf57612ed5f9d2559462526e97564b0f15c943",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:27Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "b4d5c36cbf26100f1bee197b84daf5201c9acc0b89b2c197a379b8c8ac079ba7",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:35:49Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "9da82f6dd928bd0cec8ed0df26d881d592aab9b940e70721b3d8de4552c55e30",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:11Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "6628ea38a41c11ea558cb5cef21a032bccbdf4cb6c2fd04ba7aa65150407b500",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:36:32Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "2092e6a52e096728682eeea849d37c331f031e7f8face8fbf63500a9bd4c873b",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:55Z",
+   "file": "data/store/1m/binance/ETHUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "57252cb9ba623b2651cd711caf05c6cb9dfecfc23e3727ba8d01be6a2a2d3816",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:37:18Z",
+   "file": "data/store/1m/binance/ETHUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "24820c289cb382ec4dab867703c8fa4d7788426590da0cc1e8ee3f6124d77aa4",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:37:38Z",
+   "file": "data/store/1m/binance/ETHUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "fdd1fc0ed3c4925cbe5b30b6d9c4271012f80cce07577cb1c98ba1bf70fe3fba",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:38:00Z",
+   "file": "data/store/1m/binance/ETHUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "dd763a8002edbe71650d3ec400382667fdbd5f1d257524d90ebd4a6746548161",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:38:23Z",
+   "file": "data/store/1m/binance/ETHUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "230382c91efe794a8b37026a16feced14bfb3503619b5f46c6942fd383cb3538",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:38:45Z",
+   "file": "data/store/1m/binance/ETHUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "97f1faf9f91cd1f797b355db4f8e8ad3cd21651444dcff3a7f10e4bf55b81a8c",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:39:08Z",
+   "file": "data/store/1m/binance/ETHUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "762bb6bc668ca32412b4733b8077350cc30bbc219361c4f289113182ab1960f2",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:39:29Z",
+   "file": "data/store/1m/binance/ETHUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "625bc2ec74c844c93784697881f1764dc740d6707485843cc4a1dbafc2e2065c",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:39:50Z",
+   "file": "data/store/1m/binance/ETHUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "6eb4e6f251f399a2e35685316693ccde1b7e6a410cc82723c447cc3309be7ede",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "binance/ETHUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://api.binance.com/api/v3/klines",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T14:40:08Z",
+   "file": "data/store/1m/binance/ETHUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "e664b7155bf5a8d22b72050c9e40f41eb8febae4b19420e66ef91d81d1727080",
+   "symbol": "ETHUSDT",
+   "venue": "binance",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:22Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "4e3033790cc9f42534ef497db0b727bc3f4d5243f3fcc47be9187d9e3bb754c2",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:34:18Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "97ea71df48432f9ffa5c941d0a6f72a39275e10196b9f4fb5279937cac3d5098",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:51Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "f239dbfadabe425593c20c38ab86fc796dd704b350a96f7c6b5a01ea959991b8",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:37:36Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "c3ac25d23ba5755160acb855c127f954ac6c80ba8bff21c474b8a50a37e95fad",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:39:19Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "829cdd8ffb84fbc66c6c5a390fca5a8ce795326d63e81a49d8ecf36e292d2534",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:41:12Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "289f3cca3bf2f9e4f5b4ab7a42fd65e6326125f83c58c20d9aee31cbc1bd165a",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:42:37Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "e0ce500c7aabd440d6595d46546b2b586fe3eb47d837e7bae16f363320f75a38",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:44:33Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "e2d1d087f3626b121bde6f8b9909aa01ca9ed7bf07a690dc93678b07908ca7af",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:46:01Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "063b0a4a9e7dab62e3b936583fa76ce2f0ef1a74041dc9ba2f63460040246bb5",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:47:45Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "d9689f0604e4472d5d8e5922168b5b783a80cfe1f4f8139beca7138bc813da94",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:49:43Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "0be6f88eccac56df494d4c2dede50b0ab4965ff19a8ba52649a511d3a9f2f8af",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:51:27Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "d4efa18c2e5b1f973e91d7fdd278197f1456f2161771295d4e715ae8fb7c957e",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:53:00Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "dc24dc4e8ebf2cf3732926adceb1cba762078a4bf380e3fb8e212df4ffe4be65",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:55:08Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "9ca469e6405b3ebc3dd985055e473ea2211740469cf3b077083d8fe7a7efb80a",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:56:50Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "a6aac3f065c3b5519b30814edd4df9aa6f8a33a038048e94874624a5b9e07ef8",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:58:48Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "0110ca61914243588816f9f3a186322fb11db2d66dc38dd7ddfe059ec955c422",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:00:37Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "b4829acf03ac918e01b35778415989ded50b3ddbd80aed78d2039d415dbc0294",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:02:09Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "a9bd09c9f47788d3b58f3238bc4cec6b6ecceb9511bff35875ec3f995250e409",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T15:03:59Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "67d791b265cd0de8267084379b4d3982bfed972b71fd26d3fa08f182ca92a12d",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:05:38Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "d0ebfc1429ee81bfe180fd262926be8605158c6ec411752b962feb3523e98e6c",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T15:07:02Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "99a76b054e7b0819761b2bbcb49b9056ddf20d7b5472c6c41dfb76b934b9cc2a",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:08:48Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "25e27f9afa6d9439d313d3fb3b84d87c132f88fc534bc994c38c57e0e28277be",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:10:34Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "f79ddf12af6bc359f5e3c8a628b8c0a4d08b5422d4a8f63ec335d6db317768f3",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T15:12:04Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "68ca712f8a9d930f4e230bd2fd0c5146b9073a749732836bbf546a68acec3a80",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:14:03Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "dd0dc437e4e686531beeab335fb6c6bc178d477c32bc97d2b23596691acc9272",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T15:15:39Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "077f4939d9b12602c8091b1185c284478665f8be043ef6fc421e3dfe56e00c58",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:17:17Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "b8a4caee2b04875a2b1648ba41b255ab27301aafec6435a8010c6c9eb88c7d4d",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T15:18:56Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "285d10c2bb9c61bc20dccb29ac8666f9bd4694d1fad8d4c4543a9a35a68c9b27",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:20:21Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "8f59f3f56cb80ac4d432de587f5ae3f103e089a8a9bfab4beed1152d9d3db73f",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:21:34Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "d26203f4d87fad2c559006e9c51b117b6b19843637861c29fdebad9a5be0fda0",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "bitget/BTCUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T15:22:17Z",
+   "file": "data/store/1m/bitget/BTCUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "293e3aef60f8216e332974277106280d684f9e7194d680898d44bd5bf9ccdb02",
+   "symbol": "BTCUSDT",
+   "venue": "bitget",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:29:30Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "8c555ab820b1a69522662854964fdc6dd107920a8691edb30d1db56ef97191c7",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:04Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "159cf793e057ec78a5b8ab0d12ee6c01b26097aa98972718b08f2140479df23e",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:40Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "5143585e5e7f3cb9fda38a7e6b3710f89e24ebe25dac1d9165942e98ad9980fe",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:35:26Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "9444dc50f9aaa2a980a1c7e85bfdfb4c71a03af81dbe4e26275b697074f066cb",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:59Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "92890cfb70e89b0e7bb736fcf653d0f1aeda1ec7503a38276359c580e0c7a4c9",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:38:44Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "82b8085d486fa7b38ee60d0b1ddfb0627ce2b260eb29774698d6aadfbee94f55",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:40:22Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "2ea352085e393d2eca467115a9ecb3a4bb3692dbe87d62b759fb951a12a15c4a",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:42:14Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "984177af76d157f876d4277a5f17a6bbd8ed8429611c7226fb2d176f2979be62",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:43:50Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "290fab2c14c7cfc0ed7bea95dc2e3ff3de4bb37f11a36c6a54bb07d2d5013254",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:45:39Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "f4acfe059cc3c60562c903a7ae25048601d45aa750758710cf5106a0451fc544",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:47:40Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "0f64f70678f645442a0337441fda779f684c6b268c3cd18b2e26153f4464f511",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:49:06Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "2bfb3d63e7f5e2c73cf2e46099f4b030c64d4cf697358b1fa0852372f2ad4166",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:50:34Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "a904bb683a6d181cd3a7cdb53dd8f073015b8585357d955385f9e932cfba6afa",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:52:00Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "f826d2d8742c1ce65e6effc5e63a423e194f3836a8598f864a84c9e620bfa80f",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:53:42Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "494765e9cd5d137fa2a1320b9094702104fc7b044d531a5964a369c30339a90c",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:55:18Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "a7754557f30abb142d07aff2c8c5ac827edd01e15dc676a068db64b2a208e37c",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:57:01Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "b8a07b09b3493a91f6cdfd012fd77845c3b458511f45df1afaa4c6d425de5cbf",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:58:32Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "3eb222e605a820a6b518a6418461b5cc634619a347e5c84cbdeb5634f308b534",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T15:00:09Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "4cf7b83ddd20a3c43eed915ac4c6b72c81f2de786f1bdda69e723b5b8f666dc2",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:02:08Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "6a4049acbb84b0588f2fd96394f076ba28b061f8da060300ed161c2248a7e21a",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T15:03:55Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "8fe759faec83a0f46e03e0ae53bb658f6e932b7001729fd34ebecb0e0713cb39",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:05:28Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "e5b16e1cbff661660e6b0ec28dc859a96b79d5158bc6740d94154a8e00a92afa",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:07:24Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "3cfa08b96395ae20088db9c7c9ae647fd2f3419760e169df4826480fb38a6aa2",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T15:08:45Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "31f075ca4f7a9b2c46aed0287505ffcde5297fe404f9129e0fed0bc0a6a00a47",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:10:24Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "c8f604cf529edbec03f20c94af41f8f6bf7a75d851db4ce48b70dfda6c8806e9",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T15:11:54Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "56e1542a258d5faac6bd945740b3601eb53bfa7c96201d21ba4db48be719f8e8",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:13:33Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "3d38dbb5aad6ba1108f8bd0a431665194a042b80a3a7a413492dd8515a023072",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T15:15:26Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "c38cc6a0648444bacb4f9cd87dba66a42db8a46f144f2e8addcdfe45e219fd4f",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:17:36Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "e559df29d7565e1849c79cb19f5588a99197f4b38b0e635d680b2e177e8e71e3",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T15:19:13Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "17be2b270cd90d7efab4afc24897693172850083c0a5a4f374f6663cf1e039c7",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "bitget/ETHUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://api.bitget.com/api/v2/spot/market/history-candles",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T15:20:46Z",
+   "file": "data/store/1m/bitget/ETHUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "79621281ebe6858c606eb7d16cd4e10e8107320bcf95689cc7dbfdb340570a91",
+   "symbol": "ETHUSDT",
+   "venue": "bitget",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:01Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "0c7f21dd2d310e196d86271c973351257d76403aba7d8a1322c61d463afec7ee",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:31:23Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "910ab4080938c57335df148f73c0b3c17e8930378f23ee322a8a2f090398ae81",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:08Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "f3cf8501a5d3aa699d585966d4bf327d623ac25a2f8458396689605c388b828c",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:47Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "af4212bb6319ebc74db55e6fccd5e4c023819e722a5a25818ad016a5115de2db",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:10Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "f537779d16749112f965d3a4320df39f87d565a1a06c1f948f711d4a7378adf8",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:35Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "2428c1bd2687a4e0977ff664c628cec9ac01a190b09e328de5a5759b946f754e",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:33:58Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "8d791e99d718d94eec956d527f89aa5e03c377b935a990a65aba91f72900c9b4",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:22Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "7201d6223e17eafabab4f7202c24137999e6867e76a69e3414f450c4a17c96f9",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:34:45Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "d2bdd46149139a9862d2b16d23e37c40826c210df01bd10369d36638e95c115a",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:09Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "ce4d788be15eb30802e564e6adc70e6c0f8f54d283feb59397ac7fc5b4efae69",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:34Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "d8bafb6e7c5d64b9470a27518a13be7b3b090796b9de84b3a51267066f8ee881",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:36:18Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "685c180d0385670548c64ad5cfaa330ea09aaa05ae8dbc0571e5d39dced22c89",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:45Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "088d0062d5a54f4acb6e27350bff57f3058b6d7aa0ea0a762248a1ca496b8747",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:37:08Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "f30653460c1168fc2aa71cdaddc060bf831926fbed288c5ae10673a917c68d6c",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:37:31Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "66523f11f41aaeac85f09445d8163e1bd932641bf7042b93c29a983d2b7756a1",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:39:38Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "edfacfa7b4921322b93e0ba7cf10d22fa223edcf93fd5ee41cfd4f0effa077f1",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:40:37Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "55e99b6836ac2f271374255ccfd804a292e7ca01a49b7f9e107acb404256b36d",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:40:57Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "051ef3dc4512aa56eb367d8781187f487ac7c1dfb1875c69f2f838a436f5d232",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:41:19Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "1e5973fd3570323bb1f135251fd96a5feff64640447a09583aa36185bdd082fb",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:41:56Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "4ea4f0b5e8403f974cc8ffa6b19341d0fb6b2fc33b3af248104fd82ad768fe8b",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:42:36Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "7277a9d9bc7ec2e42ae8d2958ee0d1880683b423562dca13eb6780b2e2949dd2",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:42:55Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "cad560cc9a433e7b7926cf8fa2eb441e0172765ee35ec9df93b64cfaa9734a7d",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:43:27Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "4cc7226ca6c40f88a0d3c6e932d152a4ae3fcf1245ea4bdb51086a266f7c75be",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:43:43Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "81324374e0040dbfb6fbe5071e42ca9ef25c04cf37563497c88f1ac874867f04",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:44:25Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "21e7f7c01e521db32c5df409bb0869a4d8bee2fb21be4f2fd791811ced12da5f",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:44:43Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "4a814b8fb11c958c3c5db0d2ae427e721bf579f76a4d4e41e45e7116a3d7fc04",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:45:02Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "cff013e37acdc33bb1d6d38b0049e16aba4cefd3dd2e22a257317ff6e9d0271d",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:45:20Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "9df1f915b26cff3ce7ad1caec7c29ba4cf55e88b3df0fbe78b12cc98dba91096",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:45:39Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "371be9f553192e914dfdd9a6c6430d0e3f8fe80c41095928459780474f503eaf",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:45:56Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "30c6a78a915e963deb62f6c00e1039cd6cc67db222d09952a4af3f770b37dc2b",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "bybit/BTCUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T14:46:09Z",
+   "file": "data/store/1m/bybit/BTCUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "d802ddc911967975b5d5141925193f74dad78b2daadbbd7ba4634c059d7a8337",
+   "symbol": "BTCUSDT",
+   "venue": "bybit",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:28:53Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "37a58c2bd7d9671b16731f725aa0806424ae63801ec0a3646744b10b330db64a",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:29:14Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "ec8641d26e1d11531ac00e4082af387cdd49d079330589f96835230017c3facb",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:01Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "7e8b24fadf8bd7ef2a846aa9eadae70293d292a3af72a1e7f611df3bab2b6afe",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:29:51Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "5e4c618b62d0315c3e482ad54ca1422ccc043fa8952d4aed33a8a01e0ae5c5be",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:23Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "0e98fe198342236d941366283d93a1128ccf9d4395c6ebd032bb259ca66ecb9b",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:44Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "25dca8839cdbf6fa5a48edf48f04ef810ed93565d710dcf01d0bddf926caede9",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:05Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "6f513deda25a8a2e13971f278767d0738233eeec8c5a6784093e42651af45161",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:29Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "81dd9c26249b5ec6433d72d792abd5bbca82d99e73ef8fd7c93e1d55fbbdb6f8",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:52Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "984e8f361ce6b7210e272ba7fa79d1de3d82e0ca8034ccd6ef79245d1619bae4",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:16Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "69af101b91d8b31dad8aef00a07449b824b4690ae9e48614f80fd35f0ed8bfee",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:39Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "9a671f91df9e7518557752d441697851d4f4d16f2ab116f147f4e88b39edf25b",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:34:01Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "2ba2be3be2502110d192709fbec692c1acae2d383c14a7097404fe3be726311e",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:25Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "1340c94fbd71e0a6e2f497a752545c3a9d66362d332557888cbaa4e6de9715f7",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:34:47Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "e40a1f20853322591c0c69b107c118ca424cb7fb7b5fc575c464e44c8b96b96b",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:11Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "3aed1579adcaccfb0c057a16a64bc79b011fd49e523a99afdf667796d3fd4dce",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:35:52Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "950e758cd2d3a0b0cb2e9f9b44e459c10e842dc83e47f43018eef09d443fe398",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:14Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "c57a0acafc952501bceaf2cc0fb6e403dceafef8bdaa507f6ddf65dc37a8d918",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:33Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "28ee57ff15077a40375b4bd32765e8c23da33470ec93aa63744481b435549f9f",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:37:22Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "839a8fa09a7b8e3ced2fadcdeadb69000979cb06b89de716f2b94e5011a84bc3",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:37:44Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "28c9428eb0e259f44ddce4af94448ea968dd71d9355522592ea43cf137632b5e",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:38:17Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "67de1cb5c227dd75bfa5c97b91972572ae400ba2fb9c31ac3a8d8f076d05d220",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:38:39Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "f0f46285c3e04969071a5eb62fc9e3866377521a7dd74f5c245c4b94a8b3ad95",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:38:59Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "bd7f3feda2e65990250ce997e27fff0e46bd19f47f2e2f0d35a09165235ee93d",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:39:18Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "a6e266906356d0abc44169172cee0b784b79205d11ec5a8ed109a9b9712e4176",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:39:38Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "7105829b517077ade6cdcd419dea51ca8ceb3688aa33106dfdc85aaefe062731",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:40:19Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "cba7d53f6cbbefb6528e71aa5ebcb17ceac77131e0710de76ce25e8bdc984065",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:42:03Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "7b72de611d19a486f3f3fc82aca4e298aefcb9b0b6c2671e2c91612c80749c4d",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:42:21Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "2ed5a79c615858a2bbb1278ab6c99def19487b4493646d5330b69678feb1fb8b",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:42:41Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "64152a79df85d95ae6f6cf65ae0075e6ae7b796f45a3822a72debc8c8cf68a55",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:43:21Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "4f433a7fd5ac0595483c8157516d03e704df0aca67d92f809f9eafbab08c8f67",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "bybit/ETHUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://api.bybit.com/v5/market/kline",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T14:43:35Z",
+   "file": "data/store/1m/bybit/ETHUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "65d6096170efd3f5b089f014420a2fc9c2c7003658be3ddd8b600da98dfd4ef4",
+   "symbol": "ETHUSDT",
+   "venue": "bybit",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:30:53Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "8526ceff7c8787444a44450a8ec27b136aa48a4bc2427d84885be061e57e6e5c",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:31:07Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "7a7b9a8a46edd1cd72be03126f631e18fbc18772ffec3353fbd8386d3149af32",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:21Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "c691b921ad307fd54050e70b2e3977cd86e569bb787a585112b8f405f41beaa0",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:31:34Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "2decbd109d5c2acad9a6247564cfc84cf3262800e7e3659b343d30afd2e8fcb8",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:48Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "387f65f4f075a0283cf5218636907465045ecba97da11c94ddb6093dc83f80b8",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:02Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "559da1fa285dfe1df22a1382373e34c54966d1d0c18905ed4cf67f4d42a78cb4",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:17Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "57b44e5d25532be81942248ac3bf5e7e0d97b41d74231d66b7fefa2b74ed21f5",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:32Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "9b7561524d6bfdfc593b0ebd5bda6862f20013089269e508dd8e0e3fa3927644",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:45Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "8bb816bceae7383716ccecce6869a8ac9733949481a01f6d488ee394d8e209d6",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:59Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "da902c05a5b5c1907c12f6455bfeef7f7c0b3711c83f78098aa4f7fa7e8ec854",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:14Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "803fe92206bd00221cb1d848c02b11264c618e7fb8dbdf91b903ffb2ad6e0842",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:33:26Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "f53bbc4272075359db7108d90ed92df241c10f1aab7fe44aded0add0f6597f06",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:40Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "3995ce49ca960fb1eab651cdb8a24f691118aea83426dc064e055c2cae03bf91",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:33:54Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "a8436b4f0dc9ff624a5df54deb00d33e306d57c377cc2debccadc2fd350055c7",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:09Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "e5a75672b1423e093cd476a7488054951541a1001d026ac8e4d2069798355d94",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:34:23Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "e96d34037da910d466667175d00120d1acec394e2c2dabfda6c809fd6a1df557",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:37Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "298c38f36ae1f3bd4f23d45fe7ce30d4a26f98f12a657913b7988351eca35df4",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:52Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "f423ee9a3122851df264314f7f49e38e6247fa9bb0abd9c458b4fec3e80f23a1",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:35:06Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "46b30ec8336ae1e0df08e06314836e5624fe920902fc8629ae53f8b6c1055832",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:20Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "d64f01696dddbe36ee22beacea16c609352eac244ec0a77a17610fc3d0f4276b",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:35:34Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "0b122a70ad96579b94c9cd8ef822cc533791d2614f135fd8b5a461a0c82c1c4b",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:48Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "c8b411fc8349e9a56421ac041be90eadbcd7fd3da379bb20beddc0d81f49ef88",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:02Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "3f6de4454c650d706a05a7f7502ed75c4a853a34c19d32b52157c6143c99283d",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:36:13Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "fd3a9d0ef540ccf91d8df7bc362f0ec1ecd12e35d92298a721824745802e2293",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:26Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "2a10eb4ca9a4ca976a6916dbb7d3f66fa6968f3f2ba9471f3c38f36a25474d86",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:36:38Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "465d55590ec7816bf5a210b84c64ffc861972e70908fc685823563b860f9d27b",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:51Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "2d4366d8c11d28ae9e75df4978132de53b8a0a37f17cde9dd4f480eb371f2a8f",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:37:04Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "c9ce937fd90e45e1de8319487903ad0d87ede9f794b3eccc432894ad1f9e3edd",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:37:17Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "d54d27969da75f7839add15f8e0deaa483bd9b7517b3fb3a97fee6b726923a45",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:37:30Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "87eb3a2bc6adf6243be52b5a16b6111934aa02ee5e24544101e1f12423fd314f",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "kucoin/BTCUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T14:37:40Z",
+   "file": "data/store/1m/kucoin/BTCUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "f5a545d1f2402528d59ca0cedd12905e7257bf449c62ba74db59e709122ec8b6",
+   "symbol": "BTCUSDT",
+   "venue": "kucoin",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:28:44Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "6474aef9fa32556c06767bd65a14909605481e082d545bbfb5affc4bb6be584a",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:28:57Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "f25428c14566842ca1e9a210b3ae9d8bcf62308cfc2c8b38772e2c3972cf0bb5",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:29:10Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "82d201fea9dbc944fa1ef54a814c46ef5e9cc48ba3d7217d2f311ed54334d71b",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:29:23Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "48563837fca90186840c8b799885fb115365dd180b7034b40c0d4c922534bb42",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:29:37Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "ba58825322559f7a564858e08478fa441ec36fe0b3065700c1e7379ba16e26ae",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:29:50Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "f80edcb3d165a738a75cf5bd053b2189f168a6cb4aba096d6e7a22f84db82237",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:30:03Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "3d67549402a5b881235b27028c9676a1eb2338611d91afadfd9f72ccdd0587aa",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:30:16Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "984a21f7b3318d6e7ba55b42330209f9a0f1ad33afe76eb71e22f0f7d1a56b8d",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:30:53Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "dc898686491ffe95462e8777ea205176e5bb180eb1f4bf684e85d1928a9c23c1",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:07Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "5607323de5ed64af7ed71794da57247624682204eae589a0416ccd747bcac140",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:22Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "b85a4f0b1bc17bfc86ef5ff7d9bb360dea957c55161419b60b893e7f6ad93d2f",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:31:35Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "a0b453b7870e5c37f9bfa829a4bba41bb13182a9e59d1e6e2e955d9899a6b10c",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:49Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "059197025a7d75f3789649ac9728c8fd41ec1b1774a77be8299cbab3c9fdfad8",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:03Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "c328df03f2b6790ec84e0ccc9c6d26c141c929d9dc5d6c7e54be09853d7fefa2",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:19Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "ade35d47e82e1f25d79935df40530f150319be1ee35e1cd099d8357d8b2a01c3",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:33Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "c8a19a8ad6c7b5ba99d71082830423e246c6693168670dedd7b93d372c9db0eb",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:48Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "e868ee0e1522f5ab00b2e381adb19a75bac74ff1ac0b8722e24b4001390b3788",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:02Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "6c8ab8418b35ab6944b7d610092eb7cd948262f6e282547787f9a1e78323f4ce",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:33:16Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "4739284be7c76f4357ffff1f1ef0e82ec6bfcaadfe2b6ef997fbfffd714a5667",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:31Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "06b47020722bbd8105856424e7fe8e113af75700330cadd47de6c83077e6d4ba",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:33:44Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "20d06ad26fdbaa5dc24fe4affc00e237fca84f3ec62542ac87226916902d1524",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:58Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "de07049da9c42294584a2ffa213c36b9fd10e825c627a92919ed697e5898f3b4",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:13Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "932f9114b457f3089990ed534253205bf74a8a5275e79f3ef51c894e5aa4eeb2",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:34:27Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "1ba29400ada360316aae76454370a7772a846d49903f71e1abd1b6b944c0c0f9",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:41Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "db4dc271a2a14adb004efac2d3bf28047951bb4bfb8f84f745b40fc21b10f990",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:34:55Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "b4e300569114c94ffb83b41fdfe743297fddfd273282fc60fc3e0301e4297193",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:09Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "3b97f8075e5a804b887bb041c066173e1e98d1ed5199cb20edb61db15290e33f",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:35:23Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "a6005d7deb50f4e22d118fb0e4765b425bcb086508248187ab358fe0ebb5de4b",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:38Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "74ab1a7940caf20f242bd99015c760c46813fcb0fe5a20220d0458c771d292bc",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:35:53Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "f8ed413b2e9f4dba0f3b2b01dd22cc026e42896c64ff4f0cc0447e725d72a9df",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "kucoin/ETHUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://api.kucoin.com/api/v1/market/candles",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T14:36:04Z",
+   "file": "data/store/1m/kucoin/ETHUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "f7bfa1c29047ab025db41e6a34663fab575283a972a05f1b5c35bf3805f680fc",
+   "symbol": "ETHUSDT",
+   "venue": "kucoin",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:21Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "d8758d7ac2f0e2ef7cc8f5b516c2c74fa0225732df87749dc5e5b5feab5689de",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:02Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "2c803e96f1ec093fc5bd0ba8dc9404888ea5407e75f5e14237c0331a3121de69",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:45Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "aa42a72521363e9b61289dd288c1c04f5d6a2d901c605bd15288c6f066b9c6ee",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:33:27Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "1838b2e48a564e36bcaa57c353a4cbd713c68ddc191d50c018d4923f9bc4ce74",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:09Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "69a2157174c0d090b12fa0e9e19dfb7eb4d33d33d915fa496f93ca0c06e98cc7",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:52Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "68e193e3cf47acbb3ad76296cce502b8d1920992daf3acd52ffffad1bbe9c9f1",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:35:33Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "214997247ef3eb1e0275447cd3820efc818aa6c592f7f6910a2b9c8c7b6d1a11",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:15Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "6c5de0efae1f43c90a388a8036af8bf3dfc810920c6e44e5615e94bf994d7579",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:36:55Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "1c2639cdc78b2754a148a2d90891884ca8dcaeb9927c20caa79e547c1c9b704b",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:37:38Z",
+   "file": "data/store/1m/okx/BTCUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "08d634be47740b7d3a8470bdb95781400cf0e2a5b3b2582b702427051b276569",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:38:21Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "26b8a8ee70be402f6efa197fdf438b22ed33f2d4f5e94d806ae5865434f7e4c0",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:38:59Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "e9b4beca186dec18053fcef8c566d90c202cb000faf8c0cc3a9eea612be1669f",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:39:41Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "f594f0c000facd31425f590d8b71ebcfa2c994c113fb1b9c1ba447bf1655b6a4",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:40:24Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "a84aec030c6b109c7f946262b3685c25fba164310fb860bc97b3f27edfdcfe80",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:41:06Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "35947ba2d17e3a9d83cb6b88ff4781d4537a058020e9c6c5f8595afa19368a9e",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:41:46Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "8de0d7c04d8b201fd03c91b1c7835c8405ad30339e94cda25a9be70cc3a109ff",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:42:27Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "47ce864388512f940070af17424557fa45e37cccc3627271d8e6d20340822c65",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:43:08Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "0b1855b518b49f35f833681edf3edf6c0997521ef740c3e0d49803a1d53a6977",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:43:48Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "27fdd3ade59c66e44b7ce907c40247ffd1b5705bfe9dc1809081c516916eb089",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:44:29Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "cd7c3a00a26a908d6472e70b98e9128f53482985bba2d6074da3a339f76d274c",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:45:08Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "d575a297b09c3e12320f77f65c465fd92418a9e1b98b6c0100fe6e989183b790",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:45:49Z",
+   "file": "data/store/1m/okx/BTCUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "f0074bea0eb5b6ce27e688f7e574e10debc41021bb76c6050b376334bcb6d5ee",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:46:29Z",
+   "file": "data/store/1m/okx/BTCUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "a593dc2154aa370a005fcaa88f07480a384d9bee9c28bb78c69864e2e226d1fe",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:47:09Z",
+   "file": "data/store/1m/okx/BTCUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "2fa6a9333a4c6a7f107a95d435a729cca87d832fd8540f1b56387473249ffdda",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:47:50Z",
+   "file": "data/store/1m/okx/BTCUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "e8de4c505c0076633ef9d8fa8511542219b9bcaf55e7ecd1e82a9fba5dd4a972",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:48:31Z",
+   "file": "data/store/1m/okx/BTCUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "e865e67872aa52e695df7b08771cdfa3161074e570c20766b8b82ac91c890e0c",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:49:11Z",
+   "file": "data/store/1m/okx/BTCUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "41dabc100000d32338cb649101fe032d06d9941f2681ae75490992508dc5e855",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:49:51Z",
+   "file": "data/store/1m/okx/BTCUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "5d7029fe44997f293dddf536afb2c5ec12bf778444701fac5bac68aa57733fe6",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:50:31Z",
+   "file": "data/store/1m/okx/BTCUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "bbd9f4ef8b3815a0337680330ba25b1c8e6dc9551318dcf9a0d8e483665848be",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:51:08Z",
+   "file": "data/store/1m/okx/BTCUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "84705d145d0237d15c7c3dd582efd4f2759ce250ef7b0b9bc2034d84c88bb6db",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "okx/BTCUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T14:51:36Z",
+   "file": "data/store/1m/okx/BTCUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "f0e1f4639bcd072318d9dab57b52020c1f87a030e21bd00567edd583894a64be",
+   "symbol": "BTCUSDT",
+   "venue": "okx",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-03": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:29:11Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-03.csv.gz",
+   "first": "2024-03-01T00:00:00Z",
+   "last": "2024-03-31T23:59:00Z",
+   "month": "2024-03",
+   "rows": 44640,
+   "sha256": "60c6e69ab5e83467235953e1854d8f66a35c20f3b1b59c19ab8cb5889a97dbef",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1709251200,
+    1711929600
+   ],
+   "window_iso": [
+    "2024-03-01T00:00:00Z",
+    "2024-04-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-04": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:29:49Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-04.csv.gz",
+   "first": "2024-04-01T00:00:00Z",
+   "last": "2024-04-30T23:59:00Z",
+   "month": "2024-04",
+   "rows": 43200,
+   "sha256": "c3ecfa6e0bd8c111b035ff0632f9d55ae133f5f77e3b265454cb2375197d278c",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1711929600,
+    1714521600
+   ],
+   "window_iso": [
+    "2024-04-01T00:00:00Z",
+    "2024-05-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-05": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:31:22Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-05.csv.gz",
+   "first": "2024-05-01T00:00:00Z",
+   "last": "2024-05-31T23:59:00Z",
+   "month": "2024-05",
+   "rows": 44640,
+   "sha256": "bc943d0bd80eccd8a4acb49f02a057b0de445117afefcd4560ef3d5de1ac3146",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1714521600,
+    1717200000
+   ],
+   "window_iso": [
+    "2024-05-01T00:00:00Z",
+    "2024-06-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-06": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:32:03Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-06.csv.gz",
+   "first": "2024-06-01T00:00:00Z",
+   "last": "2024-06-30T23:59:00Z",
+   "month": "2024-06",
+   "rows": 43200,
+   "sha256": "728ffcc23edcf8bce50bb128f7fa81fe983e35e4dabba9c8780a264d663e4cf2",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1717200000,
+    1719792000
+   ],
+   "window_iso": [
+    "2024-06-01T00:00:00Z",
+    "2024-07-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-07": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:32:47Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-07.csv.gz",
+   "first": "2024-07-01T00:00:00Z",
+   "last": "2024-07-31T23:59:00Z",
+   "month": "2024-07",
+   "rows": 44640,
+   "sha256": "013e869982c60168f65d746e2b16c7f554e25c0a3236f438370db13e243063e0",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1719792000,
+    1722470400
+   ],
+   "window_iso": [
+    "2024-07-01T00:00:00Z",
+    "2024-08-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-08": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:33:31Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-08.csv.gz",
+   "first": "2024-08-01T00:00:00Z",
+   "last": "2024-08-31T23:59:00Z",
+   "month": "2024-08",
+   "rows": 44640,
+   "sha256": "89e774dff752775ecd0c47b06df3cffe74ed1b4f65f4c401c97fd1e0a147f02d",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1722470400,
+    1725148800
+   ],
+   "window_iso": [
+    "2024-08-01T00:00:00Z",
+    "2024-09-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-09": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:34:13Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-09.csv.gz",
+   "first": "2024-09-01T00:00:00Z",
+   "last": "2024-09-30T23:59:00Z",
+   "month": "2024-09",
+   "rows": 43200,
+   "sha256": "f84968577bdb5b15264524204481424099f1dce917c8251bc8853f91728f2b0a",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1725148800,
+    1727740800
+   ],
+   "window_iso": [
+    "2024-09-01T00:00:00Z",
+    "2024-10-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-10": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:34:56Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-10.csv.gz",
+   "first": "2024-10-01T00:00:00Z",
+   "last": "2024-10-31T23:59:00Z",
+   "month": "2024-10",
+   "rows": 44640,
+   "sha256": "14072106cf735b40eb23bd650dfb129ac6a634702049b7a16e3286440393f981",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1727740800,
+    1730419200
+   ],
+   "window_iso": [
+    "2024-10-01T00:00:00Z",
+    "2024-11-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-11": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:35:36Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-11.csv.gz",
+   "first": "2024-11-01T00:00:00Z",
+   "last": "2024-11-30T23:59:00Z",
+   "month": "2024-11",
+   "rows": 43200,
+   "sha256": "05b3f964fe52dec6870b3061b22a1d3b4169e55f95d2a489a5447341ca063bdd",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1730419200,
+    1733011200
+   ],
+   "window_iso": [
+    "2024-11-01T00:00:00Z",
+    "2024-12-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2024-12": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:36:18Z",
+   "file": "data/store/1m/okx/ETHUSDT/2024-12.csv.gz",
+   "first": "2024-12-01T00:00:00Z",
+   "last": "2024-12-31T23:59:00Z",
+   "month": "2024-12",
+   "rows": 44640,
+   "sha256": "9e459860eb41b7aefdbf7666da5ec28d5683d36af9b9f33df2f2e6dbdbe90b6c",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1733011200,
+    1735689600
+   ],
+   "window_iso": [
+    "2024-12-01T00:00:00Z",
+    "2025-01-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-01": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:37:01Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-01.csv.gz",
+   "first": "2025-01-01T00:00:00Z",
+   "last": "2025-01-31T23:59:00Z",
+   "month": "2025-01",
+   "rows": 44640,
+   "sha256": "887e14431f9c5edccac7c08bc58a8fb94e549d841261df15493b287f45c81cd8",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1735689600,
+    1738368000
+   ],
+   "window_iso": [
+    "2025-01-01T00:00:00Z",
+    "2025-02-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-02": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:37:40Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-02.csv.gz",
+   "first": "2025-02-01T00:00:00Z",
+   "last": "2025-02-28T23:59:00Z",
+   "month": "2025-02",
+   "rows": 40320,
+   "sha256": "dd251f6e523f407d09cd590bd42941e5c460a594aaccb7ce15d120c3b4e6c488",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1738368000,
+    1740787200
+   ],
+   "window_iso": [
+    "2025-02-01T00:00:00Z",
+    "2025-03-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-03": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:38:24Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-03.csv.gz",
+   "first": "2025-03-01T00:00:00Z",
+   "last": "2025-03-31T23:59:00Z",
+   "month": "2025-03",
+   "rows": 44640,
+   "sha256": "7e3c6d30113cb79d5192f03df2042a52a09732539a82fe116d91d7a4e6cc79b7",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1740787200,
+    1743465600
+   ],
+   "window_iso": [
+    "2025-03-01T00:00:00Z",
+    "2025-04-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-04": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:39:06Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-04.csv.gz",
+   "first": "2025-04-01T00:00:00Z",
+   "last": "2025-04-30T23:59:00Z",
+   "month": "2025-04",
+   "rows": 43200,
+   "sha256": "cce738ef8ef3283db38dcf40c638d2690677a068008a7172d85b89724ea70142",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1743465600,
+    1746057600
+   ],
+   "window_iso": [
+    "2025-04-01T00:00:00Z",
+    "2025-05-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-05": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:39:47Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-05.csv.gz",
+   "first": "2025-05-01T00:00:00Z",
+   "last": "2025-05-31T23:59:00Z",
+   "month": "2025-05",
+   "rows": 44640,
+   "sha256": "b396b2956fd2ee8106858cf8ff499ec48257ea8c41775f00e6b331ea6e9e6ff9",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1746057600,
+    1748736000
+   ],
+   "window_iso": [
+    "2025-05-01T00:00:00Z",
+    "2025-06-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-06": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:40:27Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-06.csv.gz",
+   "first": "2025-06-01T00:00:00Z",
+   "last": "2025-06-30T23:59:00Z",
+   "month": "2025-06",
+   "rows": 43200,
+   "sha256": "00d7f2c03f8fadd480402434cc2546b6f5e06699fb00d15ac5fc9652d8afe9d1",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1748736000,
+    1751328000
+   ],
+   "window_iso": [
+    "2025-06-01T00:00:00Z",
+    "2025-07-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-07": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:41:08Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-07.csv.gz",
+   "first": "2025-07-01T00:00:00Z",
+   "last": "2025-07-31T23:59:00Z",
+   "month": "2025-07",
+   "rows": 44640,
+   "sha256": "2908fcc34d0d8fabd5723f3aa5add086e6afcc7df522636aa42dc47159a81d01",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1751328000,
+    1754006400
+   ],
+   "window_iso": [
+    "2025-07-01T00:00:00Z",
+    "2025-08-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-08": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:41:49Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-08.csv.gz",
+   "first": "2025-08-01T00:00:00Z",
+   "last": "2025-08-31T23:59:00Z",
+   "month": "2025-08",
+   "rows": 44640,
+   "sha256": "17cfa15ab2df2b1cf4835239038c2b8e465bbcf67e9360aa4726e0ef6ac42efa",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1754006400,
+    1756684800
+   ],
+   "window_iso": [
+    "2025-08-01T00:00:00Z",
+    "2025-09-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-09": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:42:28Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-09.csv.gz",
+   "first": "2025-09-01T00:00:00Z",
+   "last": "2025-09-30T23:59:00Z",
+   "month": "2025-09",
+   "rows": 43200,
+   "sha256": "6fa7f47bd55d92f0114a95aa3684d95849a84167d43e3be223854fc2477287ae",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1756684800,
+    1759276800
+   ],
+   "window_iso": [
+    "2025-09-01T00:00:00Z",
+    "2025-10-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-10": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:43:09Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-10.csv.gz",
+   "first": "2025-10-01T00:00:00Z",
+   "last": "2025-10-31T23:59:00Z",
+   "month": "2025-10",
+   "rows": 44640,
+   "sha256": "8907ad9ec2ad95f3d88cb6f6c96349534ce8a0bd2f55334550eca26668f2fb60",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1759276800,
+    1761955200
+   ],
+   "window_iso": [
+    "2025-10-01T00:00:00Z",
+    "2025-11-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-11": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:43:48Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-11.csv.gz",
+   "first": "2025-11-01T00:00:00Z",
+   "last": "2025-11-30T23:59:00Z",
+   "month": "2025-11",
+   "rows": 43200,
+   "sha256": "a6a21fea5ceb6bccbcf0027c0448f705d38d7273252eefb8814a142bfa8c4330",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1761955200,
+    1764547200
+   ],
+   "window_iso": [
+    "2025-11-01T00:00:00Z",
+    "2025-12-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2025-12": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:44:29Z",
+   "file": "data/store/1m/okx/ETHUSDT/2025-12.csv.gz",
+   "first": "2025-12-01T00:00:00Z",
+   "last": "2025-12-31T23:59:00Z",
+   "month": "2025-12",
+   "rows": 44640,
+   "sha256": "23aa2c01890e80cab281a6cc4650d7f381931e936d21715cfb0ac4dc514babb2",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1764547200,
+    1767225600
+   ],
+   "window_iso": [
+    "2025-12-01T00:00:00Z",
+    "2026-01-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2026-01": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:45:14Z",
+   "file": "data/store/1m/okx/ETHUSDT/2026-01.csv.gz",
+   "first": "2026-01-01T00:00:00Z",
+   "last": "2026-01-31T23:59:00Z",
+   "month": "2026-01",
+   "rows": 44640,
+   "sha256": "d37a968fd3ecf3c5063d7df1c4db809bfed87de74188b73c133690373ecd8d9b",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1767225600,
+    1769904000
+   ],
+   "window_iso": [
+    "2026-01-01T00:00:00Z",
+    "2026-02-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2026-02": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 40320,
+   "fetched_at": "2026-09-25T14:45:51Z",
+   "file": "data/store/1m/okx/ETHUSDT/2026-02.csv.gz",
+   "first": "2026-02-01T00:00:00Z",
+   "last": "2026-02-28T23:59:00Z",
+   "month": "2026-02",
+   "rows": 40320,
+   "sha256": "987407743d6c9c32d8dbd5cb4590ddd96ac764894d7776d96e84d3b5a191f1a8",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1769904000,
+    1772323200
+   ],
+   "window_iso": [
+    "2026-02-01T00:00:00Z",
+    "2026-03-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2026-03": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:46:32Z",
+   "file": "data/store/1m/okx/ETHUSDT/2026-03.csv.gz",
+   "first": "2026-03-01T00:00:00Z",
+   "last": "2026-03-31T23:59:00Z",
+   "month": "2026-03",
+   "rows": 44640,
+   "sha256": "aa0c79781777a3ff475701aaff8f691e1085c0e684b473eba0c4b2db5e6ff2ec",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1772323200,
+    1775001600
+   ],
+   "window_iso": [
+    "2026-03-01T00:00:00Z",
+    "2026-04-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2026-04": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:47:16Z",
+   "file": "data/store/1m/okx/ETHUSDT/2026-04.csv.gz",
+   "first": "2026-04-01T00:00:00Z",
+   "last": "2026-04-30T23:59:00Z",
+   "month": "2026-04",
+   "rows": 43200,
+   "sha256": "b800c6e3c7af110e68603ebec0b2c205c265ea41752fb64acc173af7c34a5c28",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1775001600,
+    1777593600
+   ],
+   "window_iso": [
+    "2026-04-01T00:00:00Z",
+    "2026-05-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2026-05": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:47:57Z",
+   "file": "data/store/1m/okx/ETHUSDT/2026-05.csv.gz",
+   "first": "2026-05-01T00:00:00Z",
+   "last": "2026-05-31T23:59:00Z",
+   "month": "2026-05",
+   "rows": 44640,
+   "sha256": "e08069acfa3f06af7a28da588c807fce9d7b377fc7bf0253035afb1bcfda40b0",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1777593600,
+    1780272000
+   ],
+   "window_iso": [
+    "2026-05-01T00:00:00Z",
+    "2026-06-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2026-06": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 43200,
+   "fetched_at": "2026-09-25T14:48:38Z",
+   "file": "data/store/1m/okx/ETHUSDT/2026-06.csv.gz",
+   "first": "2026-06-01T00:00:00Z",
+   "last": "2026-06-30T23:59:00Z",
+   "month": "2026-06",
+   "rows": 43200,
+   "sha256": "77215a9702b483ac5510fbdf6be303b2adb45a481700a120349db5f5fbf78b67",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1780272000,
+    1782864000
+   ],
+   "window_iso": [
+    "2026-06-01T00:00:00Z",
+    "2026-07-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2026-07": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:49:21Z",
+   "file": "data/store/1m/okx/ETHUSDT/2026-07.csv.gz",
+   "first": "2026-07-01T00:00:00Z",
+   "last": "2026-07-31T23:59:00Z",
+   "month": "2026-07",
+   "rows": 44640,
+   "sha256": "f5f0c6aab92eb22bb2d8ec5391328fc0d7195eea82d6c260f231885a7800e261",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1782864000,
+    1785542400
+   ],
+   "window_iso": [
+    "2026-07-01T00:00:00Z",
+    "2026-08-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2026-08": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 44640,
+   "fetched_at": "2026-09-25T14:50:02Z",
+   "file": "data/store/1m/okx/ETHUSDT/2026-08.csv.gz",
+   "first": "2026-08-01T00:00:00Z",
+   "last": "2026-08-31T23:59:00Z",
+   "month": "2026-08",
+   "rows": 44640,
+   "sha256": "96be45203120aea8b3f776fcb8567dd649076c713b037a8267ac1882656452a0",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1785542400,
+    1788220800
+   ],
+   "window_iso": [
+    "2026-08-01T00:00:00Z",
+    "2026-09-01T00:00:00Z"
+   ]
+  },
+  "okx/ETHUSDT/2026-09": {
+   "complete": true,
+   "endpoint": "https://www.okx.com/api/v5/market/history-candles",
+   "expected_minutes": 34560,
+   "fetched_at": "2026-09-25T14:50:33Z",
+   "file": "data/store/1m/okx/ETHUSDT/2026-09.csv.gz",
+   "first": "2026-09-01T00:00:00Z",
+   "last": "2026-09-24T23:59:00Z",
+   "month": "2026-09",
+   "rows": 34560,
+   "sha256": "5898e08bc6ec5c5e2ca50747045613ebd3f044a49719b2e7ef755504836c7a56",
+   "symbol": "ETHUSDT",
+   "venue": "okx",
+   "window": [
+    1788220800,
+    1790294400
+   ],
+   "window_iso": [
+    "2026-09-01T00:00:00Z",
+    "2026-09-25T00:00:00Z"
+   ]
+  }
+ }
+}

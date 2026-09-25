@@ -1,0 +1,443 @@
+{
+ "range": [
+  "2024-03-01",
+  "2026-09-25"
+ ],
+ "store": "C:\\Users\\ii562\\CorrFi\\data\\store\\1m",
+ "symbols": {
+  "ETHUSDT": {
+   "venues": {
+    "binance": {
+     "minutes": 1350720,
+     "valid": 1350720,
+     "rate": 1.0,
+     "missing": 0,
+     "zero_base_volume": 0,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 0,
+     "worst_months": [
+      [
+       "2024-03",
+       {
+        "valid": 44640
+       }
+      ],
+      [
+       "2024-04",
+       {
+        "valid": 43200
+       }
+      ],
+      [
+       "2024-05",
+       {
+        "valid": 44640
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.016551194315636064,
+      "2025-10-10T21:55Z"
+     ],
+     "dispersion_over": {
+      "0.001": 100,
+      "0.005": 5,
+      "0.01": 3
+     }
+    },
+    "okx": {
+     "minutes": 1350720,
+     "valid": 1350714,
+     "rate": 0.9999955579246624,
+     "missing": 0,
+     "zero_base_volume": 6,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 0,
+     "worst_months": [
+      [
+       "2026-01",
+       {
+        "valid": 44638,
+        "zero_base_volume": 2
+       }
+      ],
+      [
+       "2026-08",
+       {
+        "valid": 44638,
+        "zero_base_volume": 2
+       }
+      ],
+      [
+       "2026-06",
+       {
+        "valid": 43199,
+        "zero_base_volume": 1
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.01579916347777836,
+      "2025-10-10T21:55Z"
+     ],
+     "dispersion_over": {
+      "0.001": 187,
+      "0.005": 11,
+      "0.01": 4
+     }
+    },
+    "bybit": {
+     "minutes": 1350720,
+     "valid": 1350711,
+     "rate": 0.9999933368869937,
+     "missing": 0,
+     "zero_base_volume": 9,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 3,
+     "worst_months": [
+      [
+       "2026-08",
+       {
+        "valid": 44631,
+        "zero_base_volume": 9
+       }
+      ],
+      [
+       "2024-03",
+       {
+        "valid": 44640
+       }
+      ],
+      [
+       "2024-04",
+       {
+        "valid": 43200
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.009787084776100808,
+      "2025-10-10T22:05Z"
+     ],
+     "dispersion_over": {
+      "0.001": 239,
+      "0.005": 8,
+      "0.01": 0
+     }
+    },
+    "bitget": {
+     "minutes": 1350720,
+     "valid": 1350478,
+     "rate": 0.9998208362947169,
+     "missing": 0,
+     "zero_base_volume": 242,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 0,
+     "worst_months": [
+      [
+       "2026-08",
+       {
+        "valid": 44567,
+        "zero_base_volume": 73
+       }
+      ],
+      [
+       "2024-06",
+       {
+        "valid": 43149,
+        "zero_base_volume": 51
+       }
+      ],
+      [
+       "2026-01",
+       {
+        "valid": 44594,
+        "zero_base_volume": 46
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.00896161045053657,
+      "2025-10-10T21:20Z"
+     ],
+     "dispersion_over": {
+      "0.001": 393,
+      "0.005": 4,
+      "0.01": 0
+     }
+    },
+    "kucoin": {
+     "minutes": 1350720,
+     "valid": 1350208,
+     "rate": 0.999620942904525,
+     "missing": 0,
+     "zero_base_volume": 512,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 0,
+     "worst_months": [
+      [
+       "2026-08",
+       {
+        "valid": 44500,
+        "zero_base_volume": 140
+       }
+      ],
+      [
+       "2026-04",
+       {
+        "valid": 43101,
+        "zero_base_volume": 99
+       }
+      ],
+      [
+       "2026-07",
+       {
+        "valid": 44584,
+        "zero_base_volume": 56
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.01798148900981199,
+      "2025-02-03T02:00Z"
+     ],
+     "dispersion_over": {
+      "0.001": 176,
+      "0.005": 6,
+      "0.01": 2
+     }
+    }
+   },
+   "grid_5m": {
+    "points": 270144,
+    "valid": 270144,
+    "valid_rate": 1.0,
+    "venue_count_hist": {
+     "3": 1,
+     "4": 197,
+     "5": 269946
+    },
+    "jumps_over_half": [],
+    "invalid_times": [],
+    "invalid_count": 0
+   }
+  },
+  "BTCUSDT": {
+   "venues": {
+    "binance": {
+     "minutes": 1350720,
+     "valid": 1350720,
+     "rate": 1.0,
+     "missing": 0,
+     "zero_base_volume": 0,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 0,
+     "worst_months": [
+      [
+       "2024-03",
+       {
+        "valid": 44640
+       }
+      ],
+      [
+       "2024-04",
+       {
+        "valid": 43200
+       }
+      ],
+      [
+       "2024-05",
+       {
+        "valid": 44640
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.006092730429583234,
+      "2024-04-13T20:10Z"
+     ],
+     "dispersion_over": {
+      "0.001": 31,
+      "0.005": 1,
+      "0.01": 0
+     }
+    },
+    "okx": {
+     "minutes": 1350720,
+     "valid": 1350720,
+     "rate": 1.0,
+     "missing": 0,
+     "zero_base_volume": 0,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 0,
+     "worst_months": [
+      [
+       "2024-03",
+       {
+        "valid": 44640
+       }
+      ],
+      [
+       "2024-04",
+       {
+        "valid": 43200
+       }
+      ],
+      [
+       "2024-05",
+       {
+        "valid": 44640
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.007517211881149391,
+      "2025-10-10T21:45Z"
+     ],
+     "dispersion_over": {
+      "0.001": 71,
+      "0.005": 4,
+      "0.01": 0
+     }
+    },
+    "bybit": {
+     "minutes": 1350720,
+     "valid": 1350720,
+     "rate": 1.0,
+     "missing": 0,
+     "zero_base_volume": 0,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 2,
+     "worst_months": [
+      [
+       "2024-03",
+       {
+        "valid": 44640
+       }
+      ],
+      [
+       "2024-04",
+       {
+        "valid": 43200
+       }
+      ],
+      [
+       "2024-05",
+       {
+        "valid": 44640
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.0043551815133611406,
+      "2025-02-21T18:20Z"
+     ],
+     "dispersion_over": {
+      "0.001": 206,
+      "0.005": 0,
+      "0.01": 0
+     }
+    },
+    "bitget": {
+     "minutes": 1350720,
+     "valid": 1350650,
+     "rate": 0.999948175787728,
+     "missing": 0,
+     "zero_base_volume": 70,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 34,
+     "worst_months": [
+      [
+       "2025-11",
+       {
+        "valid": 43150,
+        "zero_base_volume": 50
+       }
+      ],
+      [
+       "2026-07",
+       {
+        "valid": 44634,
+        "zero_base_volume": 6
+       }
+      ],
+      [
+       "2026-08",
+       {
+        "valid": 44635,
+        "zero_base_volume": 5
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.004461498950164913,
+      "2024-04-13T20:10Z"
+     ],
+     "dispersion_over": {
+      "0.001": 161,
+      "0.005": 0,
+      "0.01": 0
+     }
+    },
+    "kucoin": {
+     "minutes": 1350720,
+     "valid": 1350685,
+     "rate": 0.999974087893864,
+     "missing": 0,
+     "zero_base_volume": 35,
+     "non_positive_quote": 0,
+     "vwap_outside_low_high": 0,
+     "worst_months": [
+      [
+       "2026-08",
+       {
+        "valid": 44630,
+        "zero_base_volume": 10
+       }
+      ],
+      [
+       "2025-04",
+       {
+        "valid": 43195,
+        "zero_base_volume": 5
+       }
+      ],
+      [
+       "2026-04",
+       {
+        "valid": 43197,
+        "zero_base_volume": 3
+       }
+      ]
+     ],
+     "max_dispersion": [
+      0.015940353999007707,
+      "2025-02-03T02:00Z"
+     ],
+     "dispersion_over": {
+      "0.001": 132,
+      "0.005": 4,
+      "0.01": 3
+     }
+    }
+   },
+   "grid_5m": {
+    "points": 270144,
+    "valid": 270144,
+    "valid_rate": 1.0,
+    "venue_count_hist": {
+     "4": 24,
+     "5": 270120
+    },
+    "jumps_over_half": [],
+    "invalid_times": [],
+    "invalid_count": 0
+   }
+  }
+ },
+ "returns_5m": {
+  "bars": 270143,
+  "valid": 270143,
+  "valid_rate": 1.0
+ }
+}
