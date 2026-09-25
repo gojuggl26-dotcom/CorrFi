@@ -1,0 +1,17 @@
+State: 7D q=+50,000, 28D q=+25,000, 14D q0=+1,000, all P_fair = 0.90, RiskBudget 100,000
+
+[A] Risk-REDUCING: Taker buys Long 1,000 in 14D (D1, q 1,000 -> 0)
+  single trade: U* = 68.4000%, h_U = 0.001568
+  2nd half   : U* = 67.9500%, h_U = 0.001404
+  Pay single = 905.368794, Pay split(500+500) = 905.295894  -> split saves Taker 0.072900 USDC
+
+[B] Risk-INCREASING: Taker sells Long 1,000 in 14D (D2, q 1,000 -> 2,000)
+  single trade: U* = 68.4000%, h_U = 0.001568
+  2nd half   : U* = 68.8500%, h_U = 0.001741
+  Receive single = 888.432000, split = 888.345749  -> split costs Taker 0.086251 USDC
+
+[C] Same as [A] but with h frozen at the first trade's U* (fixed-h additivity)
+  Pay single = 905.368794, split with frozen h = 905.368794 -> diff 0.000000 (rounding only, Taker-unfavourable)
+
+Near-side band (OI-09): alpha is above P+h_min for 0 < q < h_U/s = 470.4 tokens
+OK

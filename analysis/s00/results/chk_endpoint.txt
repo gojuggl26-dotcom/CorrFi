@@ -1,0 +1,14 @@
+[1] final report (n_rem = 0) with identical winsorized returns for ETH and BTC
+  rho_hat^2 = 1 -> rho_hat = 1 -> P_fair = 1 -> U-4 rejects the report
+[2] final report with a constant ETH price (VA = 0): rho_hat = 0/0 (undefined)
+  numerator = 0 , denominator^2 = 0 -> division by zero
+[3] createMarket: PSD check sAB^2 <= sA2*sB2 passes with sA2 = 0, sAB = 0,
+    but the initial report (n_obs = 0) is 0/0 as well
+[4] n_rem >= 1 with PSD forecast and sA2, sB2 > 0: |rho_hat| <= 1 always (Cauchy-Schwarz).
+    Randomised exact check (10,000 states); equality needs obs and forecast perfectly proportional.
+  OK: no violation
+[5] Which routes finish settlement if the final combined tx reverts (M §3.2 p.11, §5.9 p.27, §6.2.1 p.29):
+    BarFeed post (reporter only) + public crank are separate entry points; finalize needs processed = N
+    or obsEnd + 48 h. If no bar is posted, the 48 h exit marks the last price point invalid, which
+    removes a valid return and can change Long_T (or flip it to VOID) -> not equivalent.
+OK

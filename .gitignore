@@ -1,0 +1,25 @@
+# local caches (spec text extracted from the PDFs, downloaded market data)
+.cache/
+data/raw/
+data/store/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node
+node_modules/
+
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+
+# secrets — never commit keys or RPC credentials
+.env
+.env.*
+*.key
+*.pem
+keystore/
+.pytest_cache/

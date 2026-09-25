@@ -1,0 +1,23 @@
+# CorrFi contracts (Foundry). Dependency pins: docs/s00/02-decision-log.md PROP-18 / SCOPE-05.
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.30"          # same as SwapVM (its sources pin pragma 0.8.30)
+evm_version = "cancun"           # minimum for transient storage (EIP-1153); confirm Base Sepolia hardfork in S08
+optimizer = true
+optimizer_runs = 700             # same as SwapVM
+via_ir = true
+fs_permissions = [{ access = "read", path = "../vectors" }]
+remappings = [
+    "forge-std/=lib/forge-std/src/",
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    "@1inch/solidity-utils/=lib/solidity-utils/",
+    "@1inch/aqua/=lib/aqua/",
+    "@1inch/swap-vm/=lib/swap-vm/",
+    "solady/=lib/solady/src/",
+]
+
+[fuzz]
+runs = 1000

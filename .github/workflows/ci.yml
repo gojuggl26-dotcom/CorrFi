@@ -1,0 +1,45 @@
+# CorrFi CI (S01). Same commands are run locally before each stage report; this file only takes effect once the
+# repository is pushed (the user decides when — MI-12).
+name: ci
+on: [push, pull_request]
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install "pytest==8.4.2"
+      - run: python analysis/s00/run_all.py
+      - run: python -m pytest verifier/tests -q
+      - name: S02 data-processing tests (only once data/ is in the repository)
+        run: if [ -d data/tests ]; then python -m pytest data/tests -q; else echo "data/ not committed yet"; fi
+      - name: shared vectors are reproducible
+        run: python vectors/gen_fixedpoint.py && git diff --exit-code -- vectors/
+
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm test
+        working-directory: engine
+
+  solidity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.8.3
+      - run: forge test
+        working-directory: contracts
+      - name: contract size gate (24,576 / 49,152 B; warn > 90%)
+        run: python3 script/check_sizes.py
+        working-directory: contracts

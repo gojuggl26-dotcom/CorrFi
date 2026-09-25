@@ -1,0 +1,12 @@
+{
+  "name": "corrfi-engine",
+  "private": true,
+  "type": "module",
+  "description": "CorrFi price engine and reporter (TypeScript). S01: fixed-point port.",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "node --test \"test/**/*.test.ts\""
+  }
+}

@@ -1,0 +1,23 @@
+lambda = 0.99759613288362025990155607314884270282183140456477
+
+[1] Minimal reproduction: P_fair 0.900 -> 0.901 -> 0.900 (two bars)
+  per-bar reports : sigma_bar = 0.000801079711
+  one 2-bar report: sigma_bar = 0.000799037875
+  h_O at age 11 s : 3.068e-04 vs 3.060e-04 USDC/token
+
+[2] 24 bars: 2 reports x 12 bars vs 1 report x 24 bars (R §5.5 switch)
+  12+12: 0.000799250103  24: 0.000799249058
+  h_O at age 11 s: 3.060895e-04 vs 3.060891e-04 -> differs, so trade amounts/state can differ
+
+[3] Effective decay per bar when one report covers 12 bars (replay phase A)
+  production: 1 report / bar -> half-life 288 bars = 1 day
+  replay A  : 1 report / 12 bars -> half-life 288 reports = 3,456 bars = 12 days (7D market ends first)
+
+[4] quote vs swap timestamp (OI-02): h_O at the post time T+10 vs the trade block T+11
+  age   0 s: h_O = 0.000000000 USDC/token
+  age  10 s: h_O = 0.000292119 USDC/token
+  age  11 s: h_O = 0.000306377 USDC/token
+  age  12 s: h_O = 0.000320000 USDC/token
+  age 360 s: h_O = 0.001752712 USDC/token
+  h_O(11) - h_O(10) = 1.426e-5 USDC/token -> on 1,000 tokens = 0.014258 USDC (>> 1 unit = 0.000001)
+OK

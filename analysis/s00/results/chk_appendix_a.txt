@@ -1,0 +1,27 @@
+== M §4.5.1 (p.19) / App. A D1 exact-out Q=3,000 from q0=0 ==
+Pay = 2,730.000000 USDC; avg = 91/100 ; edge vs P*Q = 30.000000
+
+== App. A D1 exact-in X=1,000 from q0=0 (also M §5.8.1 p.25) ==
+Q = 1,102.732928 Long (doc: 1,102.732928)
+avg price = 0.906838 (doc: 0.906838)
+closed form x = 1102.7329283402 (doc: 1102.7329283...)
+leftover kept by Maker side = 3.091742446933333e-07 USDC (doc: ~0.0000003)
+
+== App. A D2 exact-in Q=3,000 from q0=0 ==
+Receive = 2,670.000000 USDC (doc: 2,670)
+
+== App. A D2 exact-out X=1,000 from q0=0 ==
+Q = 1,119.652929 Long (doc: 1,119.652929); closed form x = 1119.6529286417
+
+== Round trip (OI-03): the doc's 60 USDC vs the same-path round trip ==
+buy 3,000 (0 -> -3,000)         Pay     = 2,730.000000
+sell 3,000 back (-3,000 -> 0)    Receive = 2,685.000000   -> Maker round-trip PnL = 45.000000
+sell 3,000 from 0 (0 -> +3,000)  Receive = 2,670.000000   -> 2,730 - 2,670 = 60.000000 (doc's 60, different paths)
+F2 lower bound 2*hmin*Q = 30 USDC
+∫_{-3000}^{0} (alpha - beta) dq = 45 USDC (F2, M §7.1 p.32)
+
+== Fixed-h additivity of the path integral (M §4.5 consistency (2), p.19) ==
+split at   1,500.000000: exact sum equal; ceil(a)+ceil(b) - ceil(a+b) = 0 unit(s)
+split at   1,234.567891: exact sum equal; ceil(a)+ceil(b) - ceil(a+b) = 1 unit(s)
+split at       0.000001: exact sum equal; ceil(a)+ceil(b) - ceil(a+b) = 1 unit(s)
+OK
