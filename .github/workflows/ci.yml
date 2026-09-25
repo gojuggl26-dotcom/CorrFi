@@ -17,7 +17,10 @@ jobs:
       - name: S02 data-processing tests (only once data/ is in the repository)
         run: if [ -d data/tests ]; then python -m pytest data/tests -q; else echo "data/ not committed yet"; fi
       - name: shared vectors are reproducible
-        run: python vectors/gen_fixedpoint.py && git diff --exit-code -- vectors/
+        run: |
+          python vectors/gen_fixedpoint.py
+          python vectors/gen_market_scenarios.py
+          git diff --exit-code -- vectors/
 
   typescript:
     runs-on: ubuntu-latest
