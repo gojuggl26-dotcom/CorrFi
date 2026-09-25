@@ -227,6 +227,8 @@ def fair_value(c: int, va: int, vb: int, n_obs: int, n: int, s_ab: int, s_a2: in
 
 
 def tau(n_obs: int, n: int) -> int:                                      # F8
+    if n <= 0:
+        raise FixedPointError("division by zero")   # Solidity: Panic 0x12 (review S03-5)
     return n_obs * WAD // n
 
 
@@ -255,6 +257,8 @@ def h0(t: int, table: list[int], c_h: int, h_floor: int) -> int:        # F10
 def sigma_bar2_update(sig2: int, dp: int, dk: int, lam: int) -> int:    # F11
     if dk <= 0:
         raise FixedPointError("dk must be positive")
+    if not 0 <= lam <= WAD:
+        raise FixedPointError("lambda out of range")   # Solidity: WAD - lam underflows (review S03-5)
     t = (dp * dp // WAD) // dk
     return (lam * sig2 + (WAD - lam) * t) // WAD
 

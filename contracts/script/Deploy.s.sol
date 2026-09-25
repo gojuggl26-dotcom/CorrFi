@@ -23,7 +23,7 @@ import {TestUSDC} from "../src/TestUSDC.sol";
 ///   AQUA            existing Aqua; unset -> deploy lib/aqua v1.0.0 as is
 ///   WETH            required by the SwapVM constructor, unused (default: OP Stack predeploy 0x4200...0006)
 ///   REPORTER, PRICE_SIGNER, TREASURY
-///   H_FLOOR, C_O, GRACE, HU_MAX, U0, U_MAX   protocol constants (defaults: M §8.1)
+///   H_FLOOR, C_O, GRACE, HU_MAX, U0, U_MAX   protocol constants (defaults: M §8.1; c_O = 1.5 from S06, DEC-19)
 ///   DEPLOY_NAME     output file name under deployments/ (default: the chain id)
 contract Deploy is Script {
     function run() external {
@@ -34,7 +34,7 @@ contract Deploy is Script {
         address signer = vm.envAddress("PRICE_SIGNER");
         address treasury = vm.envAddress("TREASURY");
         CorrFiPricing.Params memory prm = CorrFiPricing.Params(
-            vm.envOr("C_O", uint256(2e18)),
+            vm.envOr("C_O", uint256(15e17)), // S06 adopted c_O = 1.5 (DEC-19)
             vm.envOr("GRACE", uint256(60)),
             vm.envOr("HU_MAX", uint256(2e16)),
             vm.envOr("U0", uint256(6e17)),

@@ -5,8 +5,9 @@ Usage:
                               [--store data/store/1m] [--manifest data/manifests/klines_1m.json]
 
 - One thread per venue (both symbols sequentially), with a per-venue request rate below the documented limits
-  (docs/s02/01-venue-api-survey.md). HTTP 429 / 418 / 5xx / network errors are retried with backoff;
-  Bybit's 403 ("access too frequent") waits 10 minutes as its docs require.
+  (docs/s02/01-venue-api-survey.md). HTTP 429 / 418 / 5xx / network errors are retried with backoff (Retry-After
+  when the venue sends it); Bybit's 403 ("access too frequent") waits 10 minutes as its docs require. A backoff
+  holds the whole venue client, not only the thread that saw the error (review S03-3).
 - Resumable: a month already recorded as complete in the manifest (same range) is skipped.
 - Every request is logged (URL, status, rows, seconds) to data/raw/logs/<venue>.jsonl.
 - The manifest records per file: rows, expected minutes, first/last open_time, sha256, endpoint, fetch time.
@@ -23,23 +24,17 @@ import urllib.error
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from aquacorr_data import SYMBOLS, VENUES  # noqa: E402
 from aquacorr_data.store import month_path, write_month  # noqa: E402
+from aquacorr_data.timeutil import iso, utc  # noqa: E402
 from aquacorr_data.venues import ADAPTERS, VenueError  # noqa: E402
 
 UA = "CorrFi-data/0.1 (research; public market data)"
 REPO = Path(__file__).resolve().parents[1]
-
-
-def utc(s: str) -> int:
-    return int(datetime.strptime(s, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
-
-
-def iso(t: int) -> str:
-    return datetime.fromtimestamp(t, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def month_windows(start: int, end: int):
@@ -69,18 +64,31 @@ class Client:
         if slot > now:
             time.sleep(slot - now)
 
+    def _hold(self, seconds: float):
+        """Push the client's next request slot out: every thread of this venue waits, not only the caller."""
+        with self.lock:
+            self.next_at = max(self.next_at, time.monotonic() + seconds)
+
+    @staticmethod
+    def _retry_after(headers) -> Optional[float]:
+        v = headers.get("Retry-After") if headers is not None else None
+        try:
+            return float(v) if v is not None else None
+        except ValueError:          # an HTTP date: fall back to the exponential backoff
+            return None
+
     def get_json(self, url: str):
         backoff = 2.0
         for attempt in range(10):
             self._pace()
             t0 = time.monotonic()
-            status, body, err = None, b"", None
+            status, body, err, headers = None, b"", None, None
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
                 with urllib.request.urlopen(req, timeout=30) as r:
                     status, body = r.status, r.read()
             except urllib.error.HTTPError as e:
-                status, body = e.code, e.read()
+                status, body, headers = e.code, e.read(), e.headers
             except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as e:
                 err = repr(e)
             dt = round(time.monotonic() - t0, 3)
@@ -92,9 +100,9 @@ class Client:
             if status == 200:
                 return json.loads(body)
             if status == 403 and self.venue == "bybit":
-                time.sleep(600)                      # Bybit: stop >= 10 minutes after a 403
+                self._hold(600)                      # Bybit: stop >= 10 minutes after a 403
             elif err is not None or status in (418, 429) or (status is not None and status >= 500):
-                time.sleep(backoff)
+                self._hold(self._retry_after(headers) or backoff)
                 backoff = min(backoff * 2, 120)
             else:
                 raise VenueError(f"{self.venue}: HTTP {status}: {body[:200]!r}")

@@ -27,6 +27,7 @@ library CorrFiOrders {
     uint8 internal constant OP_CORR_CURVE = 0xd1;
     uint8 internal constant OP_CORR_GUARD = 0xd2;
     uint256 internal constant PROGRAM_LENGTH = 19; // 0x20 05 obsEnd | 0xd0 06 m side gen | 0xd1 00 | 0xd2 00
+    uint8 internal constant DEADLINE_ARGS = 5; // uint40 obsEnd
     uint256 internal constant MAX_QTY = 1e18; // caps above 10^12 tokens would let the curve's integers overflow
 
     error BadOrder(uint8 code);
@@ -93,7 +94,7 @@ library CorrFiOrders {
         generation = uint32(bytes4(p[11:15]));
         ICorrFiHub.Quote memory s = e.hub.quoteState(marketId); // reverts for unknown markets
         bytes memory expected = abi.encodePacked(
-            OP_DEADLINE, uint8(5), uint40(s.obsEnd), OP_CORR_REPORT, uint8(6), marketId, side, generation
+            OP_DEADLINE, DEADLINE_ARGS, uint40(s.obsEnd), OP_CORR_REPORT, uint8(6), marketId, side, generation
         );
         if (keccak256(abi.encodePacked(expected, OP_CORR_CURVE, uint8(0), OP_CORR_GUARD, uint8(0))) != keccak256(p)) {
             revert BadOrder(8);
@@ -107,7 +108,6 @@ library CorrFiOrders {
         bytes32 h = keccak256(abi.encode(o)); // = SwapVM.hash for Aqua-mode orders
         if (st.orderInfo[h].registered) revert AlreadyRegistered(h);
         st.orderInfo[h] = CorrFiEngine.OrderInfo(o.maker, marketId, side, generation, true);
-        st.pairMask[o.maker][marketId][generation] |= uint8(1) << side;
         emit CorrOrderRegistered(h, o.maker, marketId, side, generation, o);
     }
 

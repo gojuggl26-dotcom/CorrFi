@@ -83,7 +83,7 @@ test("riskCapital / utilization / hU", () => {
   for (const r of rows("risk")) {
     const rc = fp.riskCapital(B(r.q), B(r.p));
     assert.equal(rc, B(r.rc));
-    assert.ok([1n, 2n, 3n].some((m) => fp.utilization(rc * m, B(r.rb)) === B(r.u)));
+    assert.equal(fp.utilization(rc * B(r.m), B(r.rb)), B(r.u)); // Σ RC = m · rc (S03-14)
     assert.equal(fp.hU(B(r.u), 2n * 10n ** 16n, 6n * 10n ** 17n, 9n * 10n ** 17n), B(r.hu));
   }
 });
@@ -108,4 +108,10 @@ test("sqrt is floor(sqrt(x))", () => {
     const s = fp.sqrt(x);
     assert.ok(s * s <= x && (s + 1n) * (s + 1n) > x, x.toString());
   }
+});
+
+test("errors where Solidity reverts (review S03-5)", () => {
+  assert.throws(() => fp.tau(0n, 0n), fp.FixedPointError);
+  assert.throws(() => fp.sigmaBar2Update(10n ** 12n, 10n ** 15n, 1n, fp.WAD + 1n), fp.FixedPointError);
+  assert.equal(fp.sigmaBar2Update(10n ** 12n, 10n ** 15n, 1n, fp.WAD), 10n ** 12n);
 });

@@ -182,6 +182,7 @@ export function fairValue(c: bigint, va: bigint, vb: bigint, nObs: bigint, n: bi
 }
 
 export function tau(nObs: bigint, n: bigint): bigint {                          // F8
+  if (n <= 0n) throw new FixedPointError("division by zero"); // Solidity: Panic 0x12 (review S03-5)
   return (nObs * WAD) / n;
 }
 
@@ -204,6 +205,7 @@ export function h0(t: bigint, table: readonly bigint[], cH: bigint, hFloor: bigi
 
 export function sigmaBar2Update(sig2: bigint, dp: bigint, dk: bigint, lam: bigint): bigint {      // F11
   if (dk <= 0n) throw new FixedPointError("dk must be positive");
+  if (lam < 0n || lam > WAD) throw new FixedPointError("lambda out of range"); // Solidity: WAD - lam underflows
   const t = (dp * dp) / WAD / dk;
   return (lam * sig2 + (WAD - lam) * t) / WAD;
 }

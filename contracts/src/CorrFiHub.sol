@@ -5,6 +5,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
 import {ICorrFiHub} from "./interfaces/ICorrFiHub.sol";
 import {CorrFiMath} from "./lib/CorrFiMath.sol";
@@ -236,7 +237,7 @@ contract CorrFiHub is ICorrFiHub, Ownable, EIP712 {
         address vault = Clones.clone(vaultImplementation);
         address longToken = Clones.clone(tokenImplementation);
         address shortToken = Clones.clone(tokenImplementation);
-        string memory tag = string.concat(_u2s(p.tenorDays), "D #", _u2s(id));
+        string memory tag = string.concat(Strings.toString(p.tenorDays), "D #", Strings.toString(id));
         CorrFiToken(longToken).initialize(vault, string.concat("CorrFi ETH/BTC ", tag, " Long"), "CFL");
         CorrFiToken(shortToken).initialize(vault, string.concat("CorrFi ETH/BTC ", tag, " Short"), "CFS");
         CorrFiVault(vault).initialize(address(this), id, usdc, longToken, shortToken, m.obsEnd);
@@ -280,7 +281,7 @@ contract CorrFiHub is ICorrFiHub, Ownable, EIP712 {
 
     function _post(PointInput calldata pt) internal {
         uint256 t = pt.t;
-        if (t % DELTA != 0) revert OffGrid(t);
+        if (t % DELTA != 0 || t < DELTA) revert OffGrid(t); // t = 0 has no previous grid point (review S03-6)
         if (t > block.timestamp) revert FromTheFuture(t);
         Point storage slot = _points[t];
         if (slot.posted) revert AlreadyPosted(t);
@@ -315,17 +316,21 @@ contract CorrFiHub is ICorrFiHub, Ownable, EIP712 {
         uint256 va = m.va;
         uint256 vb = m.vb;
         uint32 nValid = m.nValid;
+        // each point is read once (bar k's end is bar k + 1's start); the fixed fields once (review S03-9)
+        uint256 t1 = m.obsStart + uint256(k) * DELTA;
+        (int256 csA, int256 csB) = (m.csA, m.csB);
+        Point memory a = _points[t1];
         while (k < stop) {
-            uint256 t1 = m.obsStart + uint256(k + 1) * DELTA;
-            Point storage a = _points[t1 - DELTA];
-            Point storage b = _points[t1];
+            t1 += DELTA;
+            Point memory b = _points[t1];
             if (!(a.posted && b.posted) && !pastGrace) break; // wait for the reporter (backfill) — M §6.2.1
             if (a.posted && b.posted && a.validA && a.validB && b.validA && b.validB) {
-                int256 ra = CorrFiMath.winsorize(CorrFiMath.logRatio(a.pA, b.pA), m.csA);
-                int256 rb = CorrFiMath.winsorize(CorrFiMath.logRatio(a.pB, b.pB), m.csB);
+                int256 ra = CorrFiMath.winsorize(CorrFiMath.logRatio(a.pA, b.pA), csA);
+                int256 rb = CorrFiMath.winsorize(CorrFiMath.logRatio(a.pB, b.pB), csB);
                 (c, va, vb) = CorrFiMath.accumulate(c, va, vb, ra, rb);
                 ++nValid;
             }
+            a = b;
             ++k;
         }
         if (k != start) {
@@ -355,9 +360,12 @@ contract CorrFiHub is ICorrFiHub, Ownable, EIP712 {
     }
 
     function _checkSigner(uint8 id, uint32 k, uint256 pFair, uint256 h0_, bytes calldata signature) internal view {
-        bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(REPORT_TYPEHASH, id, k, pFair, h0_)));
-        address signer = ECDSA.recover(digest, signature);
+        address signer = ECDSA.recover(_digest(id, k, pFair, h0_), signature);
         if (signer != priceSigner) revert BadSigner(signer);
+    }
+
+    function _digest(uint8 id, uint32 k, uint256 pFair, uint256 h0_) internal view returns (bytes32) {
+        return _hashTypedDataV4(keccak256(abi.encode(REPORT_TYPEHASH, id, k, pFair, h0_)));
     }
 
     function _market(uint8 id) internal view returns (Market storage m) {
@@ -365,18 +373,10 @@ contract CorrFiHub is ICorrFiHub, Ownable, EIP712 {
         m = _markets[id];
     }
 
-    function _u2s(uint256 v) internal pure returns (string memory s) {
-        if (v == 0) return "0";
-        while (v != 0) {
-            s = string.concat(string(abi.encodePacked(bytes1(uint8(48 + v % 10)))), s);
-            v /= 10;
-        }
-    }
-
     // ------------------------------------------------------------------ views
 
     function reportDigest(uint8 marketId, uint32 k, uint256 pFair, uint256 h0_) external view returns (bytes32) {
-        return _hashTypedDataV4(keccak256(abi.encode(REPORT_TYPEHASH, marketId, k, pFair, h0_)));
+        return _digest(marketId, k, pFair, h0_);
     }
 
     function point(uint256 t) external view returns (Point memory) {
@@ -385,6 +385,12 @@ contract CorrFiHub is ICorrFiHub, Ownable, EIP712 {
 
     function marketVault(uint8 id) external view returns (address) {
         return _market(id).vault;
+    }
+
+    /// Vault and latest P_fair in one read (the router's exposure loop, review S04-14).
+    function riskState(uint8 id) external view returns (address vault, uint256 pFair) {
+        Market storage m = _market(id);
+        return (m.vault, m.pFair);
     }
 
     function marketParams(uint8 id)

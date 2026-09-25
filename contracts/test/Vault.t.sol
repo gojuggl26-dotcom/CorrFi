@@ -131,6 +131,20 @@ contract VaultTest is CorrFiFixture {
         v.depositOut(MAKER, CorrFiVault.Side.Long, 1, address(this));
     }
 
+    /// Custody moved to the vault itself would shrink the ledger but keep the tokens (A5, review S03-7).
+    function test_depositOutToTheVaultItselfIsRejected() public {
+        _routerMintPairs(1_000);
+        vm.startPrank(ROUTER);
+        v.depositIn(MAKER, CorrFiVault.Side.Long, 500);
+        vm.expectRevert(CorrFiVault.BadRecipient.selector);
+        v.depositOut(MAKER, CorrFiVault.Side.Long, 100, address(v));
+        vm.stopPrank();
+        (uint256 nl, uint256 ns, bool fin) = v.custodyOf(MAKER);
+        assertEq(nl, 500);
+        assertEq(ns, 0);
+        assertFalse(fin);
+    }
+
     function test_depositLedgerEqualsCustodyA5() public {
         _routerMintPairs(1_000);
         vm.startPrank(ROUTER);

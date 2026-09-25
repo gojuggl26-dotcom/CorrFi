@@ -44,6 +44,15 @@ def test_ln_wad_rejects_non_positive():
             fp.ln_wad(x)
 
 
+def test_errors_where_solidity_reverts():
+    # review S03-5: every Solidity revert is a FixedPointError (the vector generators record them as "revert")
+    with pytest.raises(fp.FixedPointError):
+        fp.tau(0, 0)
+    with pytest.raises(fp.FixedPointError):
+        fp.sigma_bar2_update(10**12, 10**15, 1, WAD + 1)
+    assert fp.sigma_bar2_update(10**12, 10**15, 1, WAD) == 10**12
+
+
 # ---- settlement statistic -------------------------------------------------------------------------------------
 
 def test_signed_division_truncates_toward_zero():

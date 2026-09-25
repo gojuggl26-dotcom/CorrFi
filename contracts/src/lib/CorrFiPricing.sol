@@ -2,6 +2,7 @@
 pragma solidity 0.8.30;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IAqua} from "@1inch/aqua/src/interfaces/IAqua.sol";
 import {ICorrFiHub} from "../interfaces/ICorrFiHub.sol";
 import {ICorrFiVaultView} from "../interfaces/ICorrFiVaultView.sol";
 import {CorrFiMath} from "./CorrFiMath.sol";
@@ -27,9 +28,9 @@ library CorrFiPricing {
     uint8 internal constant LOCKED = 7; // the maker is in a trade (nested re-entry, any market: DEC-15)
     uint8 internal constant QTY_TOO_SMALL = 8;
     uint8 internal constant QTY_TOO_LARGE = 9;
-    uint8 internal constant MARKET_CAP = 10; // |q1| > qmax,m
-    uint8 internal constant GROUP_CAP = 11; // Σ|q| > q_grp
-    uint8 internal constant UTILIZATION_CAP = 12; // risk-increasing with U_post >= U_max
+    uint8 internal constant MARKET_CAP = 10; // |q1| > qmax,m on a fill that increases |q| (DEC-23)
+    uint8 internal constant GROUP_CAP = 11; // Σ|q| > q_grp on a fill that increases |q| (DEC-23)
+    uint8 internal constant UTILIZATION_CAP = 12; // risk-increasing (RC grows, DEC-22) with U_post >= U_max
     uint8 internal constant ALLOCATION_SHORT = 13; // the order's USDC allocation in Aqua is too small
     uint8 internal constant WALLET_SHORT = 14; // maker's USDC balance or Aqua allowance too small
     uint8 internal constant ZERO_AMOUNT = 15; // amountIn or amountOut is 0
@@ -153,30 +154,35 @@ library CorrFiPricing {
         return t.isBuy ? 3 : 4;
     }
 
-    function inventory(ICorrFiVaultView vault, address maker) internal view returns (uint256 nl, uint256 ns) {
-        nl = vault.depositLong(maker);
-        ns = vault.depositShort(maker);
+    /// The maker's book across markets (M §6.1, PROP-10): Σ RC and Σ|q| of the other live (not finalized) markets at
+    /// their latest P_fair, and market m's P_fair and custody. Two reads per market (review S04-14).
+    struct Exposure {
+        address vault; // market m
+        uint256 rcOthers;
+        uint256 absOthers;
+        uint256 pM;
+        uint256 nl;
+        uint256 ns;
     }
 
-    /// Σ RC and Σ|q| over live (not finalized) markets, with market `m` evaluated at inventory `qm` (M §6.1, PROP-10).
-    function exposure(ICorrFiHub hub, address maker, uint8 m, int256 qm)
-        internal
-        view
-        returns (uint256 rcTotal, uint256 absTotal)
-    {
+    function exposure(ICorrFiHub hub, address maker, uint8 m) internal view returns (Exposure memory x) {
         uint256 count = hub.marketCount();
         for (uint256 i; i < count; ++i) {
-            ICorrFiVaultView v = ICorrFiVaultView(hub.marketVault(uint8(i)));
-            if (v.finalized()) continue;
-            int256 q = qm;
-            if (i != m) {
-                (uint256 nl, uint256 ns) = inventory(v, maker);
-                q = int256(nl) - int256(ns);
+            (address vault, uint256 p) = hub.riskState(uint8(i));
+            (uint256 nl, uint256 ns, bool fin) = ICorrFiVaultView(vault).custodyOf(maker);
+            if (i == m) {
+                (x.vault, x.pM, x.nl, x.ns) = (vault, p, nl, ns);
+                continue;
             }
-            if (q == 0) continue;
-            rcTotal += CorrFiMath.riskCapital(q, hub.quoteState(uint8(i)).pFair);
-            absTotal += uint256(q > 0 ? q : -q);
+            if (fin || nl == ns) continue;
+            int256 q = int256(nl) - int256(ns);
+            x.rcOthers += CorrFiMath.riskCapital(q, p);
+            x.absOthers += _abs(q);
         }
+    }
+
+    function _abs(int256 q) private pure returns (uint256) {
+        return uint256(q >= 0 ? q : -q);
     }
 
     /// Inventory, pre-trade utilization and the curve (h = hmin + hU(U*), U* before the trade — M §4.4).
@@ -185,10 +191,10 @@ library CorrFiPricing {
         view
         returns (CorrFiCurve.Curve memory c)
     {
-        (r.nl, r.ns) = inventory(ICorrFiVaultView(x.hub.marketVault(t.marketId)), t.maker);
+        Exposure memory e = exposure(x.hub, t.maker, t.marketId);
+        (r.nl, r.ns) = (e.nl, e.ns);
         r.inv0 = int256(r.nl) - int256(r.ns);
-        (uint256 rcPre,) = exposure(x.hub, t.maker, t.marketId, r.inv0);
-        r.uPre = CorrFiMath.utilization(rcPre, cfg.riskBudget);
+        r.uPre = CorrFiMath.utilization(e.rcOthers + CorrFiMath.riskCapital(r.inv0, e.pM), cfg.riskBudget);
         r.hU = CorrFiMath.hU(r.uPre, prm.hUMax, prm.u0, prm.uMax);
         r.h = r.hmin + r.hU;
         c = CorrFiCurve.make(r.pFair, r.h, r.hmin, cfg.kq, cfg.qMaxMarket);
@@ -237,23 +243,31 @@ library CorrFiPricing {
         view
         returns (uint8)
     {
+        Exposure memory e = exposure(x.hub, t.maker, t.marketId);
+        (r.nl, r.ns) = (e.nl, e.ns);
+        r.inv0 = int256(r.nl) - int256(r.ns);
         r.qty = t.isBuy ? r.amountOut : r.amountIn;
         (r.q1, r.q2, r.inv1) = split(direction(t), r.qty, r.nl, r.ns, r.inv0);
-        (uint256 rcPost, uint256 absPost) = exposure(x.hub, t.maker, t.marketId, r.inv1);
-        r.uPost = CorrFiMath.utilization(rcPost, cfg.riskBudget);
+        uint256 rc0 = CorrFiMath.riskCapital(r.inv0, e.pM);
+        uint256 rc1 = CorrFiMath.riskCapital(r.inv1, e.pM);
+        r.uPost = CorrFiMath.utilization(e.rcOthers + rc1, cfg.riskBudget);
 
         if (r.amountIn == 0 || r.amountOut == 0) return ZERO_AMOUNT;
         if (r.qty < cfg.qMinTrade) return QTY_TOO_SMALL;
         if (r.qty > cfg.qMaxTrade) return QTY_TOO_LARGE;
-        uint256 abs1 = uint256(r.inv1 > 0 ? r.inv1 : -r.inv1);
-        uint256 abs0 = uint256(r.inv0 > 0 ? r.inv0 : -r.inv0);
-        if (abs1 > cfg.qMaxMarket) return MARKET_CAP;
-        if (absPost > cfg.qGroup) return GROUP_CAP;
-        if (abs1 > abs0 && r.uPost >= prm.uMax) return UTILIZATION_CAP; // only risk-increasing fills
+        // the inventory caps stop only fills that increase |q| (the other markets do not change), so a maker who
+        // lowers a cap below its inventory can still trade back toward it (DEC-23)
+        uint256 abs1 = _abs(r.inv1);
+        if (abs1 > _abs(r.inv0)) {
+            if (abs1 > cfg.qMaxMarket) return MARKET_CAP;
+            if (e.absOthers + abs1 > cfg.qGroup) return GROUP_CAP;
+        }
+        // risk-increasing = the market's risk capital grows, also across a sign change of q (DEC-22, S5)
+        if (rc1 > rc0 && r.uPost >= prm.uMax) return UTILIZATION_CAP;
         // gross funds: D1/D3 mint Q2 from the order's USDC; D2/D4 pay Receive from it (M §5.2.3-4)
         uint256 need = t.isBuy ? r.q2 : r.amountOut;
         if (need != 0) {
-            (uint248 alloc,) = IAquaBalances(x.aqua).rawBalances(t.maker, x.app, x.orderHash, x.usdc);
+            (uint248 alloc,) = IAqua(x.aqua).rawBalances(t.maker, x.app, x.orderHash, x.usdc);
             if (alloc < need) return ALLOCATION_SHORT;
             if (IERC20(x.usdc).balanceOf(t.maker) < need || IERC20(x.usdc).allowance(t.maker, x.aqua) < need) {
                 return WALLET_SHORT;
@@ -261,17 +275,9 @@ library CorrFiPricing {
         }
         // the side token passes through the maker's wallet via Aqua (buys: pulled to the taker; sells: pulled after
         // the taker's push) and so needs the maker's approval to Aqua for Q (M §5.1)
-        ICorrFiVaultView v = ICorrFiVaultView(x.hub.marketVault(t.marketId));
+        ICorrFiVaultView v = ICorrFiVaultView(e.vault);
         address sideToken = t.side == SIDE_LONG ? v.longToken() : v.shortToken();
         if (IERC20(sideToken).allowance(t.maker, x.aqua) < r.qty) return WALLET_SHORT;
         return OK;
     }
-}
-
-/// Minimal Aqua view used by the gross-funds check.
-interface IAquaBalances {
-    function rawBalances(address maker, address app, bytes32 strategyHash, address token)
-        external
-        view
-        returns (uint248 balance, uint8 tokensCount);
 }

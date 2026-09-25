@@ -12,7 +12,6 @@ import {IAqua} from "@1inch/aqua/src/interfaces/IAqua.sol";
 import {SwapQuery, SwapRegisters} from "@1inch/swap-vm/contracts/libs/VM.sol";
 
 import {ICorrFiHub} from "../interfaces/ICorrFiHub.sol";
-import {ICorrFiVaultView} from "../interfaces/ICorrFiVaultView.sol";
 import {CorrFiPricing} from "./CorrFiPricing.sol";
 import {CorrFiCurve} from "./CorrFiCurve.sol";
 import {CorrFiVault} from "../CorrFiVault.sol";
@@ -33,11 +32,11 @@ library CorrFiEngine {
         bool registered;
     }
 
-    /// Router storage (the router holds one instance and passes it to the library).
+    /// Router storage (the router holds one instance and passes it to the library). An order is registered only
+    /// together with the other book of its market / generation (CorrFiOrders.registerPair), so `registered` also
+    /// means that the pair is complete (review S04-12).
     struct State {
         mapping(bytes32 orderHash => OrderInfo) orderInfo;
-        /// bit 0 = Long order registered, bit 1 = Short order registered, per (maker, market, generation)
-        mapping(address maker => mapping(uint8 marketId => mapping(uint32 generation => uint8))) pairMask;
         mapping(address maker => CorrFiPricing.MakerConfig) config;
     }
 
@@ -117,8 +116,6 @@ library CorrFiEngine {
     function guard(State storage st, Env memory e, SwapQuery memory q, SwapRegisters memory reg) public view {
         CorrFiPricing.Trade memory t = _trade(st, e, q, reg);
         CorrFiPricing.Result memory r;
-        (r.nl, r.ns) = CorrFiPricing.inventory(ICorrFiVaultView(e.hub.marketVault(t.marketId)), t.maker);
-        r.inv0 = int256(r.nl) - int256(r.ns);
         r.amountIn = reg.amountIn;
         r.amountOut = reg.amountOut;
         uint8 reason = CorrFiPricing.post(_ctx(e, q.orderHash), t, st.config[t.maker], e.prm, r);
@@ -183,6 +180,18 @@ library CorrFiEngine {
         return CorrFiPricing.preReport(_ctx(e, orderHash), t, cfg, e.prm);
     }
 
+    /// Stage 2 without the amounts: inventory, U* and h, for the breakdown of a book too thin (review S04-10).
+    function stageInventory(
+        Env memory e,
+        bytes32 orderHash,
+        CorrFiPricing.Trade memory t,
+        CorrFiPricing.MakerConfig memory cfg,
+        CorrFiPricing.Result memory r
+    ) public view returns (CorrFiPricing.Result memory) {
+        CorrFiPricing.curveFor(_ctx(e, orderHash), t, cfg, e.prm, r);
+        return r;
+    }
+
     /// Stage 2 (as CorrCurve): inventory, U*, h and the amounts. Reverts CorrFiCurve.BookTooThin like the opcode.
     function stageCurve(
         Env memory e,
@@ -216,9 +225,7 @@ library CorrFiEngine {
         returns (CorrFiPricing.Trade memory)
     {
         OrderInfo memory info = st.orderInfo[q.orderHash];
-        if (!info.registered || info.maker != q.maker || st.pairMask[info.maker][info.marketId][info.generation] != 3) {
-            revert CorrReject(CorrFiPricing.NOT_REGISTERED);
-        }
+        if (!info.registered || info.maker != q.maker) revert CorrReject(CorrFiPricing.NOT_REGISTERED);
         return CorrFiPricing.Trade(
             info.maker,
             info.marketId,

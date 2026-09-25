@@ -23,10 +23,14 @@ def load(argv):
             return json.load(f)
     proc = subprocess.run(["forge", "build", "--sizes", "--json", "--skip", "test", "--skip", "script"],
                           capture_output=True, text=True, encoding="utf-8", errors="replace")
-    if proc.returncode not in (0, 1):   # forge exits 1 itself when a contract exceeds the limit
-        print(proc.stderr, file=sys.stderr)
+    # forge exits 1 both when a contract exceeds the limit (the JSON report is still printed) and when the build
+    # fails (no report): only a parsable report counts (review S03-8)
+    try:
+        report = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        print(f"forge build failed (exit {proc.returncode}); no size report:", file=sys.stderr)
+        print(proc.stderr or proc.stdout, file=sys.stderr)
         sys.exit(2)
-    report = json.loads(proc.stdout)
     add_linked_libraries(report)
     return report
 
@@ -49,8 +53,9 @@ def add_linked_libraries(report: dict) -> None:
             linked.update(libs)
     for name in sorted(linked - set(report)):
         art = arts.get(name)
-        if art is None:
-            continue
+        if art is None:   # a deployed library that cannot be measured must not pass silently (review S04-11)
+            print(f"linked library {name} has no artifact under out/; cannot measure it", file=sys.stderr)
+            sys.exit(2)
         runtime = art["deployedBytecode"]["object"]
         init = art["bytecode"]["object"]
         report[name] = {"runtime_size": (len(runtime) - 2) // 2, "init_size": (len(init) - 2) // 2}

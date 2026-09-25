@@ -210,15 +210,10 @@ contract FixedPointVectorsTest is Test {
             assertEq(r, _u(rc[i]));
             assertEq(CorrFiMath.hU(_u(u[i]), 2e16, 6e17, 9e17), _u(hu[i]));
         }
-        // utilization used a multiple of rc in the generator; check the formula on the recorded pairs
+        // utilization of Σ RC = m · rc (m recorded by the generator)
+        string[] memory m = _s(".risk.m");
         for (uint256 i; i < q.length; ++i) {
-            uint256 r = _u(rc[i]);
-            uint256 got = _u(u[i]);
-            bool matched;
-            for (uint256 m = 1; m < 4; ++m) {
-                if (CorrFiMath.utilization(r * m, _u(rb[i])) == got) matched = true;
-            }
-            assertTrue(matched);
+            assertEq(CorrFiMath.utilization(_u(rc[i]) * _u(m[i]), _u(rb[i])), _u(u[i]));
         }
     }
 

@@ -11,25 +11,21 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from aquacorr_data import BAR_SECONDS, SYMBOLS, VENUES  # noqa: E402
-from aquacorr_data.build import price_points  # noqa: E402
+from aquacorr_data.build import grid_times, price_points  # noqa: E402
 from aquacorr_data.grid import BAD_QUOTE, MISSING, ZERO_BASE  # noqa: E402
 from aquacorr_data.quality import DISPERSION_THRESHOLDS, grid_quality, venue_acquisition  # noqa: E402
+from aquacorr_data.timeutil import iso as iso_s, utc  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]
 
 
-def utc(s: str) -> int:
-    return int(datetime.strptime(s, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
-
-
 def iso(t: int) -> str:
-    return datetime.fromtimestamp(t, tz=timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+    return iso_s(t, seconds=False)
 
 
 def main() -> int:
@@ -40,12 +36,12 @@ def main() -> int:
     args = ap.parse_args()
     t0, t1 = utc(args.start), utc(args.end)
     report = {"range": [args.start, args.end], "store": str(args.store), "symbols": {}}
-    valid_by_symbol = {}
+    invalid = set()   # grid times invalid for either symbol
     for sym in SYMBOLS:
         acq = venue_acquisition(args.store, sym, VENUES, t0, t1)
-        pts = list(price_points(args.store, sym, VENUES, t0 + BAR_SECONDS, t1 + 1, BAR_SECONDS))
-        q = grid_quality(pts)
-        valid_by_symbol[sym] = {p.t: p.valid for p in pts}
+        # one streaming pass over the ~270,000 points per symbol (review S03-12: they used to be held in a list)
+        q = grid_quality(price_points(args.store, sym, VENUES, t0 + BAR_SECONDS, t1 + 1, BAR_SECONDS))
+        invalid.update(q.invalid_times)
         venues = {}
         for v, a in acq.items():
             months = {m: dict(c) for m, c in sorted(a.by_month.items())}
@@ -65,9 +61,8 @@ def main() -> int:
                         "invalid_times": [iso(t) for t in q.invalid_times[:200]],
                         "invalid_count": len(q.invalid_times)}}
     # bar k (return) validity needs both assets at k-1 and k (M §2.5.3)
-    times = sorted(valid_by_symbol[SYMBOLS[0]])
-    ok = sum(1 for a, b in zip(times, times[1:]) if all(valid_by_symbol[s][a] and valid_by_symbol[s][b]
-                                                          for s in SYMBOLS))
+    times = grid_times(t0 + BAR_SECONDS, t1 + 1, BAR_SECONDS)
+    ok = sum(1 for a, b in zip(times, times[1:]) if a not in invalid and b not in invalid)
     report["returns_5m"] = {"bars": len(times) - 1, "valid": ok, "valid_rate": ok / (len(times) - 1)}
 
     out = REPO / "data" / "reports" / f"quality_{args.start}_{args.end}.json"

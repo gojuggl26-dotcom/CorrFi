@@ -6,6 +6,7 @@ interface ICorrFiVaultView {
     function depositLong(address maker) external view returns (uint256);
     function depositShort(address maker) external view returns (uint256);
     function finalized() external view returns (bool);
+    function custodyOf(address maker) external view returns (uint256 nl, uint256 ns, bool isFinalized);
     function longToken() external view returns (address);
     function shortToken() external view returns (address);
 }

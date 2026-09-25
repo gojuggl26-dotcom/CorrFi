@@ -33,6 +33,7 @@ interface ICorrFiHub {
     function usdc() external view returns (address);
     function marketCount() external view returns (uint8);
     function marketVault(uint8 marketId) external view returns (address);
+    function riskState(uint8 marketId) external view returns (address vault, uint256 pFair);
     function settlement(uint8 marketId) external view returns (Settlement memory);
     function quoteState(uint8 marketId) external view returns (Quote memory);
 }

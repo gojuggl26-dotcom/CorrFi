@@ -7,6 +7,7 @@ import {Deadline} from "@1inch/swap-vm/contracts/instructions/Controls.sol";
 import {RouterFixture} from "./helpers/RouterFixture.sol";
 import {CorrFiHub} from "../src/CorrFiHub.sol";
 import {CorrFiLens} from "../src/CorrFiLens.sol";
+import {CorrFiRouter} from "../src/CorrFiRouter.sol";
 import {ICorrFiHub} from "../src/interfaces/ICorrFiHub.sol";
 import {CorrFiPricing} from "../src/lib/CorrFiPricing.sol";
 import {CorrFiEngine} from "../src/lib/CorrFiEngine.sol";
@@ -197,9 +198,114 @@ contract RouterGatesTest is RouterFixture {
         tradeAs(TAKER, L, true, true, 1_000 * U);
     }
 
+    /// DEC-22: a fill that crosses q = 0 is risk-increasing when the market's RC grows, although |q| shrinks
+    /// (review S04-7: under |q1| > |q0| this fill passed with U_post = 90%).
+    function test_utilizationCapCountsRiskCapitalAcrossZero() public {
+        CorrFiPricing.MakerConfig memory c = makerCfg();
+        c.riskBudget = uint128(1_000 * U); // P = 0.9: RC = 0.1 |q| for q < 0, 0.9 q for q > 0
+        vm.prank(MAKER);
+        router.setMakerConfig(c);
+        tradeAs(TAKER, L, true, false, 4_000 * U); // the maker sells Long: q = -4,000, RC = 400, U = 40%
+        // selling 5,000 Long to the maker: q1 = +1,000 (|q| shrinks) but RC = 900, U_post = 90% >= Umax
+        _quoteReverts(oL, false, true, 5_000 * U, CorrFiPricing.UTILIZATION_CAP);
+        CorrFiLens.Breakdown memory b = _bd(oL, L, false, true, 5_000 * U);
+        assertEq(b.reason, CorrFiPricing.UTILIZATION_CAP);
+        assertEq(b.inv1, 1_000 * int256(U));
+        assertEq(b.uPost, 9e17);
+        // q1 = +500: RC grows to 450 but U_post = 45% < Umax
+        tradeAs(TAKER, L, false, true, 4_500 * U);
+    }
+
+    /// DEC-22: a fill that grows |q| but lowers the market's RC is not risk-increasing, even at U_post >= Umax.
+    function test_utilizationCapAllowsRiskCapitalDecreaseAcrossZero() public {
+        tradeAs(TAKER, L, false, true, 100 * U); // q = +100, RC = 90
+        CorrFiPricing.MakerConfig memory c = makerCfg();
+        c.riskBudget = uint128(16 * U); // lowering the budget leaves the inventory alone (M §5.4): U = 563%
+        vm.prank(MAKER);
+        router.setMakerConfig(c);
+        // growing RC stops: buying Short from the maker raises q (selling Long would receive 0 here: h_U clips β to 0)
+        _quoteReverts(oS, true, false, 1 * U, CorrFiPricing.UTILIZATION_CAP);
+        // buying 250 Long: q1 = -150, |q| grows but RC = 15 < 90; U_post = 94% >= Umax and still allowed
+        CorrFiLens.Breakdown memory b = _bd(oL, L, true, false, 250 * U);
+        assertEq(b.reason, CorrFiPricing.OK);
+        assertGe(b.uPost, 9e17);
+        tradeAs(TAKER, L, true, false, 250 * U);
+        (uint256 nl, uint256 ns) = custody(MAKER);
+        assertEq(int256(nl) - int256(ns), -150 * int256(U));
+    }
+
+    /// DEC-23: after the maker lowers qmax,m below its inventory, fills that shrink |q| still trade; growing ones stop.
+    function test_loweredMarketCapStillLetsInventoryShrink() public {
+        for (uint256 i; i < 6; ++i) tradeAs(TAKER, L, true, false, 5_000 * U); // q = -30,000
+        CorrFiPricing.MakerConfig memory c = makerCfg();
+        c.qMaxMarket = uint128(10_000 * U);
+        c.qGroup = uint128(10_000 * U);
+        vm.prank(MAKER);
+        router.setMakerConfig(c);
+        _quoteReverts(oL, true, false, 1 * U, CorrFiPricing.MARKET_CAP);
+        assertEq(_bd(oL, L, false, true, 1_000 * U).reason, CorrFiPricing.OK);
+        tradeAs(TAKER, L, false, true, 1_000 * U); // before DEC-23: MARKET_CAP
+        tradeAs(TAKER, S, true, true, 100 * U); // buying Short from the maker also shrinks q < 0
+        (uint256 nl, uint256 ns) = custody(MAKER);
+        assertLt(ns - nl, 29_000 * U);
+    }
+
+    /// DEC-23 for the group cap: a fill that shrinks Σ|q| trades although Σ|q| stays above q_grp.
+    function test_loweredGroupCapStillLetsInventoryShrink() public {
+        for (uint256 i; i < 6; ++i) tradeAs(TAKER, L, true, false, 5_000 * U); // market 1: q = -30,000
+        uint8 m2 = createMarket(appAInput());
+        _approveMaker(MAKER, m2);
+        _approveTaker(TAKER, m2);
+        (ISwapVM.Order memory l2,) = openBooks(MAKER, m2, 1, ALLOCATION);
+        for (uint256 i; i < 6; ++i) {
+            vm.prank(TAKER);
+            router.trade(l2, m2, L, true, false, 5_000 * U, type(uint256).max, 0); // market 2: q = -30,000
+        }
+        CorrFiPricing.MakerConfig memory c = makerCfg();
+        c.qMaxMarket = uint128(35_000 * U);
+        c.qGroup = uint128(40_000 * U); // Σ|q| = 60,000 > q_grp
+        vm.prank(MAKER);
+        router.setMakerConfig(c);
+        bytes memory up = takerTraits(TAKER, l2, true, false, 0, false);
+        _expectReject(CorrFiPricing.GROUP_CAP); // |q2| = 31,000 <= qmax,m, Σ = 61,000
+        router.quote(l2, 1_000 * U, up);
+        vm.prank(TAKER);
+        router.trade(l2, m2, L, false, true, 1_000 * U, 0, 0); // Σ = 59,000: before DEC-23 GROUP_CAP
+    }
+
+    /// The router's immutable protocol constants are checked at deployment (review S04-9).
+    function test_constructorRejectsBadParams() public {
+        CorrFiPricing.Params memory p = protocolParams();
+        p.u0 = p.uMax;
+        vm.expectRevert(CorrFiRouter.BadParams.selector);
+        new CorrFiRouter(address(aqua), WETH, address(this), ICorrFiHub(address(hub)), p);
+        p = protocolParams();
+        p.uMax = WAD + 1;
+        vm.expectRevert(CorrFiRouter.BadParams.selector);
+        new CorrFiRouter(address(aqua), WETH, address(this), ICorrFiHub(address(hub)), p);
+        p = protocolParams();
+        p.hUMax = WAD + 1;
+        vm.expectRevert(CorrFiRouter.BadParams.selector);
+        new CorrFiRouter(address(aqua), WETH, address(this), ICorrFiHub(address(hub)), p);
+    }
+
     function test_bookTooThin() public {
         bytes memory tt = takerTraits(TAKER, oL, false, false, 0, false);
         vm.expectRevert(CorrFiCurve.BookTooThin.selector);
         router.quote(oL, 130_000 * U, tt); // beyond the whole β path from q = 0
+    }
+
+    /// The breakdown of a book too thin still reports the inventory, U* and the spreads (review S04-10: it used to
+    /// return h = 0 < h_min).
+    function test_bookTooThinBreakdownKeepsInventoryAndSpreads() public {
+        tradeAs(TAKER, L, false, true, 5_000 * U); // q = +5,000
+        CorrFiLens.Breakdown memory b = _bd(oL, L, false, false, 130_000 * U);
+        assertEq(b.reason, CorrFiPricing.BOOK_TOO_THIN);
+        assertEq(b.inv0, 5_000 * int256(U));
+        assertEq(b.uPre, CorrFiMath.utilization(CorrFiMath.riskCapital(5_000 * int256(U), 9e17), 100_000 * U));
+        assertGt(b.hmin, 0);
+        assertEq(b.h, b.hmin + b.hU);
+        assertEq(b.amountIn, 0);
+        assertEq(b.amountOut, 0);
     }
 }

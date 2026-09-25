@@ -115,8 +115,9 @@ def main():
         p = rng.randrange(0, WAD + 1)
         rc = fp.risk_capital(q, p)
         rb = rng.randrange(10**9, 10**12)
-        u = fp.utilization(rc * rng.randrange(1, 4), rb)
-        rows.append({"q": q, "p": p, "rc": rc, "rb": rb, "u": u,
+        m = rng.randrange(1, 4)   # Σ RC of 1-3 markets; recorded so that the tests check this exact input (S03-14)
+        u = fp.utilization(rc * m, rb)
+        rows.append({"q": q, "p": p, "rc": rc, "m": m, "rb": rb, "u": u,
                      "hu": fp.h_u(u, 2 * 10**16, 6 * 10**17, 9 * 10**17)})
     out["risk"] = cols(rows)
 

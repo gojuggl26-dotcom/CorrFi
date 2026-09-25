@@ -3,8 +3,8 @@
     python data/make_calib.py --cutoff 2026-09-21T00:00Z --tenor 7 --out calib.json
 
 The data-derived part (s_A, s_B, Σ̂_long, Σ̂_recent, Σ̂_future) is computed here. The rest of createMarket's input
-comes from the parameter table and is marked provisional until S06 fixes it (PROP-06, PROP-08, OI-10):
-w = 0.3 / 0.5 / 0.6, σP(τ) linear from 0.04 / 0.035 / 0.03 at bin midpoints, c_h = 0.15, λ = 2^(-1/288), σ0.
+is the parameter set adopted from the S06 backtest (DEC-19, backtest/results/params.json): w = 0.3 / 0.5 / 0.6,
+the σP(τ) tables, c_h = 0.30, λ = 2^(-1/72) (half-life 72 bars) and σP,bar(0) per tenor.
 """
 from __future__ import annotations
 
@@ -25,22 +25,23 @@ from aquacorr_data.calib import WAD, calibrate            # noqa: E402
 from aquacorr_data.grid import price_point                # noqa: E402
 from corrfi_verifier import fixedpoint as fp              # noqa: E402
 
-W_DEFAULT = {7: 3 * 10**17, 14: 5 * 10**17, 28: 6 * 10**17}           # M §4.1.1 initial values (PROP-06)
-SIGMA_P0 = {7: 4 * 10**16, 14: 35 * 10**15, 28: 3 * 10**16}           # M §4.1.3 provisional σP(0)
-LAMBDA_288 = 997596132883620259                                       # 2^(-1/288) in WAD (fixtures, S03)
-SIGMA0 = 8 * 10**14                                                   # M §4.2.2 typical σP,bar (OI-10)
-C_H = 15 * 10**16
-
-
-def sigma_table(p0: int) -> list[int]:
-    """PROP-08: the linear provisional σP(τ) = σP(0)(1 - τ) at the 10 bin midpoints."""
-    return [p0 * (19 - 2 * i) // 20 for i in range(10)]
+W_DEFAULT = {7: 3 * 10**17, 14: 5 * 10**17, 28: 6 * 10**17}           # M §4.1.1, kept by S06 B2 (C5, DEC-20)
+# S06 adopted values (DEC-19): σP(τ) at the bin midpoints, c_h, λ (half-life 72 bars), σP,bar(0)
+SIGMA_TABLE = {
+    7: [19723000000000000, 18479000000000000, 17196000000000000, 15710000000000000, 13996000000000000, 12166000000000000, 10179000000000000, 7959000000000000, 5450000000000000, 2737000000000000],
+    14: [19117000000000000, 17820000000000000, 16365000000000000, 14811000000000000, 13116000000000000, 11332000000000000, 9439000000000000, 7340000000000000, 5012000000000000, 2308000000000000],
+    28: [19988000000000000, 18513000000000000, 16903000000000000, 15197000000000000, 13385000000000000, 11432000000000000, 9378000000000000, 7167000000000000, 4774000000000000, 2113000000000000],
+}
+HALF_LIFE = 72
+LAMBDA = 990419147466826256                                                   # 2^(-1/72) in WAD
+SIGMA0 = {7: 81600000000000, 14: 39900000000000, 28: 20000000000000}
+C_H = 300000000000000000
 
 
 def lambda_check() -> None:
-    getcontext().prec = 50
-    exact = Decimal(2) ** (Decimal(-1) / Decimal(288)) * Decimal(WAD)
-    assert int(exact) == LAMBDA_288, (int(exact), LAMBDA_288)
+    getcontext().prec = 60
+    exact = Decimal(2) ** (Decimal(-1) / Decimal(HALF_LIFE)) * Decimal(WAD)
+    assert int(exact) == LAMBDA, (int(exact), LAMBDA)
 
 
 def main() -> None:
@@ -67,9 +68,9 @@ def main() -> None:
     if not all(c["checks"].values()):
         raise SystemExit(f"forecast checks failed: {c['checks']}")
     c.update({
-        "sigmaTable": [str(x) for x in sigma_table(SIGMA_P0[a.tenor])],
-        "cH": str(C_H), "lambda": str(LAMBDA_288), "sigma0": str(SIGMA0),
-        "provisional": ["w (PROP-06)", "sigmaTable (PROP-08)", "cH", "lambda (half-life 288)", "sigma0 (OI-10)"],
+        "sigmaTable": [str(x) for x in SIGMA_TABLE[a.tenor]],
+        "cH": str(C_H), "lambda": str(LAMBDA), "sigma0": str(SIGMA0[a.tenor]),
+        "parameters": "S06 adopted (DEC-19): backtest/results/params.json",
         "source": {"store": "data/store/1m", "venues": list(VENUES), "symbols": list(SYMBOLS)},
     })
     Path(a.out).write_text(json.dumps(c, indent=2) + "\n", encoding="utf-8", newline="\n")

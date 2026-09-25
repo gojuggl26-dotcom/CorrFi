@@ -144,8 +144,8 @@ def main() -> None:
     exact_returns()
     out: dict = {"tenors": {}}
     states: list[dict] = []
-    ch = b3["ch"]
-    ch_wad = int(round(ch * WAD))
+    prm = json.loads((RESULTS / "params.json").read_text(encoding="utf-8"))
+    ch_wad = int(prm["ch_wad"])
     with ProcessPoolExecutor(14, initializer=_init) as ex:
         for T in TENORS:
             w = float(b3["w"][str(T)])
@@ -189,7 +189,7 @@ def main() -> None:
                 "sA_float_vs_fixed_max_rel": float(np.max(np.abs(np.array([r["sA"] for r in rows], dtype=np.float64) / WAD / W.p["sA"][idx] - 1))),
             }
             # test vectors: a few windows at k = 0, N/4, N/2, 3N/4, N-1, N with the adopted values
-            table_wad = [int(round(v * WAD)) for v in b3["tenors"][str(T)]["table"]]
+            table_wad = [int(x) for x in prm["tenors"][str(T)]["sigma_table_wad"]]  # the adopted exact values
             for r in rows[:: max(1, len(rows) // 4)][:4]:
                 for k in (0, N // 4, N // 2, 3 * N // 4, N - 1, N):
                     c_k, va_k, vb_k = r["sums"][k]

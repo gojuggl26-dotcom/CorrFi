@@ -5,6 +5,7 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import Iterator, Optional
 
+from . import VENUES
 from .grid import PricePoint, price_point
 from .store import MinuteBar, month_key, month_path, read_month
 
@@ -24,7 +25,7 @@ class MonthCache:
         path = month_path(self.root, venue, self.symbol, month)
         rows = {b.open_time: b for b in read_month(path)} if path.exists() else {}
         self._months[key] = rows
-        while len(self._months) > self.keep * 5:   # 5 venues
+        while len(self._months) > self.keep * len(VENUES):   # `keep` months of every venue (review S03-13)
             self._months.popitem(last=False)
         return rows
 

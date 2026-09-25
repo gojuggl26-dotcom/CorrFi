@@ -34,7 +34,7 @@ contract MarketScenariosTest is CorrFiFixture {
     function _cols(uint256 s) internal view returns (Cols memory c) {
         c.pa = vm.parseJsonStringArray(json, _key(s, ".points_a"));
         c.pb = vm.parseJsonStringArray(json, _key(s, ".points_b"));
-        if (vm.parseJsonUint(json, _key(s, ".final.processed")) != 0 && _hasReports(s)) {
+        if (_hasReports(s)) {
             c.rk = vm.parseJsonStringArray(json, _key(s, ".reports.k"));
             c.rp = vm.parseJsonStringArray(json, _key(s, ".reports.pFair"));
             c.rh = vm.parseJsonStringArray(json, _key(s, ".reports.h0"));
@@ -42,8 +42,9 @@ contract MarketScenariosTest is CorrFiFixture {
         }
     }
 
+    /// An explicit flag of the generator (review S03-4: this used to be guessed from the scenario's name).
     function _hasReports(uint256 s) internal view returns (bool) {
-        return bytes(vm.parseJsonString(json, _key(s, ".name"))).length != bytes("grace").length;
+        return vm.parseJsonBool(json, _key(s, ".hasReports"));
     }
 
     function _isMissing(string memory v) internal pure returns (bool) {

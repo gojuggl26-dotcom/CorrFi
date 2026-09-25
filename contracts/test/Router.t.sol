@@ -486,7 +486,12 @@ contract RouterTest is RouterFixture {
         assertEq(i.marketId, mid);
         assertEq(i.side, L);
         assertEq(i.generation, GEN);
-        assertEq(router.pairMask(MAKER, mid, GEN), 3);
+        // the other book of the pair is registered with it (registration is only ever pairwise)
+        CorrFiEngine.OrderInfo memory j = router.orderInfo(keccak256(abi.encode(oS)));
+        assertTrue(j.registered);
+        assertEq(j.side, S);
+        assertEq(j.marketId, mid);
+        assertEq(j.generation, GEN);
         assertEq(router.hash(oL), keccak256(abi.encode(oL)));
     }
 
@@ -652,7 +657,7 @@ contract RouterTest is RouterFixture {
         (uint256 nl0, uint256 ns0) = custody(MAKER);
         dock(MAKER, oL, mid, L);
         dock(MAKER, oS, mid, S);
-        (ISwapVM.Order memory l2,) = openBooks(MAKER, mid, GEN + 1, ALLOCATION);
+        (ISwapVM.Order memory l2, ISwapVM.Order memory s2) = openBooks(MAKER, mid, GEN + 1, ALLOCATION);
         (uint256 nl1, uint256 ns1) = custody(MAKER);
         assertEq(nl1, nl0);
         assertEq(ns1, ns0);
@@ -661,7 +666,8 @@ contract RouterTest is RouterFixture {
         (uint256 qty,) = router.trade(l2, mid, L, false, false, 500 * U, type(uint256).max, 0);
         (, uint256 ns2) = custody(MAKER);
         assertEq(ns2, ns0 - qty);
-        assertEq(router.pairMask(MAKER, mid, GEN + 1), 3);
+        assertTrue(router.orderInfo(keccak256(abi.encode(s2))).registered);
+        assertEq(router.orderInfo(keccak256(abi.encode(s2))).generation, GEN + 1);
     }
 
     function test_pushRestoresAllocation() public {

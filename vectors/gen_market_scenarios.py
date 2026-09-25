@@ -106,6 +106,7 @@ def build(name: str, seed: int, rho: str, invalid: dict, missing: set, report_ks
     ok = [r for r in reports if "reject" not in r]
     return {
         "name": name,
+        "hasReports": bool(ok),   # explicit, so that the forge test never skips the report checks silently
         "points_a": [pt["a"] for pt in points], "points_b": [pt["b"] for pt in points],
         # accepted reports as columns (the forge test parses each column once)
         "reports": {"k": [str(r["k"]) for r in ok], "pFair": [r["pFair"] for r in ok],

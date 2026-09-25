@@ -31,6 +31,7 @@ contract CorrFiVault is ReentrancyGuardTransient {
     error NotReady(uint32 processed, uint32 n);
     error ZeroAmount();
     error OppositeDepositNotEmpty();
+    error BadRecipient();
 
     event Minted(address indexed account, uint256 amount);
     event Burned(address indexed account, uint256 amount);
@@ -149,6 +150,7 @@ contract CorrFiVault is ReentrancyGuardTransient {
     function depositOut(address maker, Side side, uint256 amount, address to) external onlyRouter nonReentrant {
         if (finalized) revert AlreadyFinalized();
         if (amount == 0) revert ZeroAmount();
+        if (to == address(this)) revert BadRecipient(); // would shrink the ledger but keep the tokens (A5, review S03-7)
         if (side == Side.Long) {
             depositLong[maker] -= amount;
             IERC20(address(longToken)).safeTransfer(to, amount);
@@ -172,6 +174,11 @@ contract CorrFiVault is ReentrancyGuardTransient {
         payout = CorrFiMath.payout(ql, qs, longT);
         usdc.safeTransfer(msg.sender, payout);
         emit DepositClaimed(msg.sender, ql, qs, payout);
+    }
+
+    /// The maker's custody and whether the market is settled, in one read (the router's exposure loop, S04-14).
+    function custodyOf(address maker) external view returns (uint256 nl, uint256 ns, bool isFinalized) {
+        return (depositLong[maker], depositShort[maker], finalized);
     }
 
     // ------------------------------------------------------------------ true dust (DEC-01)

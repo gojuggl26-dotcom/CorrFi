@@ -22,13 +22,14 @@ import {CorrFiOrders} from "./lib/CorrFiOrders.sol";
 /// @notice SwapVM router whose programs price CorrFi Long / Short against a maker's Aqua USDC allocation
 ///         (M §3.4, §5). Opcodes decide amounts; the router's own maker hooks move vault custody, mint and burn.
 contract CorrFiRouter is SwapVM {
-    uint8 public constant OP_DEADLINE = 0x20;
-    uint8 public constant OP_CORR_REPORT = 0xd0;
-    uint8 public constant OP_CORR_CURVE = 0xd1;
-    uint8 public constant OP_CORR_GUARD = 0xd2;
+    uint8 public constant OP_DEADLINE = CorrFiOrders.OP_DEADLINE;
+    uint8 public constant OP_CORR_REPORT = CorrFiOrders.OP_CORR_REPORT;
+    uint8 public constant OP_CORR_CURVE = CorrFiOrders.OP_CORR_CURVE;
+    uint8 public constant OP_CORR_GUARD = CorrFiOrders.OP_CORR_GUARD;
 
     error UnknownOpcode(uint256 opcode);
     error OnlySelf();
+    error BadParams();
 
     // emitted from the linked libraries in this contract's context (declared here for the router ABI)
     event CorrOrderRegistered(
@@ -62,6 +63,8 @@ contract CorrFiRouter is SwapVM {
     constructor(address aqua, address weth, address owner, ICorrFiHub hub, CorrFiPricing.Params memory prm)
         SwapVM(aqua, weth, owner, "CorrFi Router", "1")
     {
+        // immutable: a wrong value could only be fixed by redeploying (review S04-9). u0 < uMax keeps h_U defined.
+        if (prm.u0 >= prm.uMax || prm.uMax > 1e18 || prm.hUMax > 1e18) revert BadParams();
         HUB = hub;
         USDC = hub.usdc();
         C_O = prm.cO;
@@ -83,10 +86,6 @@ contract CorrFiRouter is SwapVM {
 
     function orderInfo(bytes32 orderHash) external view returns (CorrFiEngine.OrderInfo memory) {
         return _st.orderInfo[orderHash];
-    }
-
-    function pairMask(address maker, uint8 marketId, uint32 generation) external view returns (uint8) {
-        return _st.pairMask[maker][marketId][generation];
     }
 
     // ------------------------------------------------------------------ maker settings, registration, entry

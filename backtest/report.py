@@ -27,6 +27,11 @@ def lam_wad(hl: int) -> int:
     return int(Decimal(2) ** (Decimal(-1) / Decimal(hl)) * WAD)
 
 
+def wad(x: float, digits: int) -> int:
+    """A decimal value rounded to `digits` places, as an exact WAD integer (no binary floating point)."""
+    return int(Decimal(f"{x:.{digits}f}") * WAD)
+
+
 def params(b2: dict, b3: dict, b4: dict) -> dict:
     """The proposed values for M v0.6 §8.1 and createMarket, with their WAD representation."""
     out = {"note": "S06 proposal; adopted only after the design review (B §5.3)", "tenors": {}}
@@ -38,21 +43,21 @@ def params(b2: dict, b3: dict, b4: dict) -> dict:
         table_round = [round(v, 6) for v in table]
         out["tenors"][str(T)] = {
             "w": b3["w"][str(T)],
-            "w_wad": str(int(round(float(b3["w"][str(T)]) * WAD))),
+            "w_wad": str(wad(float(b3["w"][str(T)]), 1)),
             "sigma_table": table_round,
-            "sigma_table_wad": [str(int(round(v * WAD))) for v in table_round],
+            "sigma_table_wad": [str(wad(v, 6)) for v in table_round],
             "half_life_bars": t4["hl_selected"],
             "lambda_wad": str(lam_wad(t4["hl_selected"])),
             "sigma0": s0_round,
-            "sigma0_wad": str(int(round(s0_round * WAD))),
+            "sigma0_wad": str(int(Decimal(repr(s0_round)) * WAD)),
             "b2_mechanical": {"selected_w": b2["tenors"][str(T)]["selected_w"], "best_oos_w": b2["tenors"][str(T)]["best_oos_w"],
                               "ewma_rule_met": b2["tenors"][str(T)]["ewma"]["adopt"], "ewma_best_w": b2["tenors"][str(T)]["ewma"]["best_w"]},
             "b2_after_c5": b2["c5"][str(T)],
         }
     out["ch"] = b3["ch"]
-    out["ch_wad"] = str(int(round(b3["ch"] * WAD)))
+    out["ch_wad"] = str(wad(b3["ch"], 6))
     out["cO"] = b4["co_selected"]
-    out["cO_wad"] = str(int(round(b4["co_selected"] * WAD)))
+    out["cO_wad"] = str(wad(b4["co_selected"], 6))
     out["hFloor"] = 0.005
     return out
 

@@ -108,6 +108,15 @@ contract HubTest is CorrFiFixture {
         hub.postPoints(ps);
     }
 
+    /// t = 0 has no previous grid point: refused as off the grid, not with an arithmetic Panic (review S03-6).
+    function test_pointAtTimeZeroIsOffGrid() public {
+        CorrFiHub.PointInput[] memory ps = new CorrFiHub.PointInput[](1);
+        ps[0] = pt(0, PA, PB);
+        vm.prank(REPORTER);
+        vm.expectRevert(abi.encodeWithSelector(CorrFiHub.OffGrid.selector, 0));
+        hub.postPoints(ps);
+    }
+
     function test_implausibleReturnRejectedBothDirections() public {
         uint256 t = (T_START / 300 + 10) * 300;
         vm.warp(t + 600);
@@ -161,6 +170,32 @@ contract HubTest is CorrFiFixture {
         ICorrFiHub.Quote memory q = hub.quoteState(id);
         assertEq(q.processed, 14);
         assertEq(q.confirmed, 0);
+    }
+
+    /// Review S03-2: a third party that cranks between the reporter's backfill transactions cannot make the report
+    /// fail, because postAndReport cranks every posted bar in its own transaction: its k does not depend on who
+    /// cranked before. (submitReport after a partial crank can be front-run; the reporter bot never uses it.)
+    function test_thirdPartyCrankDuringBackfillCannotBreakPostAndReport() public {
+        uint8 id = createMarket(defaultInput());
+        vm.warp(obsStart(id) + 40 * 300 + 10);
+        vm.startPrank(REPORTER);
+        hub.postPoints(_pointsBatch(id, 0, 20));
+        hub.postPoints(_pointsBatch(id, 21, 40));
+        vm.stopPrank();
+        hub.crank(id, 10); // the reporter's partial crank
+        // the engine signs k = 40 from the posted points
+        uint256 snap = vm.snapshotState();
+        hub.crank(id, type(uint32).max);
+        CorrFiHub.ReportInput[] memory rs = new CorrFiHub.ReportInput[](1);
+        rs[0] = honestReport(id, 40);
+        vm.revertToState(snap);
+        vm.prank(address(0xCAFE));
+        hub.crank(id, 17); // a third party gets in first
+        CorrFiHub.PointInput[] memory none = new CorrFiHub.PointInput[](0);
+        vm.prank(REPORTER);
+        hub.postAndReport(none, rs);
+        assertEq(hub.quoteState(id).confirmed, 40);
+        assertEq(hub.quoteState(id).processed, 40);
     }
 
     // ------------------------------------------------------------------ reports U-1..U-4 (M §4.2.1)

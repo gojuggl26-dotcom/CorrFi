@@ -14,6 +14,7 @@ import {ICorrFiHub} from "./interfaces/ICorrFiHub.sol";
 import {CorrFiPricing} from "./lib/CorrFiPricing.sol";
 import {CorrFiCurve} from "./lib/CorrFiCurve.sol";
 import {CorrFiEngine} from "./lib/CorrFiEngine.sol";
+import {CorrFiOrders} from "./lib/CorrFiOrders.sol";
 import {CorrFiRouter} from "./CorrFiRouter.sol";
 
 /// @title CorrFiLens
@@ -21,8 +22,8 @@ import {CorrFiRouter} from "./CorrFiRouter.sol";
 ///         a trading condition: it returns the reason code that quote would revert with. Amounts come from the same
 ///         linked CorrFiEngine stages that the router's opcodes run (論点 36), evaluated at the current block time.
 contract CorrFiLens {
-    uint256 internal constant WAD = 1e18;
-    uint256 internal constant DELTA = 300;
+    uint256 internal constant WAD = CorrFiPricing.WAD;
+    uint256 internal constant DELTA = CorrFiPricing.DELTA;
 
     struct Breakdown {
         uint8 reason; // 0 = tradable, else a CorrFiPricing reason code
@@ -142,7 +143,7 @@ contract CorrFiLens {
             return b;
         }
         // 3. CorrReport: registration
-        if (!info.registered || info.maker != order.maker || ROUTER.pairMask(info.maker, info.marketId, info.generation) != 3) {
+        if (!info.registered || info.maker != order.maker) {
             b.reason = CorrFiPricing.NOT_REGISTERED;
             return b;
         }
@@ -167,7 +168,12 @@ contract CorrFiLens {
                     revert(add(err, 32), mload(err))
                 }
             }
+            // the inventory, U* and h of the rejected trade (the stage runs again without the amounts)
+            r = CorrFiEngine.stageInventory(e, h, t, cfg, r);
             b.reason = CorrFiPricing.BOOK_TOO_THIN;
+            _spreads(b, r);
+            b.inv0 = r.inv0;
+            b.uPre = r.uPre;
             return b;
         }
         // CorrGuard
@@ -191,7 +197,7 @@ contract CorrFiLens {
 
     function _pastDeadline(ISwapVM.Order calldata order) internal view returns (bool) {
         bytes calldata p = MakerTraitsLib.program(order.traits, order.data);
-        if (p.length < 7 || uint8(p[0]) != 0x20 || uint8(p[1]) != 5) return false;
+        if (p.length < 7 || uint8(p[0]) != CorrFiOrders.OP_DEADLINE || uint8(p[1]) != CorrFiOrders.DEADLINE_ARGS) return false;
         return block.timestamp > uint40(bytes5(p[2:7]));
     }
 

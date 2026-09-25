@@ -21,3 +21,7 @@ remappings = [
 
 [fuzz]
 runs = 1000
+
+[invariant]
+# a failed assertion inside a handler only reverts the call; without this the campaign ignores it (S07 finding)
+fail_on_revert = true
