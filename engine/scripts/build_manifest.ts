@@ -8,6 +8,8 @@
 // compares the deployment transactions' input against `creationLinked` (constructor arguments follow it).
 //
 //   node scripts/build_manifest.ts [--check]      (after `forge build` in contracts/)
+//   node scripts/build_manifest.ts --broadcast <forge run.json>      V7 creation half on a deployment broadcast
+//   RPC_URL=... node scripts/build_manifest.ts --deployed <deployments/x.json>   V7 runtime half on the chain
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -128,27 +130,65 @@ function checkBroadcast(path: string, manifest: { contracts: Record<string, { cr
     bad += ok ? 0 : 1;
     seen += 1;
   }
-  if (bad || !seen) process.exit(1);
+  if (bad || !seen) process.exitCode = 1;
 }
 
+/** V7 runtime half on a live chain (RPC_URL): the deployed code with the immutables masked (positions from the
+ *  compiler output) has the pinned runtime hash. The vault / token implementations are read from the hub. */
+async function checkDeployed(depPath: string, manifest: { contracts: Record<string, { runtimeMasked: Hex }>; libraryDeployment: { addresses: Record<string, string> } }) {
+  const { createPublicClient, http, parseAbi } = await import("viem");
+  const rpc = process.env.RPC_URL;
+  if (!rpc) throw new Error("RPC_URL is required");
+  const pc = createPublicClient({ transport: http(rpc) });
+  const d = JSON.parse(readFileSync(depPath, "utf8"));
+  const hubAbi = parseAbi(["function vaultImplementation() view returns (address)", "function tokenImplementation() view returns (address)"]);
+  const at: Record<string, string> = {
+    CorrFiHub: d.hub, CorrFiRouter: d.router, CorrFiLens: d.lens, Aqua: d.aqua, TestUSDC: d.usdc,
+    CorrFiVault: await pc.readContract({ address: d.hub, abi: hubAbi, functionName: "vaultImplementation" }),
+    CorrFiToken: await pc.readContract({ address: d.hub, abi: hubAbi, functionName: "tokenImplementation" }),
+    ...manifest.libraryDeployment.addresses,
+  };
+  let bad = 0;
+  for (const [src, n] of CONTRACTS) {
+    const addr = at[n];
+    if (!addr) continue;
+    const code = await pc.getCode({ address: addr as Hex });
+    if (!code || code === "0x") {
+      console.log(`FAIL ${n} ${addr}: no code`);
+      bad += 1;
+      continue;
+    }
+    const a = artifact(src, n);
+    const masked = patch({ object: code, linkReferences: {}, immutableReferences: a.deployedBytecode.immutableReferences }, {}, true);
+    const ok = keccak256(masked) === manifest.contracts[n].runtimeMasked;
+    console.log(`${ok ? "ok  " : "FAIL"} ${n} ${addr}`);
+    bad += ok ? 0 : 1;
+  }
+  if (bad) process.exitCode = 1;
+}
+
+// exit through process.exitCode: process.exit() with open HTTP handles aborts Node on Windows
 const target = root("contracts/build-manifest.json");
 const bi = process.argv.indexOf("--broadcast");
+const di = process.argv.indexOf("--deployed");
 if (bi > 0) {
   checkBroadcast(process.argv[bi + 1], JSON.parse(readFileSync(target, "utf8")));
-  process.exit(0);
-}
-const text = `${JSON.stringify(build(), null, 1)}\n`;
-if (process.argv.includes("--check")) {
+} else if (di > 0) {
+  await checkDeployed(process.argv[di + 1], JSON.parse(readFileSync(target, "utf8")));
+} else if (process.argv.includes("--check")) {
+  const text = `${JSON.stringify(build(), null, 1)}\n`;
   const cur = readFileSync(target, "utf8");
   if (cur !== text) {
     const a = JSON.parse(cur);
     const b = JSON.parse(text);
     for (const k of Object.keys(b)) if (JSON.stringify(a[k]) !== JSON.stringify(b[k])) console.error(`differs: ${k}`);
     console.error("contracts/build-manifest.json does not match this build");
-    process.exit(1);
+    process.exitCode = 1;
+  } else {
+    console.log("contracts/build-manifest.json matches this build");
   }
-  console.log("contracts/build-manifest.json matches this build");
 } else {
+  const text = `${JSON.stringify(build(), null, 1)}\n`;
   writeFileSync(target, text);
   console.log(`contracts/build-manifest.json: ${Object.keys(JSON.parse(text).contracts).length} contracts`);
 }

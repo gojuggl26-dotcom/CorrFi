@@ -1,7 +1,7 @@
 import threading
 import time
 
-from aquacorr_data.timeutil import iso, utc
+from aquacorr_data.timeutil import iso, utc, utc_time
 from fetch_klines import Client
 
 
@@ -10,6 +10,8 @@ def test_time_helpers():
     assert t == 1_709_251_200
     assert iso(t + 61) == "2024-03-01T00:01:01Z"
     assert iso(t + 61, seconds=False) == "2024-03-01T00:01Z"
+    assert utc_time("2024-03-01") == t
+    assert utc_time("2024-03-01T00:05Z") == t + 300
 
 
 def test_backoff_holds_every_thread_of_the_venue(tmp_path):

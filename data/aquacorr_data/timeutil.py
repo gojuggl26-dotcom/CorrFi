@@ -9,6 +9,12 @@ def utc(day: str) -> int:
     return int(datetime.strptime(day, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp())
 
 
+def utc_time(s: str) -> int:
+    """'YYYY-MM-DD' (midnight) or 'YYYY-MM-DDTHH:MMZ' (UTC) -> Unix seconds."""
+    fmt = "%Y-%m-%dT%H:%MZ" if "T" in s else "%Y-%m-%d"
+    return int(datetime.strptime(s, fmt).replace(tzinfo=timezone.utc).timestamp())
+
+
 def iso(t: int, *, seconds: bool = True) -> str:
     """Unix seconds -> 'YYYY-MM-DDTHH:MM:SSZ' (or 'YYYY-MM-DDTHH:MMZ' with seconds=False, for grid times)."""
     return datetime.fromtimestamp(t, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ" if seconds else "%Y-%m-%dT%H:%MZ")

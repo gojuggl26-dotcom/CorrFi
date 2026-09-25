@@ -30,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from aquacorr_data import SYMBOLS, VENUES  # noqa: E402
 from aquacorr_data.store import month_path, write_month  # noqa: E402
-from aquacorr_data.timeutil import iso, utc  # noqa: E402
+from aquacorr_data.timeutil import iso, utc_time  # noqa: E402
 from aquacorr_data.venues import ADAPTERS, VenueError  # noqa: E402
 
 UA = "CorrFi-data/0.1 (research; public market data)"
@@ -175,8 +175,8 @@ def run_venue(venue: str, args, manifest: Manifest, errors: list):
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--start", required=True, type=utc)
-    ap.add_argument("--end", required=True, type=utc)
+    ap.add_argument("--start", required=True, type=utc_time)
+    ap.add_argument("--end", required=True, type=utc_time, help="YYYY-MM-DD or YYYY-MM-DDTHH:MMZ (exclusive)")
     ap.add_argument("--venues", default=",".join(VENUES))
     ap.add_argument("--store", type=Path, default=REPO / "data" / "store" / "1m")
     ap.add_argument("--manifest", type=Path, default=REPO / "data" / "manifests" / "klines_1m.json")
