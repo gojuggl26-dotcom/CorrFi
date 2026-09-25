@@ -1,22 +1,26 @@
 {
-  "name": "corrfi-engine",
+  "name": "corrfi-ui",
   "private": true,
   "type": "module",
-  "description": "CorrFi price engine, reporter, finalizer and maker tools (TypeScript).",
+  "description": "CorrFi MVP UI (M \u00a75.8, \u00a78.3). Core logic in src/core (tested with node:test), view in src/view.",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
     "test": "node --test \"test/*.test.ts\"",
     "test:anvil": "node --test --test-concurrency=1 \"test/anvil/*.test.ts\"",
     "typecheck": "tsc -p .",
-    "abi": "node scripts/gen_abi.ts"
+    "smoke": "node scripts/smoke.ts"
   },
   "dependencies": {
     "viem": "2.56.9"
   },
   "devDependencies": {
     "@types/node": "24.13.6",
-    "typescript": "5.9.3"
+    "playwright": "1.63.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.6"
   }
 }

@@ -1,5 +1,4 @@
-# CorrFi CI (S01). Same commands are run locally before each stage report; this file only takes effect once the
-# repository is pushed (the user decides when — MI-12).
+# CorrFi CI. The same commands are run locally before each stage report.
 name: ci
 on: [push, pull_request]
 
@@ -29,8 +28,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
-      - run: npm test
+      - name: engine (fixed point, price points, reporter rules) — unit tests and type check
         working-directory: engine
+        run: |
+          npm ci
+          npm test
+          npm run typecheck
+      - name: UI (quote controller) — unit tests, type check, production build
+        working-directory: ui
+        run: |
+          npm ci
+          npm test
+          npm run typecheck
+          npx vite build --outDir "$RUNNER_TEMP/ui-dist"
 
   solidity:
     runs-on: ubuntu-latest
@@ -46,3 +56,15 @@ jobs:
       - name: contract size gate (24,576 / 49,152 B; warn > 90%)
         run: python3 script/check_sizes.py
         working-directory: contracts
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: generated ABI matches the contracts
+        working-directory: engine
+        run: |
+          npm ci
+          node scripts/gen_abi.ts --check
+      - name: integration on a local Anvil (deploy script, reporter, finalizer, CLIs, UI chain side)
+        run: |
+          (cd engine && npm run test:anvil)
+          (cd ui && npm ci && npm run test:anvil)

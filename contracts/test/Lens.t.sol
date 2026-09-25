@@ -81,6 +81,24 @@ contract LensTest is RouterFixture {
         assertGt(b.devSize, 0); // inventory slope makes the maker's side dearer
         assertEq(b.inv0, 0);
         assertEq(b.inv1, -int256(b.qty));
+        assertEq(b.sideFair, 9e17);
+
+        // a Short buy is measured against the Short's fair value 1 - P_fair = 0.10, not the Long's 0.90
+        CorrFiLens.Breakdown memory s = lens.breakdown(oS, mid, S, true, true, 100 * U, DELTA_TOL);
+        assertEq(s.dir, 3);
+        assertEq(s.pFair, 9e17);
+        assertEq(s.sideFair, 1e17);
+        uint256 spq = Math.mulDiv(1e17, s.qty, WAD);
+        assertEq(s.deviation, int256(100 * U) - int256(spq));
+        assertGt(s.deviation, 0);
+        assertEq(s.devHmin, Math.mulDiv(5e15, s.qty, WAD));
+        assertEq(s.devSize, s.deviation - int256(s.devHmin) - int256(s.devHU));
+        assertGe(s.devSize, 0);
+        // a Short sell: sideFair·Q − Receive
+        CorrFiLens.Breakdown memory ss = lens.breakdown(oS, mid, S, false, true, 1_000 * U, DELTA_TOL);
+        assertEq(ss.dir, 4);
+        assertEq(ss.deviation, int256(Math.mulDiv(1e17, ss.qty, WAD)) - int256(ss.amountOut));
+        assertGt(ss.deviation, 0);
     }
 
     // ------------------------------------------------------------------ tolerance δ (M §5.8.3)

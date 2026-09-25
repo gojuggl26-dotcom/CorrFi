@@ -33,11 +33,14 @@ contract CorrFiLens {
         uint256 qty; // Q, token units
         uint256 limit; // with tolerance δ: min receive (exact-in) or max pay / max sell (exact-out)
         bool limitDefined; // false for sells when p̄ ≤ δ (OI-17)
-        // prices (WAD per token) and the deviation from P_fair (units; buy Pay − P_fair·Q, sell P_fair·Q − Receive)
+        // prices (WAD per token of the traded side). pFair is the market's P_fair (the Long value); sideFair is the
+        // fair value of the traded token (Long: P_fair, Short: 1 - P_fair). The deviation is taken from sideFair
+        // (units; buy Pay − sideFair·Q, sell sideFair·Q − Receive)
         uint256 avgPrice;
         uint256 pFair;
+        uint256 sideFair;
         int256 deviation;
-        int256 deviationRate; // WAD, deviation / (P_fair·Q)
+        int256 deviationRate; // WAD, deviation / (sideFair·Q)
         uint256 devHmin; // h_min·Q
         uint256 devHU; // h_U·Q
         int256 devSize; // the rest: inventory slope
@@ -227,7 +230,8 @@ contract CorrFiLens {
         uint256 x = isBuy ? r.amountIn : r.amountOut; // USDC paid / received
         uint256 q = r.qty;
         b.avgPrice = Math.mulDiv(x, WAD, q);
-        uint256 pq = Math.mulDiv(r.pFair, q, WAD);
+        b.sideFair = b.dir >= 3 ? WAD - r.pFair : r.pFair; // a Short is not valued at the Long's P_fair
+        uint256 pq = Math.mulDiv(b.sideFair, q, WAD);
         b.deviation = isBuy ? int256(x) - int256(pq) : int256(pq) - int256(x);
         if (pq != 0) b.deviationRate = b.deviation * int256(WAD) / int256(pq);
         b.devHmin = Math.mulDiv(r.hmin, q, WAD);

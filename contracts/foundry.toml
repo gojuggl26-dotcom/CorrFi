@@ -9,7 +9,7 @@ evm_version = "cancun"           # minimum for transient storage (EIP-1153); con
 optimizer = true
 optimizer_runs = 700             # same as SwapVM
 via_ir = true
-fs_permissions = [{ access = "read", path = "../vectors" }]
+fs_permissions = [{ access = "read", path = "../vectors" }, { access = "read-write", path = "../deployments" }]
 remappings = [
     "forge-std/=lib/forge-std/src/",
     "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",

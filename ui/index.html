@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CorrFi — ETH/BTC correlation (testnet)</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">CorrFi <span class="sub">ETH/BTC 5 分リターンの実現相関 Long / Short</span></div>
+      <div class="net"><span id="network">—</span> <button id="connect">接続</button> <span id="account"></span></div>
+    </header>
+    <nav id="markets"></nav>
+    <main>
+      <section class="panel" id="trade">
+        <h2>取引</h2>
+        <div class="row" role="group" aria-label="Long / Short">
+          <button data-side="0" class="seg">Long</button><button data-side="1" class="seg">Short</button>
+        </div>
+        <div class="row" role="group" aria-label="指定方法">
+          <button data-mode="buy-in" class="seg">買う：支払う USDC</button>
+          <button data-mode="buy-out" class="seg">買う：受け取る数量</button>
+          <button data-mode="sell-in" class="seg">売る：売る数量</button>
+          <button data-mode="sell-out" class="seg">売る：受け取る USDC</button>
+        </div>
+        <label>金額または数量 <input id="amount" inputmode="decimal" value="1000" /> <span id="amountUnit"></span></label>
+        <label>許容幅 δ（USDC / token）<input id="delta" inputmode="decimal" value="0.002" /> <small>0.0005〜0.01</small></label>
+        <label>見積もりの自動更新
+          <select id="refresh"><option>5</option><option>7</option><option selected>10</option><option>12</option><option>15</option></select> 秒</label>
+        <div id="status" class="status"></div>
+        <button id="execute" class="primary" disabled>実行</button>
+        <div id="result"></div>
+      </section>
+      <section class="panel" id="clocks">
+        <h2>見積もりの有効期間</h2>
+        <div class="ring"><span id="refreshIn">—</span><small>見積もりの自動更新まで</small></div>
+        <div class="ring"><span id="nextUpdate">—</span><small>公正価格の次回更新まで</small></div>
+        <div id="chainTime" class="muted"></div>
+      </section>
+      <section class="panel" id="breakdown">
+        <h2>見積もりの内訳</h2>
+        <table id="bd"></table>
+      </section>
+      <section class="panel" id="positions">
+        <h2>保有と償還</h2>
+        <table id="pos"></table>
+      </section>
+    </main>
+    <footer>
+      <div>Powered by SwapVM — © Degensoft Ltd 2025 · Aqua — © Degensoft Ltd 2025</div>
+      <div class="muted">CorrFi は 1inch Aqua / SwapVM を利用した testnet MVP です（1inch・Degensoft とは無関係）。見積もりは確約ではなく、保護は許容幅が担います。</div>
+    </footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

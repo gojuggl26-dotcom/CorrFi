@@ -128,7 +128,7 @@ abstract contract RouterFixture is CorrFiFixture {
     }
 
     /// Open a market as a maker (M §5.7): build, register and ship both books.
-    function openBooks(address maker, uint8 m, uint32 gen, uint256 allocation)
+    function openBooks(address maker, uint8 m, uint32 gen, uint256 alloc)
         internal
         returns (ISwapVM.Order memory l, ISwapVM.Order memory s)
     {
@@ -136,8 +136,8 @@ abstract contract RouterFixture is CorrFiFixture {
         s = buildOrder(maker, m, CorrFiPricing.SIDE_SHORT, gen);
         vm.prank(maker);
         router.registerCorrPair(l, s);
-        ship(maker, l, m, CorrFiPricing.SIDE_LONG, allocation);
-        ship(maker, s, m, CorrFiPricing.SIDE_SHORT, allocation);
+        ship(maker, l, m, CorrFiPricing.SIDE_LONG, alloc);
+        ship(maker, s, m, CorrFiPricing.SIDE_SHORT, alloc);
     }
 
     function _approveMaker(address maker, uint8 m) internal {
