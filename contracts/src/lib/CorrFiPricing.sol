@@ -24,7 +24,7 @@ library CorrFiPricing {
     uint8 internal constant STALE = 4; // T-2: age > Δ + g
     uint8 internal constant EXPIRED = 5; // T-3: at or after obsEnd
     uint8 internal constant TOO_MANY_INVALID = 6; // T-4: invalid bars > (N - N_min) / 2
-    uint8 internal constant LOCKED = 7; // maker x market busy (re-entry)
+    uint8 internal constant LOCKED = 7; // the maker is in a trade (nested re-entry, any market: DEC-15)
     uint8 internal constant QTY_TOO_SMALL = 8;
     uint8 internal constant QTY_TOO_LARGE = 9;
     uint8 internal constant MARKET_CAP = 10; // |q1| > qmax,m
@@ -35,6 +35,10 @@ library CorrFiPricing {
     uint8 internal constant ZERO_AMOUNT = 15; // amountIn or amountOut is 0
     uint8 internal constant BOOK_TOO_THIN = 16;
     uint8 internal constant ORDER_INACTIVE = 17; // the order is not an active Aqua strategy (never shipped / docked)
+    uint8 internal constant UNSUPPORTED_TRANSFER = 18; // a buy where the taker pushes to Aqua and transfer-out runs first
+
+    /// Amounts above this cannot be priced (the path integral would overflow); treated as a book too thin.
+    uint256 internal constant MAX_AMOUNT = 1e24;
 
     uint8 internal constant SIDE_LONG = 0;
     uint8 internal constant SIDE_SHORT = 1;
@@ -196,6 +200,7 @@ library CorrFiPricing {
         pure
         returns (uint256 amountIn, uint256 amountOut)
     {
+        if (amount > MAX_AMOUNT) revert CorrFiCurve.BookTooThin();
         if (dir == 1) {
             if (exactIn) return (amount, CorrFiCurve.qtyD1ExactIn(c, q0, amount));
             return (CorrFiCurve.payD1(c, q0, amount), amount);
@@ -254,6 +259,11 @@ library CorrFiPricing {
                 return WALLET_SHORT;
             }
         }
+        // the side token passes through the maker's wallet via Aqua (buys: pulled to the taker; sells: pulled after
+        // the taker's push) and so needs the maker's approval to Aqua for Q (M §5.1)
+        ICorrFiVaultView v = ICorrFiVaultView(x.hub.marketVault(t.marketId));
+        address sideToken = t.side == SIDE_LONG ? v.longToken() : v.shortToken();
+        if (IERC20(sideToken).allowance(t.maker, x.aqua) < r.qty) return WALLET_SHORT;
         return OK;
     }
 }

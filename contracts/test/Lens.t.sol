@@ -198,6 +198,13 @@ contract LensTest is RouterFixture {
         _check(oL, L, false, true, 1, CorrFiPricing.ZERO_AMOUNT);
         _check(oL, L, false, false, 130_000 * U, CorrFiPricing.BOOK_TOO_THIN);
 
+        // absurd inputs answer with a reason instead of reverting (review 2026-09-26)
+        _check(oL, L, true, true, type(uint256).max, CorrFiPricing.BOOK_TOO_THIN);
+        _check(oS, S, false, true, 10 ** 30, CorrFiPricing.BOOK_TOO_THIN);
+        CorrFiLens.Breakdown memory wide = lens.breakdown(oL, mid, L, true, true, 100 * U, type(uint256).max);
+        assertEq(wide.reason, 0);
+        assertFalse(wide.limitDefined);
+
         // gross funds: wallet approval
         vm.prank(MAKER);
         usdc.approve(address(aqua), 10 * U);

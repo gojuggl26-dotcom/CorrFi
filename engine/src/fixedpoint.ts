@@ -266,10 +266,11 @@ export class Curve {
     this.qmax = qmax;
     this.d = 2n * qmax * WAD;
     this.alphaConstOne = p + hmin >= WAD;
-    this.q1 = floorDiv((p + h - WAD) * qmax, kq);
+    // cut points: the clipped (constant) piece is extended — q1 and qss up, qs and q0 down (F16, M-F1)
+    this.q1 = ceilDiv((p + h - WAD) * qmax, kq);
     this.qs = floorDiv((h - hmin) * qmax, kq);
     this.betaConstZero = p - hmin <= 0n;
-    this.qss = floorDiv(-(h - hmin) * qmax, kq);
+    this.qss = ceilDiv(-(h - hmin) * qmax, kq);
     this.q0 = floorDiv((p - h) * qmax, kq);
   }
 

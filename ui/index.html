@@ -25,7 +25,7 @@
           <button data-mode="sell-out" class="seg">売る：受け取る USDC</button>
         </div>
         <label>金額または数量 <input id="amount" inputmode="decimal" value="1000" /> <span id="amountUnit"></span></label>
-        <label>許容幅 δ（USDC / token）<input id="delta" inputmode="decimal" value="0.002" /> <small>0.0005〜0.01</small></label>
+        <label>許容幅 δ（<span id="deltaUnit">USDC / token</span>）<input id="delta" inputmode="decimal" value="0.002" /> <small>0.0005〜0.01</small></label>
         <label>見積もりの自動更新
           <select id="refresh"><option>5</option><option>7</option><option selected>10</option><option>12</option><option>15</option></select> 秒</label>
         <div id="status" class="status"></div>
@@ -48,6 +48,7 @@
       </section>
     </main>
     <footer>
+      <div id="testToken" class="warn-line"></div>
       <div>Powered by SwapVM — © Degensoft Ltd 2025 · Aqua — © Degensoft Ltd 2025</div>
       <div class="muted">CorrFi は 1inch Aqua / SwapVM を利用した testnet MVP です（1inch・Degensoft とは無関係）。見積もりは確約ではなく、保護は許容幅が担います。</div>
     </footer>

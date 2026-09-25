@@ -44,3 +44,4 @@ td:first-child, th:first-child { text-align: left; color: var(--muted); }
 tr.group td { color: var(--accent); text-align: left; padding-top: 10px; }
 #result { font-size: 13px; margin-top: 8px; }
 @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+.warn-line { color: var(--warn); font-weight: 600; }

@@ -137,6 +137,28 @@ def main():
                      "qty_d1": fp.qty_d1_exact_in(c, q0, x), "qty_d3": fp.qty_d3_exact_in(c, q0, x),
                      "qty_d2": attempt(fp.qty_d2_exact_out, c, q0, x),
                      "qty_d4": attempt(fp.qty_d4_exact_out, c, q0, x)})
+    # boundary cases (review 2026-09-26): inventory at and next to every cut point, where rounding of the cuts
+    # matters; plus the reported reproducer (q0 = q1 + 1 gave alpha > 1 when q1 was floored)
+    edge_rng = random.Random(20260926)
+    curves = [(904472535618734469, 8480908525053903, 4797785325233453, 192985728308015929, 50_000 * UNIT)]
+    for _ in range(60):
+        hmin = edge_rng.randrange(1, 12 * 10**15)
+        curves.append((edge_rng.randrange(2 * 10**16, 98 * 10**16), hmin + edge_rng.randrange(1, 2 * 10**16), hmin,
+                       edge_rng.choice([WAD // 6, 2 * 10**17, edge_rng.randrange(10**16, 3 * 10**17)]),
+                       edge_rng.choice([50_000, 15_000, 60_000]) * UNIT))
+    for p, h, hmin, kq, qmax in curves:
+        c = fp.Curve(p, h, hmin, kq, qmax)
+        for cut in (c.q1, c.qs, c.qss, c.q0):
+            for dq in (-2, -1, 0, 1, 2):
+                for q in (1, 1000, edge_rng.randrange(1, 5_000 * UNIT)):
+                    q0 = cut + dq
+                    x = edge_rng.randrange(1, 3_000 * UNIT)
+                    rows.append({"p": p, "h": h, "hmin": hmin, "kq": kq, "qmax": qmax, "q0": q0, "q": q, "x": x,
+                                 "pay_d1": fp.pay_d1(c, q0, q), "receive_d2": fp.receive_d2(c, q0, q),
+                                 "pay_d3": fp.pay_d3(c, q0, q), "receive_d4": fp.receive_d4(c, q0, q),
+                                 "qty_d1": fp.qty_d1_exact_in(c, q0, x), "qty_d3": fp.qty_d3_exact_in(c, q0, x),
+                                 "qty_d2": attempt(fp.qty_d2_exact_out, c, q0, x),
+                                 "qty_d4": attempt(fp.qty_d4_exact_out, c, q0, x)})
     out["curve"] = cols(rows)
 
     path = ROOT / "vectors" / "fixedpoint.json"

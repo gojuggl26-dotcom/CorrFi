@@ -9,6 +9,38 @@ import {CorrFiCurve} from "../src/lib/CorrFiCurve.sol";
 contract CurveBoundsTest is Test {
     uint256 constant WAD = 1e18;
 
+    /// The same bounds at and next to every cut point (review 2026-09-26: with q1 / qss floored, q0 = q1 + 1 gave
+    /// alpha > 1 — D1 paid Q + 1 and D4 underflowed). The uniform q0 above almost never lands there.
+    function testFuzz_boundsAtCutPoints(
+        uint256 pRaw,
+        uint256 hminRaw,
+        uint256 extraRaw,
+        uint256 kqRaw,
+        uint8 which,
+        int8 dqRaw,
+        uint256 qRaw
+    ) public pure {
+        uint256 p = bound(pRaw, 2e16, 98e16);
+        uint256 hmin = bound(hminRaw, 1, 12e15);
+        uint256 h = hmin + bound(extraRaw, 0, 2e16);
+        uint256 kq = bound(kqRaw, 1e16, 3e17);
+        uint256 qmax = 50_000e6;
+        CorrFiCurve.Curve memory c = CorrFiCurve.make(p, h, hmin, kq, qmax);
+        int256 cut = [c.q1, c.qs, c.qss, c.q0][which % 4];
+        int256 q0 = cut + int256(bound(int256(dqRaw), -3, 3));
+        uint256 q = bound(qRaw, 1, 5_000e6);
+        uint256 payL = CorrFiCurve.payD1(c, q0, q);
+        assertLe(payL, q, "alpha <= 1");
+        if (p + hmin <= WAD) assertGe(payL * WAD, (p + hmin) * q, "alpha >= P + hmin");
+        uint256 recvS = CorrFiCurve.receiveD4(c, q0, q); // must not underflow
+        if (p + hmin <= WAD) assertLe(recvS * WAD, (WAD - p - hmin) * q, "Short bid <= 1 - P - hmin");
+        uint256 recvL = CorrFiCurve.receiveD2(c, q0, q);
+        if (p >= hmin) assertLe(recvL * WAD, (p - hmin) * q, "beta <= P - hmin");
+        uint256 payS = CorrFiCurve.payD3(c, q0, q);
+        assertLe(payS, q, "Short ask <= 1");
+        if (p >= hmin) assertGe(payS * WAD, (WAD - p + hmin) * q, "Short ask >= 1 - P + hmin");
+    }
+
     function testFuzz_averagePricesWithinBounds(
         uint256 pRaw,
         uint256 hminRaw,

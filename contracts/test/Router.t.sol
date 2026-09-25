@@ -10,6 +10,7 @@ import {RouterFixture} from "./helpers/RouterFixture.sol";
 import {CorrFiRouter} from "../src/CorrFiRouter.sol";
 import {CorrFiLens} from "../src/CorrFiLens.sol";
 import {CorrFiVault} from "../src/CorrFiVault.sol";
+import {CorrFiToken} from "../src/CorrFiToken.sol";
 import {ICorrFiHub} from "../src/interfaces/ICorrFiHub.sol";
 import {CorrFiPricing} from "../src/lib/CorrFiPricing.sol";
 import {CorrFiEngine} from "../src/lib/CorrFiEngine.sol";
@@ -44,9 +45,19 @@ contract ReentrantTaker {
         router.swap(o, amount, tt);
     }
 
+    function preTransferInCallback(address, address, address, address, uint256, uint256, bytes32, bytes calldata)
+        external
+    {
+        _inner();
+    }
+
     function preTransferOutCallback(address, address, address, address, uint256, uint256, bytes32, bytes calldata)
         external
     {
+        _inner();
+    }
+
+    function _inner() internal {
         try router.swap(other, otherAmount, otherTraits) {}
         catch (bytes memory err) {
             innerRevert = err;
@@ -381,6 +392,38 @@ contract RouterTest is RouterFixture {
         rt.go(oL, 100 * U, tt);
     }
 
+    /// Review 2026-09-26 (DEC-15): the taker's pre-transfer-in callback runs after CorrGuard and before the
+    /// settlement hooks, so a nested trade on ANOTHER market of the same maker would be checked against stale
+    /// inventory (GROUP_CAP / UTILIZATION_CAP). The lock is per maker, so it is rejected.
+    function test_lockBlocksNestedTradeOnAnotherMarketOfTheSameMaker() public {
+        uint8 m2 = createMarket(appAInput());
+        _approveMaker(MAKER, m2);
+        (ISwapVM.Order memory l2,) = openBooks(MAKER, m2, 1, ALLOCATION);
+        ReentrantTaker rt = new ReentrantTaker(router);
+        usdc.mint(address(rt), 10_000 * U);
+        rt.approve(address(usdc), address(router));
+        TakerTraitsLib.Args memory inner;
+        inner.taker = address(rt);
+        inner.isExactIn = true;
+        inner.useTransferFromAndAquaPush = true;
+        inner.isAToB = address(usdc) < sideToken(m2, L);
+        rt.arm(l2, TakerTraitsLib.build(inner), 100 * U);
+        TakerTraitsLib.Args memory outer;
+        outer.taker = address(rt);
+        outer.isExactIn = true;
+        outer.useTransferFromAndAquaPush = true;
+        outer.isFirstTransferFromTaker = true;
+        outer.isAToB = _usdcIsA(L);
+        outer.hasPreTransferInCallback = true;
+        bytes memory tt = TakerTraitsLib.build(outer);
+        vm.expectRevert(abi.encodeWithSelector(CorrFiEngine.CorrReject.selector, CorrFiPricing.LOCKED));
+        rt.go(oL, 100 * U, tt);
+        // sequential trades on both markets are unaffected
+        tradeAs(TAKER, L, true, true, 100 * U);
+        vm.prank(TAKER);
+        router.trade(l2, m2, L, true, true, 100 * U, 0, 0);
+    }
+
     function test_lockReleasedAfterEachSwap() public {
         DoubleTaker d = new DoubleTaker();
         usdc.mint(address(d), 10_000 * U);
@@ -393,6 +436,45 @@ contract RouterTest is RouterFixture {
 
     function _usdcIsA(uint8 side) internal view returns (bool) {
         return address(usdc) < sideToken(mid, side);
+    }
+
+    // ------------------------------------------------------------------ review 2026-09-26: quote = swap cases
+
+    /// The maker's Long / Short approval to Aqua is needed for the pass-through; without it quote used to say
+    /// tradable and swap reverted in the ERC-20. Now CorrGuard answers WALLET_SHORT (and so does the breakdown).
+    function test_sideTokenApprovalIsCheckedByTheGuard() public {
+        CorrFiToken lng = longOf(mid); // resolve first: the lookup's calls would consume the prank
+        vm.prank(MAKER);
+        lng.approve(address(aqua), 100 * U);
+        bytes memory tt = takerTraits(TAKER, oL, true, false, 0, false);
+        vm.expectRevert(abi.encodeWithSelector(CorrFiEngine.CorrReject.selector, CorrFiPricing.WALLET_SHORT));
+        router.quote(oL, 101 * U, tt); // buy 101 Long: the pull to the taker needs 101
+        assertEq(lens.breakdown(oL, mid, L, true, false, 101 * U, 2e15).reason, CorrFiPricing.WALLET_SHORT);
+        quoteOf(oL, true, false, 100 * U);
+        tradeAs(TAKER, L, true, false, 100 * U);
+        assertEq(lng.allowance(MAKER, address(aqua)), 0);
+        assertGt(lng.balanceOf(TAKER), 0);
+    }
+
+    /// A buy with the taker pushing to Aqua and transfer-out first cannot settle (the mint pulls USDC from the order
+    /// before the taker's USDC is counted): quote and swap both answer UNSUPPORTED_TRANSFER. Sells, and buys with
+    /// transfer-in first, are unaffected.
+    function test_pushModeBuyWithTransferOutFirstIsRejected() public {
+        TakerTraitsLib.Args memory a;
+        a.taker = TAKER;
+        a.isExactIn = true;
+        a.isAToB = _usdcIsA(L);
+        bytes memory tt = TakerTraitsLib.build(a); // push mode, transfer-out first, buy
+        vm.expectRevert(abi.encodeWithSelector(CorrFiEngine.CorrReject.selector, CorrFiPricing.UNSUPPORTED_TRANSFER));
+        router.quote(oL, 100 * U, tt);
+        vm.prank(TAKER);
+        vm.expectRevert(abi.encodeWithSelector(CorrFiEngine.CorrReject.selector, CorrFiPricing.UNSUPPORTED_TRANSFER));
+        router.swap(oL, 100 * U, tt);
+        a.isFirstTransferFromTaker = true;
+        router.quote(oL, 100 * U, TakerTraitsLib.build(a));
+        a.isFirstTransferFromTaker = false;
+        a.isAToB = !_usdcIsA(L); // a sell in push mode
+        router.quote(oL, 100 * U, TakerTraitsLib.build(a));
     }
 
     // ------------------------------------------------------------------ registration (M §5.1)
@@ -530,6 +612,10 @@ contract RouterTest is RouterFixture {
         router.setMakerConfig(c);
         c = makerCfg();
         c.riskBudget = 0;
+        vm.expectRevert(CorrFiOrders.BadConfig.selector);
+        router.setMakerConfig(c);
+        c = makerCfg();
+        c.qGroup = uint128(1e18 + 1); // caps beyond 10^12 tokens would overflow the curve's integers
         vm.expectRevert(CorrFiOrders.BadConfig.selector);
         router.setMakerConfig(c);
     }

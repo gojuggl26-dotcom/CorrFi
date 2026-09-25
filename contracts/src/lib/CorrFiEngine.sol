@@ -66,12 +66,14 @@ library CorrFiEngine {
     );
 
     bytes32 private constant _PLAN_SEED = keccak256("CorrFi.settlePlan");
-    bytes32 private constant _LOCK_SEED = keccak256("CorrFi.makerMarketLock");
+    bytes32 private constant _LOCK_SEED = keccak256("CorrFi.makerLock");
 
     // ------------------------------------------------------------------ opcodes (M §5.2)
 
     /// 0xd0: registration, maker settings, T-1..T-4, h_min; registers balanceOut <- P_fair, balanceIn <- h_min;
-    /// takes the maker x market lock in execution.
+    /// takes the maker's lock in execution. The lock covers all of the maker's markets (DEC-15): the group and
+    /// utilization caps are evaluated over every market, and a taker callback runs between CorrGuard and the
+    /// settlement hooks, so a nested trade on another market would otherwise see stale inventory.
     function report(State storage st, Env memory e, SwapQuery memory q, SwapRegisters memory reg, bool isStatic)
         public
         returns (SwapRegisters memory)
@@ -79,9 +81,9 @@ library CorrFiEngine {
         CorrFiPricing.Trade memory t = _trade(st, e, q, reg);
         CorrFiPricing.Result memory r = CorrFiPricing.preReport(_ctx(e, q.orderHash), t, st.config[t.maker], e.prm);
         if (r.reason != CorrFiPricing.OK) revert CorrReject(r.reason);
-        bytes32 lockSlot = _lockSlot(t.maker, t.marketId);
+        bytes32 lockSlot = _lockSlot(t.maker);
         if (_tload(lockSlot) != 0) revert CorrReject(CorrFiPricing.LOCKED);
-        if (!isStatic) _tstore(lockSlot, 1); // released by the second hook (M §5.4, PROP-16)
+        if (!isStatic) _tstore(lockSlot, 1); // released by the second hook (M §5.4, PROP-16, DEC-15)
         reg.balanceOut = r.pFair;
         reg.balanceIn = r.hmin;
         return reg;
@@ -144,7 +146,7 @@ library CorrFiEngine {
             IERC20(tokenOut).forceApprove(address(aqua), amountOut); // K5: every push consumes an approval
             aqua.push(maker, address(this), orderHash, tokenOut, amountOut);
         }
-        _hookDone(orderHash, maker, m);
+        _hookDone(orderHash, maker);
     }
 
     /// postTransferIn: for sells (D2 / D4), take the received side tokens out of the order; pair Q1 with the
@@ -167,7 +169,7 @@ library CorrFiEngine {
                 vault.depositIn(maker, CorrFiVault.Side(side), q2);
             }
         }
-        _hookDone(orderHash, maker, m);
+        _hookDone(orderHash, maker);
     }
 
     // ------------------------------------------------------------------ breakdown stages (M §5.8.2)
@@ -235,8 +237,8 @@ library CorrFiEngine {
         return keccak256(abi.encode(orderHash, _PLAN_SEED));
     }
 
-    function _lockSlot(address maker, uint8 m) private pure returns (bytes32) {
-        return keccak256(abi.encode(maker, m, _LOCK_SEED));
+    function _lockSlot(address maker) private pure returns (bytes32) {
+        return keccak256(abi.encode(maker, _LOCK_SEED));
     }
 
     function _readPlan(bytes32 orderHash)
@@ -255,7 +257,7 @@ library CorrFiEngine {
     }
 
     /// Both hooks always run (their flags are mandatory); the second one clears the plan and releases the lock.
-    function _hookDone(bytes32 orderHash, address maker, uint8 m) private {
+    function _hookDone(bytes32 orderHash, address maker) private {
         bytes32 slot = _planSlot(orderHash);
         uint256 head = _tload(slot);
         if ((head >> 24) & 0xff == 0) {
@@ -264,7 +266,7 @@ library CorrFiEngine {
             _tstore(slot, 0);
             _tstore(bytes32(uint256(slot) + 1), 0);
             _tstore(bytes32(uint256(slot) + 2), 0);
-            _tstore(_lockSlot(maker, m), 0);
+            _tstore(_lockSlot(maker), 0);
         }
     }
 

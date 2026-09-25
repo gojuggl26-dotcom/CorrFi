@@ -23,10 +23,12 @@ library CorrFiCurve {
         int256 d; // 2 * qmax * WAD
         bool alphaConstOne; // P + hmin >= 1  -> alpha == 1
         bool betaConstZero; // P - hmin <= 0  -> beta == 0
-        int256 q1; // g_alpha = 1        (floored)
-        int256 qs; // g_alpha = P + hmin (floored)
-        int256 qss; // g_beta = P - hmin (floored)
-        int256 q0; // g_beta = 0        (floored)
+        // cut points rounded so that the clipped (constant) piece is the one extended — the linear piece is only
+        // used where it lies inside [P + hmin, 1] (alpha) or [0, P - hmin] (beta), M-F1
+        int256 q1; // g_alpha = 1        (ceiled: alpha = 1 below)
+        int256 qs; // g_alpha = P + hmin (floored: alpha = P + hmin from here)
+        int256 qss; // g_beta = P - hmin (ceiled: beta = P - hmin below)
+        int256 q0; // g_beta = 0        (floored: beta = 0 from here)
     }
 
     function make(uint256 p, uint256 h, uint256 hmin, uint256 kq, uint256 qmax) internal pure returns (Curve memory c) {
@@ -39,9 +41,9 @@ library CorrFiCurve {
         c.d = 2 * c.qmax * IWAD;
         c.alphaConstOne = p + hmin >= WAD;
         c.betaConstZero = c.p - c.hmin <= 0;
-        c.q1 = _floorDiv((c.p + c.h - IWAD) * c.qmax, c.kq);
+        c.q1 = -_floorDiv(-(c.p + c.h - IWAD) * c.qmax, c.kq);
         c.qs = _floorDiv((c.h - c.hmin) * c.qmax, c.kq);
-        c.qss = _floorDiv(-(c.h - c.hmin) * c.qmax, c.kq);
+        c.qss = -_floorDiv((c.h - c.hmin) * c.qmax, c.kq);
         c.q0 = _floorDiv((c.p - c.h) * c.qmax, c.kq);
     }
 

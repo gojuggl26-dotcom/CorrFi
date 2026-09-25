@@ -7,7 +7,7 @@ import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { bytesToHex } from "viem";
-import { mockUsdcAbi } from "../../src/abi.ts";
+import { testUsdcAbi } from "../../src/abi.ts";
 import { type Chain, ROOT, startChain } from "./harness.ts";
 
 const T0 = 1_789_689_600;
@@ -28,7 +28,7 @@ before(async () => {
   writeFileSync(join(dir, "deployment.json"), JSON.stringify(c.dep));
   const key = (r: Parameters<Chain["account"]>[0]) => bytesToHex(c.account(r).getHdKey().privateKey!);
   env = { RPC_URL: c.rpc, DEPLOYMENT: join(dir, "deployment.json"), OWNER_KEY: key("owner"), ENGINE_KEY: key("engine"), MAKER_KEY: key("maker") };
-  await c.pc.waitForTransactionReceipt({ hash: await c.wallet("owner").writeContract({ address: c.dep.usdc, abi: mockUsdcAbi, functionName: "mint", args: [c.account("maker").address, 200_000n * 10n ** 6n] }) });
+  await c.pc.waitForTransactionReceipt({ hash: await c.wallet("owner").writeContract({ address: c.dep.usdc, abi: testUsdcAbi, functionName: "mint", args: [c.account("maker").address, 200_000n * 10n ** 6n] }) });
 });
 
 after(() => c?.stop());

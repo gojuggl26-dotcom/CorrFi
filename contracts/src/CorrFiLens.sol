@@ -238,6 +238,7 @@ contract CorrFiLens {
         b.devHU = Math.mulDiv(r.hU, q, WAD);
         b.devSize = b.deviation - int256(b.devHmin) - int256(b.devHU);
         // tolerance δ (M §5.8.3): p̄ = x / q
+        if (delta > WAD) return; // a tolerance above 1 USDC per token is meaningless (limitDefined stays false)
         uint256 dq = Math.mulDiv(delta, q, WAD, Math.Rounding.Ceil); // ⌈δ·Q⌉ in units
         b.limitDefined = true;
         if (isBuy) {

@@ -9,7 +9,7 @@ import {CorrFiRouter} from "../src/CorrFiRouter.sol";
 import {CorrFiLens} from "../src/CorrFiLens.sol";
 import {ICorrFiHub} from "../src/interfaces/ICorrFiHub.sol";
 import {CorrFiPricing} from "../src/lib/CorrFiPricing.sol";
-import {MockUSDC} from "../test/helpers/MockUSDC.sol";
+import {TestUSDC} from "../src/TestUSDC.sol";
 
 /// @notice Deploys the protocol (M §8.2.2): Aqua (unless AQUA is given), the hub (BarFeed / Accumulator /
 ///         FairValue / market factory), the router with its linked libraries, and the quote lens; registers the
@@ -18,7 +18,8 @@ import {MockUSDC} from "../test/helpers/MockUSDC.sol";
 ///
 /// Environment (no secrets are printed):
 ///   DEPLOYER_KEY    deployer = hub owner (router rescue owner)
-///   USDC            token address; unset -> deploy a MockUSDC (local chains only)
+///   USDC            token address; unset -> deploy the test token TestUSDC (local chains and Base Sepolia, DEC-13)
+///   USDC_NAME, USDC_SYMBOL   the test token's name / symbol (default "Test USDC" / "tUSDC")
 ///   AQUA            existing Aqua; unset -> deploy lib/aqua v1.0.0 as is
 ///   WETH            required by the SwapVM constructor, unused (default: OP Stack predeploy 0x4200...0006)
 ///   REPORTER, PRICE_SIGNER, TREASURY
@@ -43,8 +44,8 @@ contract Deploy is Script {
         vm.startBroadcast(key);
         address usdc = vm.envOr("USDC", address(0));
         if (usdc == address(0)) {
-            require(block.chainid == 31337 || block.chainid == 84532 && vm.envOr("LOCAL", false), "USDC required");
-            usdc = address(new MockUSDC());
+            require(block.chainid == 31337 || block.chainid == 84532, "USDC required outside local / Base Sepolia");
+            usdc = address(new TestUSDC(vm.envOr("USDC_NAME", string("Test USDC")), vm.envOr("USDC_SYMBOL", string("tUSDC"))));
         }
         address aqua = vm.envOr("AQUA", address(0));
         if (aqua == address(0)) aqua = address(new Aqua());

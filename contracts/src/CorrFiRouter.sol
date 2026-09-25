@@ -11,6 +11,7 @@ import {SwapVM} from "@1inch/swap-vm/contracts/SwapVM.sol";
 import {ISwapVM} from "@1inch/swap-vm/contracts/interfaces/ISwapVM.sol";
 import {Context} from "@1inch/swap-vm/contracts/libs/VM.sol";
 import {Deadline} from "@1inch/swap-vm/contracts/instructions/Controls.sol";
+import {TakerTraits, TakerTraitsLib} from "@1inch/swap-vm/contracts/libs/TakerTraits.sol";
 
 import {ICorrFiHub} from "./interfaces/ICorrFiHub.sol";
 import {CorrFiPricing} from "./lib/CorrFiPricing.sol";
@@ -124,6 +125,11 @@ contract CorrFiRouter is SwapVM {
         if (opcode == OP_DEADLINE) {
             Deadline.exec(ctx, args);
         } else if (opcode == OP_CORR_REPORT) {
+            // a buy mints with USDC pulled from the order before the taker's pushed USDC is counted: with the taker
+            // pushing to Aqua and transfer-out first, SwapVM's balance check would always fail (review 2026-09-26)
+            if (ctx.query.tokenIn == USDC && _pushWithTransferOutFirst()) {
+                revert CorrFiEngine.CorrReject(CorrFiPricing.UNSUPPORTED_TRANSFER);
+            }
             ctx.swap = CorrFiEngine.report(_st, _env(), ctx.query, ctx.swap, ctx.vm.isStaticContext);
         } else if (opcode == OP_CORR_CURVE) {
             ctx.swap = CorrFiEngine.curve(_st, _env(), ctx.query, ctx.swap, ctx.vm.isStaticContext);
@@ -132,6 +138,14 @@ contract CorrFiRouter is SwapVM {
         } else {
             revert UnknownOpcode(opcode);
         }
+    }
+
+    /// The taker's transfer mode, read from this call's calldata: swap and quote share the arguments
+    /// (Order order, uint256 amount, bytes takerTraitsAndData); the entry point delegatecalls swap.
+    function _pushWithTransferOutFirst() private pure returns (bool) {
+        uint256 off = 4 + uint256(bytes32(msg.data[68:100])) + 32;
+        TakerTraits tt = TakerTraits.wrap(uint176(bytes22(msg.data[off:off + 22])));
+        return !TakerTraitsLib.useTransferFromAndAquaPush(tt) && !TakerTraitsLib.isFirstTransferFromTaker(tt);
     }
 
     // ------------------------------------------------------------------ maker hooks (M §5.3)

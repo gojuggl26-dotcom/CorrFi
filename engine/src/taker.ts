@@ -16,7 +16,7 @@ export const REASONS: Record<number, { code: string; ja: string; en: string; cle
   4: { code: "STALE", ja: "停止中：価格更新待ち（最後の確認から 6 分超）", en: "Halted: fair value is stale (T-2)", clears: "report" },
   5: { code: "EXPIRED", ja: "取引期間が終了しました（obsEnd）", en: "Trading closed at obsEnd (T-3)", clears: "never" },
   6: { code: "TOO_MANY_INVALID", ja: "停止中：無効バーが許容数の半分を超えました（再開しません）", en: "Halted: too many invalid bars (T-4, permanent)", clears: "never" },
-  7: { code: "LOCKED", ja: "同じ Maker・市場の取引が実行中です", en: "Maker x market busy", clears: "-" },
+  7: { code: "LOCKED", ja: "同じ Maker の取引が実行中です（入れ子の取引）", en: "Maker busy (nested trade)", clears: "-" },
   8: { code: "QTY_TOO_SMALL", ja: "数量が下限（1 token）未満です", en: "Quantity below the minimum", clears: "amount" },
   9: { code: "QTY_TOO_LARGE", ja: "数量が 1 回の上限を超えます", en: "Quantity above the per-trade maximum", clears: "amount" },
   10: { code: "MARKET_CAP", ja: "Maker の在庫上限に達します", en: "Maker's market inventory cap", clears: "amount" },
@@ -27,6 +27,7 @@ export const REASONS: Record<number, { code: string; ja: string; en: string; cle
   15: { code: "ZERO_AMOUNT", ja: "金額が 0 になります", en: "Amount rounds to zero", clears: "amount" },
   16: { code: "BOOK_TOO_THIN", ja: "板の深さが足りません", en: "Book too thin", clears: "amount" },
   17: { code: "ORDER_INACTIVE", ja: "order が停止中です（dock 済み）", en: "Order docked / not shipped", clears: "maker" },
+  18: { code: "UNSUPPORTED_TRANSFER", ja: "この送金方式（Aqua への先入れで、送金を後にする買い）には対応していません", en: "Unsupported transfer mode", clears: "-" },
 };
 
 export interface RegisteredOrder {

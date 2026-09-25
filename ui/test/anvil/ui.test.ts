@@ -6,7 +6,7 @@
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
 import { join } from "node:path";
-import { erc20Abi, lensAbi, mockUsdcAbi } from "../../../engine/src/abi.ts";
+import { erc20Abi, lensAbi, testUsdcAbi } from "../../../engine/src/abi.ts";
 import { createMarket, marketInputFromCalib } from "../../../engine/src/createMarket.ts";
 import { finalizeTick } from "../../../engine/src/finalizer.ts";
 import { MakerOps, MVP_CONFIG } from "../../../engine/src/maker.ts";
@@ -42,7 +42,7 @@ before(async () => {
   c = await startChain({ genesis: T0 - 3600 });
   await c.setTime(T0 - 240);
   await createMarket(c.pc, c.wallet("owner"), c.account("engine"), c.dep, marketInputFromCalib(join(ROOT, "vectors", "calib_7d_20260918.json")));
-  const usdc = { address: c.dep.usdc, abi: mockUsdcAbi } as const;
+  const usdc = { address: c.dep.usdc, abi: testUsdcAbi } as const;
   for (const [who, amt] of [["maker", 200_000n], ["taker", 20_000n]] as const) {
     await c.pc.waitForTransactionReceipt({ hash: await c.wallet("owner").writeContract({ ...usdc, functionName: "mint", args: [c.account(who).address, amt * U] }) });
   }

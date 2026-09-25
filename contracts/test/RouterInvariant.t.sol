@@ -11,6 +11,8 @@ import {CorrFiRouter} from "../src/CorrFiRouter.sol";
 import {CorrFiVault} from "../src/CorrFiVault.sol";
 import {CorrFiPricing} from "../src/lib/CorrFiPricing.sol";
 import {CorrFiMath} from "../src/lib/CorrFiMath.sol";
+import {CorrFiEngine} from "../src/lib/CorrFiEngine.sol";
+import {CorrFiCurve} from "../src/lib/CorrFiCurve.sol";
 
 /// @notice Random trades through the real router (quote first; a trade that quotes must swap identically).
 contract RouterHandler is Test {
@@ -89,7 +91,11 @@ contract RouterHandler is Test {
                 // P_fair stays 0.90 (no reports are posted in these runs)
                 assertLt(CorrFiMath.utilization(CorrFiMath.riskCapital(q1, 9e17), riskBudget), 9e17, "S5");
             }
-        } catch {
+        } catch (bytes memory err) {
+            // only a trading condition may stop a quote: a reason code or a book too thin — never a Panic or an
+            // unrelated revert (review 2026-09-26: Panics used to be counted as rejects and hid the q1 rounding)
+            bytes4 sel = bytes4(err);
+            assertTrue(sel == CorrFiEngine.CorrReject.selector || sel == CorrFiCurve.BookTooThin.selector, "unexpected revert");
             ++rejects;
         }
     }

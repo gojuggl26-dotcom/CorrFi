@@ -4,7 +4,7 @@
 //   node scripts/live_dryrun.ts [minutes=15] [log.jsonl]
 import { appendFileSync } from "node:fs";
 import { join } from "node:path";
-import { hubAbi, mockUsdcAbi } from "../src/abi.ts";
+import { hubAbi, testUsdcAbi } from "../src/abi.ts";
 import { createMarket, marketInputFromCalib } from "../src/createMarket.ts";
 import { MakerOps, MVP_CONFIG } from "../src/maker.ts";
 import { Reporter } from "../src/reporter.ts";
@@ -24,7 +24,7 @@ try {
   await c.rpcCall("evm_setAutomine", [true]);
   await c.rpcCall("evm_setIntervalMining", [2]); // blocks every 2 s, like Base
   const { id } = await createMarket(c.pc, c.wallet("owner"), c.account("engine"), c.dep, marketInputFromCalib(join(ROOT, "vectors", "calib_7d_20260918.json")));
-  await c.pc.waitForTransactionReceipt({ hash: await c.wallet("owner").writeContract({ address: c.dep.usdc, abi: mockUsdcAbi, functionName: "mint", args: [c.account("maker").address, 200_000n * 10n ** 6n] }) });
+  await c.pc.waitForTransactionReceipt({ hash: await c.wallet("owner").writeContract({ address: c.dep.usdc, abi: testUsdcAbi, functionName: "mint", args: [c.account("maker").address, 200_000n * 10n ** 6n] }) });
   const maker = new MakerOps(c.pc, c.wallet("maker"), c.dep);
   await maker.setConfig(MVP_CONFIG);
   await maker.open(id, 1, 55_000n * 10n ** 6n, 105_000n * 10n ** 6n);

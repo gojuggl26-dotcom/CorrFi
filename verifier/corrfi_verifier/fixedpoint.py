@@ -302,10 +302,11 @@ class Curve:
         self.d = 2 * qmax * WAD
         # breakpoints, floored to integer units (spec F16)
         self.alpha_const_one = p + hmin >= WAD
-        self.q1 = floor_div((p + h - WAD) * qmax, kq)
+        # cut points: the clipped (constant) piece is extended — q1 and qss up, qs and q0 down (F16, M-F1)
+        self.q1 = -floor_div(-(p + h - WAD) * qmax, kq)
         self.qs = floor_div((h - hmin) * qmax, kq)
         self.beta_const_zero = p - hmin <= 0
-        self.qss = floor_div(-(h - hmin) * qmax, kq)
+        self.qss = -floor_div((h - hmin) * qmax, kq)
         self.q0 = floor_div((p - h) * qmax, kq)
 
     # a branch is (A, slope) meaning A - slope*kq/qmax*q with slope in {0, 1}

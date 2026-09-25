@@ -7,7 +7,7 @@ import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { hubAbi, lensAbi, mockUsdcAbi, routerAbi } from "../../src/abi.ts";
+import { hubAbi, lensAbi, testUsdcAbi, routerAbi } from "../../src/abi.ts";
 import { readMarket } from "../../src/chain.ts";
 import { createMarket, marketInputFromCalib } from "../../src/createMarket.ts";
 import { MakerOps, MVP_CONFIG } from "../../src/maker.ts";
@@ -31,7 +31,7 @@ before(async () => {
   await c.setTime(T0 - 240);
   const { id } = await createMarket(c.pc, c.wallet("owner"), c.account("engine"), c.dep, marketInputFromCalib(join(ROOT, "vectors", "calib_7d_20260918.json")));
   assert.equal(id, 0);
-  const usdc = { address: c.dep.usdc, abi: mockUsdcAbi } as const;
+  const usdc = { address: c.dep.usdc, abi: testUsdcAbi } as const;
   for (const [who, amt] of [["maker", 200_000n], ["taker", 20_000n]] as const) {
     await c.pc.waitForTransactionReceipt({ hash: await c.wallet("owner").writeContract({ ...usdc, functionName: "mint", args: [c.account(who).address, amt * U] }) });
   }

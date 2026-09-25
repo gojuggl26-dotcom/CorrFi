@@ -27,6 +27,7 @@ library CorrFiOrders {
     uint8 internal constant OP_CORR_CURVE = 0xd1;
     uint8 internal constant OP_CORR_GUARD = 0xd2;
     uint256 internal constant PROGRAM_LENGTH = 19; // 0x20 05 obsEnd | 0xd0 06 m side gen | 0xd1 00 | 0xd2 00
+    uint256 internal constant MAX_QTY = 1e18; // caps above 10^12 tokens would let the curve's integers overflow
 
     error BadOrder(uint8 code);
     error AlreadyRegistered(bytes32 orderHash);
@@ -43,7 +44,7 @@ library CorrFiOrders {
     function setConfig(CorrFiEngine.State storage st, CorrFiPricing.MakerConfig calldata c) external {
         if (
             c.kq == 0 || c.qMaxMarket == 0 || c.riskBudget == 0 || c.qMinTrade == 0 || c.qMaxTrade < c.qMinTrade
-                || c.qGroup < c.qMaxMarket
+                || c.qGroup < c.qMaxMarket || c.qGroup > MAX_QTY
         ) revert BadConfig();
         st.config[msg.sender] = c;
         emit MakerConfigSet(msg.sender, c);

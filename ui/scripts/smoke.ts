@@ -8,7 +8,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import { createServer } from "vite";
-import { mockUsdcAbi } from "../../engine/src/abi.ts";
+import { testUsdcAbi } from "../../engine/src/abi.ts";
 import { createMarket, marketInputFromCalib } from "../../engine/src/createMarket.ts";
 import { MakerOps, MVP_CONFIG } from "../../engine/src/maker.ts";
 import { Reporter } from "../../engine/src/reporter.ts";
@@ -25,7 +25,7 @@ try {
   await c.setTime(T0 - 240);
   await createMarket(c.pc, c.wallet("owner"), c.account("engine"), c.dep, marketInputFromCalib(join(ROOT, "vectors", "calib_7d_20260918.json")));
   for (const [who, amt] of [["maker", 200_000n], ["taker", 20_000n]] as const) {
-    await c.pc.waitForTransactionReceipt({ hash: await c.wallet("owner").writeContract({ address: c.dep.usdc, abi: mockUsdcAbi, functionName: "mint", args: [c.account(who).address, amt * U] }) });
+    await c.pc.waitForTransactionReceipt({ hash: await c.wallet("owner").writeContract({ address: c.dep.usdc, abi: testUsdcAbi, functionName: "mint", args: [c.account(who).address, amt * U] }) });
   }
   const maker = new MakerOps(c.pc, c.wallet("maker"), c.dep);
   await maker.setConfig(MVP_CONFIG);
