@@ -1,0 +1,627 @@
+{
+ "model": "DEC-18 (assumptions)",
+ "co": 1.5,
+ "scenarios": {
+  "base": {
+   "params": {
+    "kq": 0.16666666666666666,
+    "cap": 0.5,
+    "freq": "mid",
+    "informed": 0.1,
+    "ch": null
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 8430.540837555072,
+     "pnl_mean": 9545.479036448936,
+     "pnl_p5": 4674.879402548585,
+     "pnl_p5_over_budget": 0.04674879402548585,
+     "pnl_negative_share": 0.0,
+     "spread_median": 8465.404585111388,
+     "inventory_median": -6.131738797576418,
+     "mdd_median": 11.838225678196522,
+     "mdd_p95": 63.06809243605892,
+     "trades_median": 605.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.0007215368092919707
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 20439.679387664386,
+     "pnl_mean": 22477.570548234195,
+     "pnl_p5": 11888.7845668771,
+     "pnl_p5_over_budget": 0.118887845668771,
+     "pnl_negative_share": 0.0,
+     "spread_median": 20549.14035514438,
+     "inventory_median": 6.35993976136524,
+     "mdd_median": 10.36181185078749,
+     "mdd_p95": 46.183382437306136,
+     "trades_median": 1208.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00329332530034628
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 49946.13294830059,
+     "pnl_mean": 54791.1324719251,
+     "pnl_p5": 28882.343341772314,
+     "pnl_p5_over_budget": 0.28882343341772315,
+     "pnl_negative_share": 0.0,
+     "spread_median": 50054.305612489654,
+     "inventory_median": -5.026246392684698,
+     "mdd_median": 8.707730423928297,
+     "mdd_p95": 38.50972624931163,
+     "trades_median": 2408.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00783338624445494
+    }
+   }
+  },
+  "kq=0.1": {
+   "params": {
+    "kq": 0.1,
+    "cap": 0.5,
+    "freq": "mid",
+    "informed": 0.1,
+    "ch": null
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 5951.911913708322,
+     "pnl_mean": 6784.083324731473,
+     "pnl_p5": 3678.8828619334786,
+     "pnl_p5_over_budget": 0.03678882861933479,
+     "pnl_negative_share": 0.0,
+     "spread_median": 5994.055136281486,
+     "inventory_median": -6.131738797578009,
+     "mdd_median": 12.2480236723286,
+     "mdd_p95": 69.58857904858388,
+     "trades_median": 605.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.0007215368092919707
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 14486.747865509315,
+     "pnl_mean": 15882.707732147312,
+     "pnl_p5": 8742.852699857121,
+     "pnl_p5_over_budget": 0.08742852699857122,
+     "pnl_negative_share": 0.0,
+     "spread_median": 14523.678875867896,
+     "inventory_median": 6.35993976140162,
+     "mdd_median": 10.494017908094065,
+     "mdd_p95": 53.63982331626903,
+     "trades_median": 1208.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00329332530034628
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 36707.784920458886,
+     "pnl_mean": 38559.70152969535,
+     "pnl_p5": 20719.680187339254,
+     "pnl_p5_over_budget": 0.20719680187339254,
+     "pnl_negative_share": 0.0,
+     "spread_median": 36626.036282867775,
+     "inventory_median": -5.026246392691974,
+     "mdd_median": 8.715091829086305,
+     "mdd_p95": 39.38268783125673,
+     "trades_median": 2408.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00783338624445494
+    }
+   }
+  },
+  "kq=0.27": {
+   "params": {
+    "kq": 0.27,
+    "cap": 0.5,
+    "freq": "mid",
+    "informed": 0.1,
+    "ch": null
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 11451.046549238185,
+     "pnl_mean": 13153.81082546808,
+     "pnl_p5": 6294.5384154554595,
+     "pnl_p5_over_budget": 0.0629453841545546,
+     "pnl_negative_share": 0.0,
+     "spread_median": 11503.925604352668,
+     "inventory_median": -6.131738797582329,
+     "mdd_median": 11.427117864584943,
+     "mdd_p95": 60.85639196142856,
+     "trades_median": 605.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.0007215368092919707
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 26662.982195857672,
+     "pnl_mean": 31076.888061093498,
+     "pnl_p5": 16100.745073898604,
+     "pnl_p5_over_budget": 0.16100745073898604,
+     "pnl_negative_share": 0.0,
+     "spread_median": 26622.14425193323,
+     "inventory_median": 6.3599397614379996,
+     "mdd_median": 10.25997177424506,
+     "mdd_p95": 45.00125426306113,
+     "trades_median": 1208.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00329332530034628
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 65933.28617134821,
+     "pnl_mean": 75524.55007912482,
+     "pnl_p5": 40054.01198575331,
+     "pnl_p5_over_budget": 0.4005401198575331,
+     "pnl_negative_share": 0.0,
+     "spread_median": 65802.09082711664,
+     "inventory_median": -5.026246392721077,
+     "mdd_median": 8.673555974208284,
+     "mdd_p95": 38.30231015941097,
+     "trades_median": 2408.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00783338624445494
+    }
+   }
+  },
+  "cap=0.3": {
+   "params": {
+    "kq": 0.16666666666666666,
+    "cap": 0.3,
+    "freq": "mid",
+    "informed": 0.1,
+    "ch": null
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 11479.305740681822,
+     "pnl_mean": 12539.892678448243,
+     "pnl_p5": 6416.975552561862,
+     "pnl_p5_over_budget": 0.06416975552561863,
+     "pnl_negative_share": 0.0,
+     "spread_median": 11463.701989006404,
+     "inventory_median": -5.946466354071163,
+     "mdd_median": 11.032316235088729,
+     "mdd_p95": 52.22067770099723,
+     "trades_median": 602.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.008699757701055617
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 25902.93453437167,
+     "pnl_mean": 27571.297436641165,
+     "pnl_p5": 16214.155671078523,
+     "pnl_p5_over_budget": 0.16214155671078523,
+     "pnl_negative_share": 0.0,
+     "spread_median": 25932.27304192739,
+     "inventory_median": 6.35993976140162,
+     "mdd_median": 8.512061516772519,
+     "mdd_p95": 36.60646955487027,
+     "trades_median": 1202.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.013485391218288515
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 58857.670973007116,
+     "pnl_mean": 60209.84288375536,
+     "pnl_p5": 39705.59051485817,
+     "pnl_p5_over_budget": 0.39705590514858174,
+     "pnl_negative_share": 0.0,
+     "spread_median": 59057.76869305745,
+     "inventory_median": -1.6191555753321154,
+     "mdd_median": 5.799863340351294,
+     "mdd_p95": 22.03120403988796,
+     "trades_median": 2394.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.018587031714355308
+    }
+   }
+  },
+  "cap=0.7": {
+   "params": {
+    "kq": 0.16666666666666666,
+    "cap": 0.7,
+    "freq": "mid",
+    "informed": 0.1,
+    "ch": null
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 6685.552868177282,
+     "pnl_mean": 7655.913465198363,
+     "pnl_p5": 3975.9938480660894,
+     "pnl_p5_over_budget": 0.039759938480660895,
+     "pnl_negative_share": 0.0,
+     "spread_median": 6732.902421722036,
+     "inventory_median": -6.131738797577782,
+     "mdd_median": 11.918374335421504,
+     "mdd_p95": 65.50952605394303,
+     "trades_median": 605.0,
+     "u_above_60_share": 0.00010675062042135419,
+     "risk_increasing_rejected_share": 8.43469019382918e-06
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 16449.858470333827,
+     "pnl_mean": 18374.565295960376,
+     "pnl_p5": 9641.690376148556,
+     "pnl_p5_over_budget": 0.09641690376148555,
+     "pnl_negative_share": 0.0,
+     "spread_median": 16464.695759900736,
+     "inventory_median": 4.161039906284714,
+     "mdd_median": 10.51017374631192,
+     "mdd_p95": 55.39313651544762,
+     "trades_median": 1209.0,
+     "u_above_60_share": 0.0021852448921874435,
+     "risk_increasing_rejected_share": 0.0006413593600254143
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 42359.737196084025,
+     "pnl_mean": 47586.146792147025,
+     "pnl_p5": 23096.20357831339,
+     "pnl_p5_over_budget": 0.2309620357831339,
+     "pnl_negative_share": 0.0,
+     "spread_median": 42347.336306688856,
+     "inventory_median": -3.3727492834077566,
+     "mdd_median": 10.070373440430558,
+     "mdd_p95": 50.3307267114949,
+     "trades_median": 2415.0,
+     "u_above_60_share": 0.011197520046247819,
+     "risk_increasing_rejected_share": 0.0029925210358536744
+    }
+   }
+  },
+  "freq=low": {
+   "params": {
+    "kq": 0.16666666666666666,
+    "cap": 0.5,
+    "freq": "low",
+    "informed": 0.1,
+    "ch": null
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 1355.2308361585651,
+     "pnl_mean": 1534.658789845477,
+     "pnl_p5": 779.0458910677801,
+     "pnl_p5_over_budget": 0.007790458910677801,
+     "pnl_negative_share": 0.0,
+     "spread_median": 1350.1259821281783,
+     "inventory_median": 0.8815607968691097,
+     "mdd_median": 6.888215550293808,
+     "mdd_p95": 52.47828185753877,
+     "trades_median": 150.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.0
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 3383.853863429329,
+     "pnl_mean": 3817.8680280840463,
+     "pnl_p5": 1943.9217654489803,
+     "pnl_p5_over_budget": 0.019439217654489804,
+     "pnl_negative_share": 0.0,
+     "spread_median": 3380.300339824355,
+     "inventory_median": -0.056289920043127495,
+     "mdd_median": 6.89019340408413,
+     "mdd_p95": 48.24567555663816,
+     "trades_median": 303.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 7.49737591842855e-06
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 8341.272792625175,
+     "pnl_mean": 9343.28358698341,
+     "pnl_p5": 4773.566577886803,
+     "pnl_p5_over_budget": 0.047735665778868036,
+     "pnl_negative_share": 0.0,
+     "spread_median": 8332.785023229506,
+     "inventory_median": 1.6561047281402352,
+     "mdd_median": 5.735371801107249,
+     "mdd_p95": 36.784560095019636,
+     "trades_median": 604.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00037798063647293163
+    }
+   }
+  },
+  "freq=high": {
+   "params": {
+    "kq": 0.16666666666666666,
+    "cap": 0.5,
+    "freq": "high",
+    "informed": 0.1,
+    "ch": null
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 34806.26412221601,
+     "pnl_mean": 37390.83704415381,
+     "pnl_p5": 19945.71224950585,
+     "pnl_p5_over_budget": 0.1994571224950585,
+     "pnl_negative_share": 0.0,
+     "spread_median": 34781.01044651524,
+     "inventory_median": 1.6946806115283835,
+     "mdd_median": 16.939565182922706,
+     "mdd_p95": 73.14628962353945,
+     "trades_median": 1811.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.0048496543221140526
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 82813.73671265121,
+     "pnl_mean": 87722.26675316194,
+     "pnl_p5": 53111.85096316444,
+     "pnl_p5_over_budget": 0.5311185096316444,
+     "pnl_negative_share": 0.0,
+     "spread_median": 82886.82200745707,
+     "inventory_median": -5.98158595644054,
+     "mdd_median": 13.219608540588524,
+     "mdd_p95": 50.8209206967731,
+     "trades_median": 3615.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.009532950126701552
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 177319.63255551795,
+     "pnl_mean": 182475.42469973752,
+     "pnl_p5": 121378.76270653616,
+     "pnl_p5_over_budget": 1.2137876270653616,
+     "pnl_negative_share": 0.0,
+     "spread_median": 177280.25602063764,
+     "inventory_median": -6.659560913074529,
+     "mdd_median": 7.710322374521638,
+     "mdd_p95": 28.74968055143543,
+     "trades_median": 7221.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.011014347143407878
+    }
+   }
+  },
+  "informed=0.0": {
+   "params": {
+    "kq": 0.16666666666666666,
+    "cap": 0.5,
+    "freq": "mid",
+    "informed": 0.0,
+    "ch": null
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 9700.713063835023,
+     "pnl_mean": 10816.19748231153,
+     "pnl_p5": 5551.773311272239,
+     "pnl_p5_over_budget": 0.05551773311272239,
+     "pnl_negative_share": 0.0,
+     "spread_median": 9714.094342229855,
+     "inventory_median": -8.843405980431271,
+     "mdd_median": 12.318411355997341,
+     "mdd_p95": 55.562122233302894,
+     "trades_median": 671.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.0011080137211048977
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 24602.84622403455,
+     "pnl_mean": 26911.210228138116,
+     "pnl_p5": 13806.002492106789,
+     "pnl_p5_over_budget": 0.1380600249210679,
+     "pnl_negative_share": 0.0,
+     "spread_median": 24570.271827180248,
+     "inventory_median": 8.189610613404511,
+     "mdd_median": 11.562703674528166,
+     "mdd_p95": 51.05844840933423,
+     "trades_median": 1343.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.004248137662073354
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 56563.46562333366,
+     "pnl_mean": 60429.92645083131,
+     "pnl_p5": 33488.536881872074,
+     "pnl_p5_over_budget": 0.3348853688187207,
+     "pnl_negative_share": 0.0,
+     "spread_median": 56524.22729565512,
+     "inventory_median": -0.7525896321531036,
+     "mdd_median": 8.617712781946466,
+     "mdd_p95": 36.771540706991786,
+     "trades_median": 2678.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.006813868021989072
+    }
+   }
+  },
+  "informed=0.3": {
+   "params": {
+    "kq": 0.16666666666666666,
+    "cap": 0.5,
+    "freq": "mid",
+    "informed": 0.3,
+    "ch": null
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 6188.342016052104,
+     "pnl_mean": 6922.04914940817,
+     "pnl_p5": 3539.007541647333,
+     "pnl_p5_over_budget": 0.03539007541647333,
+     "pnl_negative_share": 0.0,
+     "spread_median": 6183.238456634135,
+     "inventory_median": -11.647628736661318,
+     "mdd_median": 11.95971142579856,
+     "mdd_p95": 61.65543244455401,
+     "trades_median": 470.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00042038174990641013
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 15246.615974488663,
+     "pnl_mean": 17089.73734715037,
+     "pnl_p5": 8398.256397250798,
+     "pnl_p5_over_budget": 0.08398256397250797,
+     "pnl_negative_share": 0.0,
+     "spread_median": 15230.7482796761,
+     "inventory_median": 7.18886215382372,
+     "mdd_median": 10.524804112137645,
+     "mdd_p95": 52.92320669466426,
+     "trades_median": 939.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.002145451933245639
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 36441.50053741538,
+     "pnl_mean": 39816.747847466424,
+     "pnl_p5": 21413.721950746047,
+     "pnl_p5_over_budget": 0.21413721950746048,
+     "pnl_negative_share": 0.0,
+     "spread_median": 36436.164625035504,
+     "inventory_median": 1.721688886776974,
+     "mdd_median": 8.662627226491168,
+     "mdd_p95": 35.29242534511977,
+     "trades_median": 1875.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.006506818759543322
+    }
+   }
+  },
+  "ch=0.1": {
+   "params": {
+    "kq": 0.16666666666666666,
+    "cap": 0.5,
+    "freq": "mid",
+    "informed": 0.1,
+    "ch": 0.1
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 8364.39996163208,
+     "pnl_mean": 9483.074591406663,
+     "pnl_p5": 4618.071956963613,
+     "pnl_p5_over_budget": 0.04618071956963613,
+     "pnl_negative_share": 0.0,
+     "spread_median": 8398.187364767673,
+     "inventory_median": -6.131738797576645,
+     "mdd_median": 11.838225678196522,
+     "mdd_p95": 63.06809243605892,
+     "trades_median": 605.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.0007215368092919707
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 20360.16942974818,
+     "pnl_mean": 22394.513233434805,
+     "pnl_p5": 11809.453395900924,
+     "pnl_p5_over_budget": 0.11809453395900923,
+     "pnl_negative_share": 0.0,
+     "spread_median": 20469.933623154662,
+     "inventory_median": 6.359939761376154,
+     "mdd_median": 10.368329390308645,
+     "mdd_p95": 46.183382437306136,
+     "trades_median": 1208.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00329332530034628
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 49742.48328554355,
+     "pnl_mean": 54543.810134592706,
+     "pnl_p5": 28632.040177656065,
+     "pnl_p5_over_budget": 0.28632040177656065,
+     "pnl_negative_share": 0.0,
+     "spread_median": 49778.16551057392,
+     "inventory_median": -5.026246392641042,
+     "mdd_median": 8.707730423928297,
+     "mdd_p95": 38.509726249321815,
+     "trades_median": 2408.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00783338624445494
+    }
+   }
+  },
+  "ch=0.2": {
+   "params": {
+    "kq": 0.16666666666666666,
+    "cap": 0.5,
+    "freq": "mid",
+    "informed": 0.1,
+    "ch": 0.2
+   },
+   "tenors": {
+    "7": {
+     "windows": 748,
+     "pnl_median": 8364.39996163208,
+     "pnl_mean": 9483.074591406663,
+     "pnl_p5": 4618.071956963613,
+     "pnl_p5_over_budget": 0.04618071956963613,
+     "pnl_negative_share": 0.0,
+     "spread_median": 8398.187364767673,
+     "inventory_median": -6.131738797576645,
+     "mdd_median": 11.838225678196522,
+     "mdd_p95": 63.06809243605892,
+     "trades_median": 605.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.0007215368092919707
+    },
+    "14": {
+     "windows": 741,
+     "pnl_median": 20360.16942974818,
+     "pnl_mean": 22394.513233434805,
+     "pnl_p5": 11809.453395900924,
+     "pnl_p5_over_budget": 0.11809453395900923,
+     "pnl_negative_share": 0.0,
+     "spread_median": 20469.933623154662,
+     "inventory_median": 6.359939761376154,
+     "mdd_median": 10.368329390308645,
+     "mdd_p95": 46.183382437306136,
+     "trades_median": 1208.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00329332530034628
+    },
+    "28": {
+     "windows": 727,
+     "pnl_median": 49742.48328554355,
+     "pnl_mean": 54543.810134592706,
+     "pnl_p5": 28632.040177656065,
+     "pnl_p5_over_budget": 0.28632040177656065,
+     "pnl_negative_share": 0.0,
+     "spread_median": 49778.16551057392,
+     "inventory_median": -5.026246392641042,
+     "mdd_median": 8.707730423928297,
+     "mdd_p95": 38.509726249321815,
+     "trades_median": 2408.0,
+     "u_above_60_share": 0.0,
+     "risk_increasing_rejected_share": 0.00783338624445494
+    }
+   }
+  }
+ },
+ "ch_check_b_base_median_nonnegative": {
+  "7": true,
+  "14": true,
+  "28": true
+ }
+}

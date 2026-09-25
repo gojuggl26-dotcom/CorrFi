@@ -10,9 +10,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: pip install "pytest==8.4.2"
+      - run: pip install "pytest==8.4.2" "numpy==2.3.*"
       - run: python analysis/s00/run_all.py
       - run: python -m pytest verifier/tests -q
+      - name: backtest helpers (walk-forward splits, bootstrap, isotonic, σP table rule)
+        run: python -m pytest backtest/tests -q
       - name: S02 data-processing tests (only once data/ is in the repository)
         run: if [ -d data/tests ]; then python -m pytest data/tests -q; else echo "data/ not committed yet"; fi
       - name: shared vectors are reproducible
