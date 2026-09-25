@@ -25,10 +25,21 @@ export interface Broadcaster {
   last: () => string | undefined;
 }
 
-export function broadcaster(port: number): Promise<Broadcaster> {
+/** `onPost(path)` receives the UI's commands (POST /start); everything else is the WebSocket upgrade. */
+export function broadcaster(port: number, onPost: (path: string) => void = () => {}): Promise<Broadcaster> {
   const sockets = new Set<Socket>();
   const history: string[] = [];
-  const server: Server = createServer((_, res) => {
+  const server: Server = createServer((req, res) => {
+    const cors = { "access-control-allow-origin": "*", "access-control-allow-methods": "POST, OPTIONS", "access-control-allow-headers": "content-type" };
+    if (req.method === "OPTIONS") {
+      res.writeHead(204, cors);
+      return res.end();
+    }
+    if (req.method === "POST") {
+      onPost(req.url ?? "/");
+      res.writeHead(200, { ...cors, "content-type": "application/json" });
+      return res.end('{"ok":true}');
+    }
     res.writeHead(426, { "content-type": "text/plain" });
     res.end("websocket only");
   });

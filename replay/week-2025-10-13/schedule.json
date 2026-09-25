@@ -1,0 +1,228 @@
+{
+ "note": "R v0.4 §5.3 scenario, §5.3.1 golden table, App. A pacing (ms), §6.1 settlement",
+ "actors": {
+  "A": "vault mint / burn and a Short sale",
+  "B": "Long trades",
+  "C": "a Short purchase"
+ },
+ "funding": {
+  "maker": "200000000000",
+  "A": "2000000000",
+  "B": "2000000000",
+  "C": "2000000000"
+ },
+ "maker": {
+  "allocation": "55000000000",
+  "usdcApproval": "100000000000",
+  "generation": 1,
+  "config": {
+   "riskBudget": "100000000000",
+   "qMaxMarket": "50000000000",
+   "qGroup": "100000000000",
+   "qMinTrade": "1000000",
+   "qMaxTrade": "5000000000",
+   "kq": "166666666666666666",
+   "hM": "0",
+   "active": true
+  }
+ },
+ "toleranceWad": "2000000000000000",
+ "chain": {
+  "genesisOffset": -3600,
+  "marketCreationOffset": -240,
+  "postDelay": 10,
+  "tradeDelay": 11
+ },
+ "pacing": {
+  "scene1Ms": 10000,
+  "phaseA": {
+   "barsPerStep": 12,
+   "steps": 167,
+   "stepMs": 450,
+   "tradeStepMs": 1500
+  },
+  "phaseB": {
+   "barsPerStep": 1,
+   "steps": 12,
+   "stepMs": 600
+  },
+  "settlementMs": 5000,
+  "verificationMs": 5000,
+  "widen": {
+   "lateMs": 3000,
+   "barsPerStep": 24
+  },
+  "shortenPause": {
+   "lateMs": 8000
+  }
+ },
+ "trades": [
+  {
+   "id": "S0a",
+   "k": 0,
+   "actor": "A",
+   "op": "mint",
+   "amount": "100000000"
+  },
+  {
+   "id": "S0b",
+   "k": 0,
+   "actor": "B",
+   "op": "trade",
+   "side": "long",
+   "isBuy": true,
+   "exactIn": false,
+   "amount": "1000000000",
+   "expect": {
+    "dir": 1,
+    "q1": "0",
+    "q2": "1000000000",
+    "path": "mint"
+   }
+  },
+  {
+   "id": "S1",
+   "k": 504,
+   "actor": "B",
+   "op": "trade",
+   "side": "long",
+   "isBuy": false,
+   "exactIn": true,
+   "amount": "400000000",
+   "expect": {
+    "dir": 2,
+    "q1": "400000000",
+    "q2": "0",
+    "path": "paired burn"
+   }
+  },
+  {
+   "id": "S2",
+   "k": 1008,
+   "actor": "C",
+   "op": "trade",
+   "side": "short",
+   "isBuy": true,
+   "exactIn": false,
+   "amount": "500000000",
+   "expect": {
+    "dir": 3,
+    "q1": "500000000",
+    "q2": "0",
+    "path": "from custody"
+   }
+  },
+  {
+   "id": "S3a",
+   "k": 1512,
+   "actor": "A",
+   "op": "trade",
+   "side": "short",
+   "isBuy": false,
+   "exactIn": true,
+   "amount": "50000000",
+   "expect": {
+    "dir": 4,
+    "q1": "0",
+    "q2": "50000000",
+    "path": "bought into custody"
+   }
+  },
+  {
+   "id": "S3b",
+   "k": 1512,
+   "actor": "A",
+   "op": "burn",
+   "amount": "50000000"
+  },
+  {
+   "id": "S4",
+   "k": 1920,
+   "actor": "B",
+   "op": "trade",
+   "side": "long",
+   "isBuy": true,
+   "exactIn": true,
+   "amount": "300000000",
+   "expect": {
+    "dir": 1,
+    "q1": "0",
+    "q2": "Q4",
+    "path": "mint"
+   }
+  }
+ ],
+ "golden": [
+  {
+   "after": "initial",
+   "q": "0",
+   "nl": "0",
+   "ns": "0",
+   "collateral": "0",
+   "supply": "0"
+  },
+  {
+   "after": "S0a",
+   "q": "0",
+   "nl": "0",
+   "ns": "0",
+   "collateral": "100000000",
+   "supply": "100000000"
+  },
+  {
+   "after": "S0b",
+   "q": "-1000000000",
+   "nl": "0",
+   "ns": "1000000000",
+   "collateral": "1100000000",
+   "supply": "1100000000"
+  },
+  {
+   "after": "S1",
+   "q": "-600000000",
+   "nl": "0",
+   "ns": "600000000",
+   "collateral": "700000000",
+   "supply": "700000000"
+  },
+  {
+   "after": "S2",
+   "q": "-100000000",
+   "nl": "0",
+   "ns": "100000000",
+   "collateral": "700000000",
+   "supply": "700000000"
+  },
+  {
+   "after": "S3a",
+   "q": "-150000000",
+   "nl": "0",
+   "ns": "150000000",
+   "collateral": "700000000",
+   "supply": "700000000"
+  },
+  {
+   "after": "S3b",
+   "q": "-150000000",
+   "nl": "0",
+   "ns": "150000000",
+   "collateral": "650000000",
+   "supply": "650000000"
+  },
+  {
+   "after": "S4",
+   "q": "-150000000-Q4",
+   "nl": "0",
+   "ns": "150000000+Q4",
+   "collateral": "650000000+Q4",
+   "supply": "650000000+Q4"
+  }
+ ],
+ "settlement": [
+  "post k = 2016 (obsEnd + 10)",
+  "finalize (obsEnd + 11)",
+  "maker docks both orders",
+  "A, B, C redeem",
+  "maker claims its custody"
+ ]
+}

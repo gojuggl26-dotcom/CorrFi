@@ -27,7 +27,7 @@ export function anvilArgs(port: number, genesis: number): string[] {
   return [
     "--port", String(port), "--chain-id", String(CHAIN_ID), "--timestamp", String(genesis), "--mnemonic", MNEMONIC,
     "--accounts", "10", "--balance", "10000", "--block-base-fee-per-gas", "0", "--gas-price", "0",
-    "--gas-limit", "1000000000", "--hardfork", "prague", "--silent",
+    "--gas-limit", "1000000000", "--hardfork", "jovian", "--silent", // chainId 84532 selects the OP network config; Jovian = its latest in Foundry v1.8.3
   ];
 }
 
@@ -76,12 +76,21 @@ export function connect(rpc: string, proc?: ChildProcess): ReplayChain {
   const transport = custom({
     async request({ method, params }) {
       if (method === "eth_estimateGas") return "0x1c9c380"; // 30,000,000
+      // the node would fill (and so execute) the transaction at the previous block's time: let viem fill it itself
+      if (method === "eth_fillTransaction") throw Object.assign(new Error("Method not found"), { code: -32601 });
       if (method === "eth_sendRawTransaction" || method === "eth_sendTransaction") {
         await call("evm_setNextBlockTimestamp", [next]);
         next += 1;
         const hash = (await call(method, params as unknown[])) as Hex;
-        const rc = (await call("eth_getTransactionReceipt", [hash])) as { status: string; gasUsed: string; blockNumber: string } | null;
-        if (rc) gasLog.push({ block: Number(rc.blockNumber), gasUsed: BigInt(rc.gasUsed), hash });
+        // automine: the receipt appears as soon as the block is sealed (waiting here uses no chain time)
+        for (let i = 0; i < 500; ++i) {
+          const rc = (await call("eth_getTransactionReceipt", [hash])) as { gasUsed: string; blockNumber: string } | null;
+          if (rc) {
+            gasLog.push({ block: Number(rc.blockNumber), gasUsed: BigInt(rc.gasUsed), hash });
+            break;
+          }
+          await new Promise((r) => setTimeout(r, 2));
+        }
         return hash;
       }
       return call(method, params as unknown[]);
