@@ -6,7 +6,9 @@ Usage (from contracts/):
 Exit code: 0 ok / warnings only, 1 a limit is exceeded, 2 the report could not be produced.
 The local chain must never raise the limit (R §4.2 p.9, P5 p.18).
 """
+import glob
 import json
+import os
 import subprocess
 import sys
 
@@ -24,7 +26,34 @@ def load(argv):
     if proc.returncode not in (0, 1):   # forge exits 1 itself when a contract exceeds the limit
         print(proc.stderr, file=sys.stderr)
         sys.exit(2)
-    return json.loads(proc.stdout)
+    report = json.loads(proc.stdout)
+    add_linked_libraries(report)
+    return report
+
+
+def add_linked_libraries(report: dict) -> None:
+    """`forge build --sizes` leaves out some deployable libraries (e.g. ones with only external functions).
+    The router's linked libraries (DEC-12) are deployed on their own, so measure every src/ artifact with code."""
+    arts = {}
+    linked = set()
+    for path in glob.glob(os.path.join("out", "*.sol", "*.json")):
+        with open(path, encoding="utf-8") as f:
+            art = json.load(f)
+        meta = art.get("metadata")
+        target = meta.get("settings", {}).get("compilationTarget", {}) if isinstance(meta, dict) else {}
+        src = next(iter(target), "")
+        if not src.startswith("src/") or not os.path.exists(src):   # skip stale artifacts of deleted sources
+            continue
+        arts[os.path.splitext(os.path.basename(path))[0]] = art
+        for libs in art.get("bytecode", {}).get("linkReferences", {}).values():
+            linked.update(libs)
+    for name in sorted(linked - set(report)):
+        art = arts.get(name)
+        if art is None:
+            continue
+        runtime = art["deployedBytecode"]["object"]
+        init = art["bytecode"]["object"]
+        report[name] = {"runtime_size": (len(runtime) - 2) // 2, "init_size": (len(init) - 2) // 2}
 
 
 def check(report: dict) -> int:
