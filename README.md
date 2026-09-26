@@ -389,9 +389,40 @@ Used as deployed on Base Sepolia: Multicall3 [`0xcA11bde05977b3631167028862bE2a1
 | First fair-value report accepted by the hub's on-chain recomputation (`postAndReport`, all three markets) | [`0x1a1c…dc07`](https://sepolia.basescan.org/tx/0x1a1c8a5b5bbfa17b384e4d7000cd1f61f32d95c5d076af53ac81de6372a4dc07) |
 | Swaps in the four directions, a mint in the hook, finalize, redeem | to be added (after the demo; finalize and redeem at maturity) |
 
+**Deploy it yourself**
+
+Requirements: Foundry 1.8.3 (`forge`, `cast`, `anvil`), Node.js 24, Python 3.13 and bash. Clone with the submodules (`git clone --recursive`, or `git submodule update --init --recursive`), then `cd engine && npm ci`.
+
+Put the keys in a file outside the repository: `RPC_URL`, and `*_KEY` / `*_ADDRESS` for `DEPLOYER`, `REPORTER`, `PRICE_SIGNER`, `MAKER` and `TAKER`. Only the deployer needs ETH at first; `fund` passes gas on to the others. The calibration needs 180 days of 1-minute bars before the start, so fetch them once: `python data/fetch_klines.py --start <180+ days ago> --end <now>`.
+
+Every step is one command: `ENV_FILE=<keys file> DEPLOY_NAME=base-sepolia engine/scripts/testnet.sh <step>`.
+
+| Step | What it does |
+|---|---|
+| `fund` | sends gas ETH from the deployer to the reporter, the maker and the taker |
+| `deploy` | rebuilds, checks the build and a dry run against `contracts/build-manifest.json`, then broadcasts [`Deploy.s.sol`](contracts/script/Deploy.s.sol) (Aqua v1.0.0 as is, tUSDC, libraries, hub, router, lens) and writes `deployments/<name>.json` |
+| `verify` | checks the creation code of every deployment transaction and the runtime code on chain against the manifest |
+| `calib` | fetches this month's 1-minute bars and writes the 7D / 14D / 28D calibrations; the start is a 5-minute mark 4 to 9 minutes ahead |
+| `markets` | waits for the 5 minutes before that start and creates the three markets (run it right after `calib`) |
+| `maker` | mints 1,000,000 tUSDC to the maker, sets its risk limits, and registers and ships both books of every market (55,000 virtual each, one 105,000 approval) |
+| `bots` | starts the reporter and the finalizer in the background (logs in `~/.corrfi/<name>/logs`) |
+
+`balances` shows each role's ETH at any time. Point the UI at the new deployment with `cd engine && node bin/ui-config.ts ../deployments/<name>.json <rpc url> <maker address> ../ui/public/config.json --multicall3 0xcA11bde05977b3631167028862bE2a173976CA11 --explorer https://sepolia.basescan.org --chain-name "Base Sepolia"`.
+
 ## 6.Demo and try it
 
-<!-- Demo video and live site. Try it: get tUSDC on the faucet page -> trade Long / Short on the trade page -> redeem after maturity. Run it locally: cd ui && npm run live; the 7D replay demo. -->
+<!-- Demo video: link to be added. -->
+
+**Try it on Base Sepolia.** The committed [`ui/public/config.json`](ui/public/config.json) points at the deployment in section 5.
+
+1. `cd engine && npm ci && cd ../ui && npm ci && npm run dev`, then open http://localhost:5173.
+2. Connect MetaMask. The page switches it to Base Sepolia (and adds the network if needed). You need a little Base Sepolia ETH for gas.
+3. **Get tUSDC**: up to 10,000 per wallet every 24 hours.
+4. **Trade**: buy or sell Long / Short in any market; the quote details show the fair value and each part of the spread.
+5. **Maker**: watch the maker's side of your fill (what Aqua pulled, the shared balance, the inventory).
+6. **Redeem**: after maturity, finalize the market and redeem.
+
+**Or on a local chain** (no testnet ETH): `cd ui && npm run live -- --metamask` starts Anvil on port 8545, deploys everything, creates the markets and funds Anvil's public test account #8 for MetaMask. It reads the 1-minute bars under `data/store/1m` (see above).
 
 ## 7.Tech Stack
 
