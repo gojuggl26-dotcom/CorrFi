@@ -4,7 +4,7 @@
 import type { Address, PublicClient, WalletClient } from "viem";
 import { erc20Abi, hubAbi, vaultAbi, aquaAbi } from "../../../engine/src/abi.ts";
 import type { Deployment } from "../../../engine/src/chain.ts";
-import { breakdown, type Breakdown, OrderIndex, type RegisteredOrder, trade, type Fill } from "../../../engine/src/taker.ts";
+import { breakdown, type Breakdown, derivedOrders, type RegisteredOrder, trade, type Fill } from "../../../engine/src/taker.ts";
 import { explainFill, type QuoteInput } from "./quote.ts";
 
 const WAD = 10n ** 18n;
@@ -44,13 +44,12 @@ export class CorrFiApp {
   readonly pc: PublicClient;
   readonly dep: Deployment;
   readonly maker: Address;
-  private readonly orders: OrderIndex;
+  private readonly orders = new Map<number, Promise<RegisteredOrder[]>>(); // per market, derived once per page
 
   constructor(pc: PublicClient, dep: Deployment, maker: Address) {
     this.pc = pc;
     this.dep = dep;
     this.maker = maker;
-    this.orders = new OrderIndex(pc, dep, maker);
   }
 
   async markets(): Promise<MarketInfo[]> {
@@ -96,7 +95,12 @@ export class CorrFiApp {
 
   /** The default maker's newest shipped (not docked) order for a market and side (M §5.6: the operator's maker). */
   async orderFor(marketId: number, side: number): Promise<RegisteredOrder | undefined> {
-    const all = (await this.orders.sync()).filter((o) => o.marketId === marketId && o.side === side);
+    if (!this.orders.has(marketId)) {
+      const p = this.marketOrders(marketId);
+      this.orders.set(marketId, p);
+      p.catch(() => this.orders.delete(marketId)); // retry on the next quote
+    }
+    const all = (await this.orders.get(marketId)!).filter((o) => o.side === side);
     all.sort((a, b) => b.generation - a.generation);
     for (const o of all) {
       const [, tokens] = await this.pc.readContract({
@@ -108,6 +112,16 @@ export class CorrFiApp {
       if (tokens > 0 && tokens !== 255) return o;
     }
     return all[0];
+  }
+
+  private async marketOrders(marketId: number): Promise<RegisteredOrder[]> {
+    const q = await this.pc.readContract({ address: this.dep.hub, abi: hubAbi, functionName: "quoteState", args: [marketId] });
+    const vault = await this.pc.readContract({ address: this.dep.hub, abi: hubAbi, functionName: "marketVault", args: [marketId] });
+    const [longToken, shortToken] = await Promise.all([
+      this.pc.readContract({ address: vault, abi: vaultAbi, functionName: "longToken" }),
+      this.pc.readContract({ address: vault, abi: vaultAbi, functionName: "shortToken" }),
+    ]);
+    return derivedOrders(this.pc, this.dep, this.maker, [{ id: marketId, obsEnd: Number(q.obsEnd), longToken, shortToken }]);
   }
 
   async quote(input: QuoteInput): Promise<Quoted> {

@@ -165,7 +165,7 @@ async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>, sil
   try {
     c = await connectWallet(chain, cfg.devAccount, silent, pc);
   } catch (e) {
-    state.message = walletError(e);
+    if (!silent) state.message = walletError(e);
     return render();
   }
   if (!c) return;
@@ -208,7 +208,7 @@ async function main() {
     render();
   };
   $("connect").onclick = () => void connect(cfg, chain);
-  if (!cfg.devAccount) await connect(cfg, chain, true); // a wallet that already allowed this site reconnects by itself
+  if (!cfg.devAccount) void connect(cfg, chain, true); // a wallet that already allowed this site reconnects by itself
   $("claim").onclick = () => void (state.wc ? claim() : connect(cfg, chain));
   await refresh();
   setInterval(render, 1000);

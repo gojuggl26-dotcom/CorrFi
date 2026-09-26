@@ -9,6 +9,45 @@ type Eip1193 = Parameters<typeof custom>[0] & { on?: (event: string, fn: (arg: u
 
 export const injected = () => (window as unknown as { ethereum?: Eip1193 }).ethereum;
 
+// Remembered after the user connects once on this site, so the next page reconnects without asking.
+const REMEMBER = "corrfi.wallet";
+const remembered = () => {
+  try {
+    return localStorage.getItem(REMEMBER) === "1";
+  } catch {
+    return false;
+  }
+};
+const remember = (on: boolean) => {
+  try {
+    if (on) localStorage.setItem(REMEMBER, "1");
+    else localStorage.removeItem(REMEMBER);
+  } catch {
+    /* storage blocked: the user just connects again */
+  }
+};
+
+/** The injected wallet, waiting up to `waitMs` for one that injects late (MetaMask dispatches ethereum#initialized). */
+async function injectedSoon(waitMs: number) {
+  if (injected() || waitMs <= 0) return injected();
+  await new Promise<void>((resolve) => {
+    const t = setTimeout(resolve, waitMs);
+    window.addEventListener("ethereum#initialized", () => (clearTimeout(t), resolve()), { once: true });
+  });
+  return injected();
+}
+
+/** eth_accounts, asked again for up to `waitMs`: right after a page load MetaMask can answer [] before it has restored
+ *  the site's permission, which made every page ask to connect again. */
+async function accountsSoon(wc: WalletClient, waitMs: number): Promise<Address | undefined> {
+  const end = Date.now() + waitMs;
+  for (;;) {
+    const [a] = await wc.getAddresses().catch(() => [] as Address[]);
+    if (a || Date.now() >= end) return a;
+    await new Promise((r) => setTimeout(r, 250));
+  }
+}
+
 export interface Connected {
   wc: WalletClient;
   account: Address;
@@ -44,6 +83,7 @@ async function onChain(wc: WalletClient, chain: Chain) {
 function reloadOnChange(eth: Eip1193, chain: Chain, account: Address) {
   eth.on?.("accountsChanged", (a) => {
     const next = (a as Address[])[0];
+    if (!next) remember(false); // disconnected in the wallet: do not reconnect by ourselves
     if (!next || next.toLowerCase() !== account.toLowerCase()) location.reload();
   });
   eth.on?.("chainChanged", (id) => {
@@ -66,19 +106,21 @@ async function sameNode(eth: Eip1193, pc: PublicClient, chain: Chain) {
   }
 }
 
-/** Connect (asks the wallet; `silent` only uses an account the wallet already allowed and does not switch chains).
+/** Connect (asks the wallet). `silent` never asks: it reuses an account the wallet already allowed for this site
+ *  (waiting a moment when the user connected before) and gives up if the wallet is on another chain.
  *  With `pc`, the wallet's node is checked to be the one the page reads. */
 export async function connectWallet(chain: Chain, devAccount?: Address, silent = false, pc?: PublicClient): Promise<Connected | undefined> {
   if (devAccount) {
     return { wc: createWalletClient({ chain, transport: http(chain.rpcUrls.default.http[0]), account: devAccount }), account: devAccount, wallet: false };
   }
-  const eth = injected();
+  const wait = silent && remembered() ? 3_000 : 0;
+  const eth = await injectedSoon(wait);
   if (!eth) {
     if (silent) return undefined;
     throw new Error("No wallet found. Install MetaMask (or another browser wallet) and reload.");
   }
   const bare = createWalletClient({ chain, transport: custom(eth) });
-  const [account] = silent ? await bare.getAddresses() : await bare.requestAddresses();
+  const account = silent ? await accountsSoon(bare, wait) : (await bare.requestAddresses())[0];
   if (!account) return undefined;
   if (silent) {
     if ((await bare.getChainId()) !== chain.id) return undefined;
@@ -86,6 +128,7 @@ export async function connectWallet(chain: Chain, devAccount?: Address, silent =
     await onChain(bare, chain);
   }
   if (pc) await sameNode(eth, pc, chain);
+  remember(true);
   reloadOnChange(eth, chain, account);
   return { wc: createWalletClient({ chain, transport: custom(eth), account }), account, wallet: true };
 }

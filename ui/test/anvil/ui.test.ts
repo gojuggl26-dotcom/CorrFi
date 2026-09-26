@@ -121,7 +121,7 @@ test("maker page: the fill's events alone give what Aqua pulled (the mint) and h
     Promise.all((["depositLong", "depositShort"] as const).map((fn) => c.pc.readContract({ address: m.vault, abi: vaultAbi, functionName: fn, args: [maker], ...at(b) })));
   const [c0, c1] = [await custody(f.block - 1n), await custody(f.block)];
   assert.deepEqual([c1[0] - c0[0], c1[1] - c0[1]], [s.custodyLong, s.custodyShort]);
-  for (const o of await view.books()) {
+  for (const o of await view.books(await app.markets())) {
     const bal = async (b: bigint) => (await c.pc.readContract({ address: c.dep.aqua, abi: aquaAbi, functionName: "rawBalances", args: [maker, c.dep.router, o.hash, c.dep.usdc], ...at(b) }))[0];
     assert.equal((await bal(f.block)) - (await bal(f.block - 1n)), s.bookDelta.get(o.hash.toLowerCase()) ?? 0n, `book ${o.side}`);
   }

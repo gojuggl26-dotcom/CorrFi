@@ -8,7 +8,7 @@ import { aquaAbi, erc20Abi, routerAbi, vaultAbi } from "../../../engine/src/abi.
 import type { Deployment } from "../../../engine/src/chain.ts";
 import { riskCapital, utilization } from "../../../engine/src/fixedpoint.ts";
 import { lastLogBackwards, logsInChunks } from "../../../engine/src/logs.ts";
-import { OrderIndex, type RegisteredOrder } from "../../../engine/src/taker.ts";
+import { derivedOrders, type RegisteredOrder } from "../../../engine/src/taker.ts";
 import type { MarketInfo } from "./app.ts";
 
 export interface Book {
@@ -99,7 +99,6 @@ export class MakerView {
   readonly pc: PublicClient;
   readonly dep: Deployment;
   readonly maker: Address;
-  private readonly orders: OrderIndex;
   private nextFillBlock?: bigint; // undefined until the first search (backwards from the latest block)
   private lastFill?: { hash: Hex; block: bigint; orderHash: Hex; marketId: number; dir: number; qty: bigint; q1: bigint; q2: bigint };
   private fillView?: FillView; // the last fill's breakdown, read once
@@ -108,11 +107,11 @@ export class MakerView {
     this.pc = pc;
     this.dep = dep;
     this.maker = maker;
-    this.orders = new OrderIndex(pc, dep, maker);
   }
 
-  books(): Promise<RegisteredOrder[]> {
-    return this.orders.sync();
+  /** The maker's books in these markets (derived, no log scan). */
+  books(markets: MarketInfo[]): Promise<RegisteredOrder[]> {
+    return derivedOrders(this.pc, this.dep, this.maker, markets);
   }
 
   private async aquaBalance(o: RegisteredOrder, token: Address, blockNumber?: bigint) {
@@ -128,7 +127,7 @@ export class MakerView {
 
   async snapshot(markets: MarketInfo[]): Promise<MakerSnapshot> {
     const block = await this.pc.getBlockNumber();
-    const orders = await this.orders.sync();
+    const orders = await this.books(markets);
     const [wallet, approval, cfg] = await Promise.all([
       this.pc.readContract({ address: this.dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [this.maker] }),
       this.pc.readContract({ address: this.dep.usdc, abi: erc20Abi, functionName: "allowance", args: [this.maker, this.dep.aqua] }),

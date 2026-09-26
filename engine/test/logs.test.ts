@@ -52,3 +52,14 @@ test("the latest event is found searching backwards, without reading the whole h
   assert.deepEqual(asked, ["35001-40000", "30001-35000"]);
   assert.equal(await lastLogBackwards(100n, 1_000n, async () => [], 5_000n), undefined);
 });
+
+test("a range limit stated in the error is adopted at once and kept", async () => {
+  const sizes: bigint[] = [];
+  const out = await logsInChunks(0n, 4_999n, async (f, t) => {
+    if (t - f + 1n > 1_000n) throw new Error("eth_getLogs is limited to a 1,000 range");
+    sizes.push(t - f + 1n);
+    return [f];
+  }, 5_000n, 100n, 3, 1);
+  assert.equal(out.length, 5);
+  assert.deepEqual(sizes, [1_000n, 1_000n, 1_000n, 1_000n, 1_000n]);
+});

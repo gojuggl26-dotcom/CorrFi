@@ -444,7 +444,7 @@ async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>, sil
   try {
     c = await connectWallet(chain, cfg.devAccount, silent, pc);
   } catch (e) {
-    $("result").textContent = walletError(e);
+    if (!silent) $("result").textContent = walletError(e);
     return renderStatus();
   }
   if (!c) return;
@@ -533,7 +533,7 @@ async function main() {
   };
   $("execute").onclick = () => void (state.wc ? execute() : connect(cfg, chain));
   $("connect").onclick = () => void connect(cfg, chain);
-  if (!cfg.devAccount) await connect(cfg, chain, true); // a wallet that already allowed this site reconnects by itself
+  if (!cfg.devAccount) void connect(cfg, chain, true); // a wallet that already allowed this site reconnects by itself
   await refreshData();
   if (state.markets.length) {
     // the market in ?market= if it still trades, else the first one that does

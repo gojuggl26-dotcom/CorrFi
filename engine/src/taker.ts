@@ -6,7 +6,7 @@ import { parseEventLogs } from "viem";
 import { lensAbi, routerAbi } from "./abi.ts";
 import type { Deployment } from "./chain.ts";
 import { logsInChunks } from "./logs.ts";
-import type { Order } from "./orders.ts";
+import { buildOrder, type Order, orderHash } from "./orders.ts";
 
 /** Reason codes of CorrFiPricing (M §5.8.2 可否) with what the UI shows and whether waiting can clear them. */
 export const REASONS: Record<number, { code: string; ja: string; en: string; clears: "report" | "maker" | "amount" | "never" | "-" }> = {
@@ -96,6 +96,39 @@ export class OrderIndex {
     }
     return [...this.byHash.values()];
   }
+}
+
+/** What `derivedOrders` needs to know about a market. */
+export interface OrderMarket {
+  id: number;
+  obsEnd: number;
+  longToken: Address;
+  shortToken: Address;
+}
+
+/** A maker's registered orders without reading logs. An order is a pure function of (maker, market, side, generation)
+ *  (orders.ts), so build generations 1, 2, ... and keep the ones the router has registered, stopping at the first
+ *  generation with neither side registered. Public RPCs cap eth_getLogs at a small block range (Base: 1,000 blocks),
+ *  so a log scan from the deployment would grow by dozens of requests per day. `block` is 0 (unknown here). */
+export async function derivedOrders(pc: PublicClient, dep: Deployment, maker: Address, markets: OrderMarket[], maxGeneration = 16): Promise<RegisteredOrder[]> {
+  const found = await Promise.all(
+    markets.map(async (m) => {
+      const out: RegisteredOrder[] = [];
+      for (let generation = 1; generation <= maxGeneration; generation++) {
+        const spec = { maker, usdc: dep.usdc, router: dep.router, obsEnd: m.obsEnd, marketId: m.id, generation };
+        const pair = [buildOrder({ ...spec, sideToken: m.longToken, side: 0 }), buildOrder({ ...spec, sideToken: m.shortToken, side: 1 })];
+        const infos = await Promise.all(
+          pair.map((o) => pc.readContract({ address: dep.router, abi: routerAbi, functionName: "orderInfo", args: [orderHash(o)] })),
+        );
+        if (!infos.some((i) => i.registered)) break;
+        pair.forEach((o, side) => {
+          if (infos[side].registered) out.push({ hash: orderHash(o), maker, marketId: m.id, side, generation, order: o, block: 0n });
+        });
+      }
+      return out;
+    }),
+  );
+  return found.flat();
 }
 
 export type Breakdown = Awaited<ReturnType<typeof breakdown>>;

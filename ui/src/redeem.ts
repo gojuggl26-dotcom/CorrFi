@@ -199,7 +199,7 @@ async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>, sil
   try {
     c = await connectWallet(chain, cfg.devAccount, silent, pc);
   } catch (e) {
-    state.message = walletError(e);
+    if (!silent) state.message = walletError(e);
     return render();
   }
   if (!c) return;
@@ -232,7 +232,7 @@ async function main() {
   document.querySelectorAll(".cash").forEach((e) => (e.textContent = sym));
   $("testToken").textContent = `${sym} (${name}) is a test token. It is not Circle USDC and has no value.`;
   $("connect").onclick = () => void connect(cfg, chain);
-  if (!cfg.devAccount) await connect(cfg, chain, true); // a wallet that already allowed this site reconnects by itself
+  if (!cfg.devAccount) void connect(cfg, chain, true); // a wallet that already allowed this site reconnects by itself
   $("redeemAll").onclick = () => void (state.wc ? redeem(state.markets.filter((m) => redeemable(m)).map((m) => m.id)) : connect(cfg, chain));
   await refresh();
   setInterval(tick, 1000);
