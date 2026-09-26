@@ -10,6 +10,8 @@ import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 library CorrFiCurve {
     uint256 internal constant WAD = 1e18;
     int256 internal constant IWAD = 1e18;
+    /// correction steps after the analytic walk; the walk is exact up to one rounding, so more means no solution
+    uint256 internal constant MAX_FIX = 64;
 
     error BadCurve();
     error BookTooThin();
@@ -45,6 +47,10 @@ library CorrFiCurve {
         c.qs = _floorDiv((c.h - c.hmin) * c.qmax, c.kq);
         c.qss = -_floorDiv((c.h - c.hmin) * c.qmax, c.kq);
         c.q0 = _floorDiv((c.p - c.h) * c.qmax, c.kq);
+        // rounding can invert a pair when its linear piece is shorter than one unit; the piece is then empty and
+        // the branches are unchanged by closing the pair, which keeps lo <= hi for numer and _walk
+        if (c.q1 > c.qs) c.qs = c.q1;
+        if (c.qss > c.q0) c.qss = c.q0;
     }
 
     // ---------------------------------------------------------------- F16
@@ -109,27 +115,45 @@ library CorrFiCurve {
     /// Largest Q (units) of Long whose cost does not exceed x.
     function qtyD1ExactIn(Curve memory c, int256 q0, uint256 x) internal pure returns (uint256 q) {
         q = _walk(c, true, q0, -1, false, x, true);
-        while (q > 0 && payD1(c, q0, q) > x) --q;
+        for (uint256 i; q > 0 && payD1(c, q0, q) > x; ++i) {
+            if (i == MAX_FIX) revert BookTooThin();
+            --q;
+        }
     }
 
     /// Largest Q (units) of Short whose cost does not exceed x.
     function qtyD3ExactIn(Curve memory c, int256 q0, uint256 x) internal pure returns (uint256 q) {
         q = _walk(c, false, q0, 1, true, x, true);
-        while (q > 0 && payD3(c, q0, q) > x) --q;
+        for (uint256 i; q > 0 && payD3(c, q0, q) > x; ++i) {
+            if (i == MAX_FIX) revert BookTooThin();
+            --q;
+        }
     }
 
     /// Smallest Q (units) of Long whose proceeds reach x.
     function qtyD2ExactOut(Curve memory c, int256 q0, uint256 x) internal pure returns (uint256 q) {
         q = _walk(c, false, q0, 1, false, x, false);
-        while (receiveD2(c, q0, q) < x) ++q;
-        while (q > 0 && receiveD2(c, q0, q - 1) >= x) --q;
+        for (uint256 i; receiveD2(c, q0, q) < x; ++i) {
+            if (i == MAX_FIX) revert BookTooThin();
+            ++q;
+        }
+        for (uint256 i; q > 0 && receiveD2(c, q0, q - 1) >= x; ++i) {
+            if (i == MAX_FIX) revert BookTooThin();
+            --q;
+        }
     }
 
     /// Smallest Q (units) of Short whose proceeds reach x.
     function qtyD4ExactOut(Curve memory c, int256 q0, uint256 x) internal pure returns (uint256 q) {
         q = _walk(c, true, q0, -1, true, x, false);
-        while (receiveD4(c, q0, q) < x) ++q;
-        while (q > 0 && receiveD4(c, q0, q - 1) >= x) --q;
+        for (uint256 i; receiveD4(c, q0, q) < x; ++i) {
+            if (i == MAX_FIX) revert BookTooThin();
+            ++q;
+        }
+        for (uint256 i; q > 0 && receiveD4(c, q0, q - 1) >= x; ++i) {
+            if (i == MAX_FIX) revert BookTooThin();
+            --q;
+        }
     }
 
     /// @dev Walk from q0 in `dir` over the pieces of f (or 1 - f), consuming numerator r = x * D.

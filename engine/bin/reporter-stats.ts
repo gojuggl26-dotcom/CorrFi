@@ -7,6 +7,7 @@
 // - with --log (the reporter's LOG_FILE): ticks that failed, and U-3 recompute mismatches among them (must be 0).
 import { readFileSync, writeFileSync } from "node:fs";
 import { hubAbi } from "../src/abi.ts";
+import { logsInChunks } from "../src/logs.ts";
 import { DELTA } from "../src/market.ts";
 import { setup } from "./common.ts";
 
@@ -19,20 +20,9 @@ const grace = Number(arg("grace") ?? 60);
 
 async function events<N extends "PointPosted" | "ReportAccepted" | "MarketCreated">(eventName: N) {
   const latest = await pc.getBlockNumber();
-  const res = [];
-  let from = BigInt(dep.block ?? 0);
-  let step = 5_000n;
-  while (from <= latest) {
-    const to = from + step - 1n > latest ? latest : from + step - 1n;
-    try {
-      res.push(...(await pc.getContractEvents({ address: dep.hub, abi: hubAbi, eventName, fromBlock: from, toBlock: to })));
-      from = to + 1n;
-    } catch (e) {
-      if (step <= 100n) throw e;
-      step /= 2n; // the RPC limits the range of eth_getLogs
-    }
-  }
-  return res;
+  return logsInChunks(BigInt(dep.block ?? 0), latest, (fromBlock, toBlock) =>
+    pc.getContractEvents({ address: dep.hub, abi: hubAbi, eventName, fromBlock, toBlock }),
+  );
 }
 
 const times = new Map<bigint, number>();

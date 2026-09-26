@@ -33,6 +33,13 @@ def attempt(f, *a):
         return "revert"
 
 
+def raw_inverted(p, h, hmin, kq, qmax) -> bool:
+    """True if a cut pair crosses before Curve closes it (only for a non-constant side)."""
+    q1, qs = -fp.floor_div(-(p + h - WAD) * qmax, kq), fp.floor_div((h - hmin) * qmax, kq)
+    qss, q0 = -fp.floor_div((h - hmin) * qmax, kq), fp.floor_div((p - h) * qmax, kq)
+    return (p + hmin < WAD and q1 > qs) or (p - hmin > 0 and qss > q0)
+
+
 def main():
     rng = random.Random(20260925)
     out = {"meta": {"spec": "docs/s01/01-fixed-point-spec.md", "table": [str(v) for v in TABLE],
@@ -160,6 +167,41 @@ def main():
                                  "qty_d1": fp.qty_d1_exact_in(c, q0, x), "qty_d3": fp.qty_d3_exact_in(c, q0, x),
                                  "qty_d2": attempt(fp.qty_d2_exact_out, c, q0, x),
                                  "qty_d4": attempt(fp.qty_d4_exact_out, c, q0, x)})
+    # inverted cut pairs (review 2026-09-26 #2): when a linear piece is shorter than one unit the rounded cuts cross
+    # (q1 > qs or qss > q0 before closing the pair). Tiny qmax makes that common; at production qmax it needs
+    # P + h_min or P − h_min within kq/qmax wei of 1 or 0. Includes the reproducer that ran the Solidity walk
+    # out of gas.
+    inv_rng = random.Random(20260927)
+    inverted = [(737018080279891314, 600262631839343899, 9746425217800037, 663423151981851124, 1)]
+    while len(inverted) < 40:
+        hmin = inv_rng.randrange(0, 5 * 10**16)
+        cand = (inv_rng.randrange(0, WAD + 1), hmin + inv_rng.randrange(0, 7 * 10**17), hmin,
+                inv_rng.randrange(10**15, WAD), inv_rng.randrange(1, 8))
+        if raw_inverted(*cand):
+            inverted.append(cand)
+    while len(inverted) < 60:
+        hmin = inv_rng.randrange(1, 12 * 10**15)
+        kq, qmax = inv_rng.choice([WAD // 6, 2 * 10**17]), inv_rng.choice([50_000, 15_000, 60_000]) * UNIT
+        gap = inv_rng.randrange(1, kq // qmax + 1)
+        p = WAD - hmin - gap if len(inverted) % 2 else hmin + gap
+        cand = (p, hmin + inv_rng.randrange(1, 2 * 10**16), hmin, kq, qmax)
+        if raw_inverted(*cand):
+            inverted.append(cand)
+    for p, h, hmin, kq, qmax in inverted:
+        c = fp.Curve(p, h, hmin, kq, qmax)
+        for cut in sorted({c.q1, c.qs, c.qss, c.q0}):
+            for dq in (-2, -1, 0, 1, 2):
+                q0 = cut + dq
+                small = qmax < UNIT
+                q = inv_rng.randrange(1, 12) if small else inv_rng.randrange(1, 5_000 * UNIT)
+                x = inv_rng.randrange(1, 12) if small else inv_rng.randrange(1, 3_000 * UNIT)
+                rows.append({"p": p, "h": h, "hmin": hmin, "kq": kq, "qmax": qmax, "q0": q0, "q": q, "x": x,
+                             "pay_d1": fp.pay_d1(c, q0, q), "receive_d2": fp.receive_d2(c, q0, q),
+                             "pay_d3": fp.pay_d3(c, q0, q), "receive_d4": fp.receive_d4(c, q0, q),
+                             "qty_d1": attempt(fp.qty_d1_exact_in, c, q0, x),
+                             "qty_d3": attempt(fp.qty_d3_exact_in, c, q0, x),
+                             "qty_d2": attempt(fp.qty_d2_exact_out, c, q0, x),
+                             "qty_d4": attempt(fp.qty_d4_exact_out, c, q0, x)})
     out["curve"] = cols(rows)
 
     path = ROOT / "vectors" / "fixedpoint.json"

@@ -5,6 +5,7 @@
 import type { Address, Hex, PublicClient, WalletClient } from "viem";
 import { aquaAbi, erc20Abi, hubAbi, routerAbi, vaultAbi } from "./abi.ts";
 import type { Deployment } from "./chain.ts";
+import { logsInChunks } from "./logs.ts";
 import { riskCapital, utilization, WAD } from "./fixedpoint.ts";
 import { buildOrder, type Order, orderHash, orderStrategy, SIDE_LONG, SIDE_SHORT } from "./orders.ts";
 
@@ -126,13 +127,9 @@ export class MakerOps {
    *  settlement at Long_T), P&L = equity - baseline. Aqua allocations are virtual and not counted (M §5.7). */
   async monitor(baseline?: bigint): Promise<MakerReport> {
     const cfg = await this.pc.readContract({ address: this.dep.router, abi: routerAbi, functionName: "makerConfig", args: [this.maker] });
-    const logs = await this.pc.getContractEvents({
-      address: this.dep.router,
-      abi: routerAbi,
-      eventName: "CorrOrderRegistered",
-      args: { maker: this.maker },
-      fromBlock: BigInt(this.dep.block ?? 0),
-    });
+    const logs = await logsInChunks(BigInt(this.dep.block ?? 0), await this.pc.getBlockNumber(), (fromBlock, toBlock) =>
+      this.pc.getContractEvents({ address: this.dep.router, abi: routerAbi, eventName: "CorrOrderRegistered", args: { maker: this.maker }, fromBlock, toBlock }),
+    );
     const count = await this.pc.readContract({ address: this.dep.hub, abi: hubAbi, functionName: "marketCount" });
     const markets: MakerReport["markets"] = [];
     let rcTotal = 0n;

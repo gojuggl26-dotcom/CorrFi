@@ -16,11 +16,15 @@ export interface KlineSource {
 export class RestSource implements KlineSource {
   private readonly getJson: GetJson;
   private readonly retries: number;
+  private readonly backoffMs: number;
   private readonly last = new Map<string, number>();
 
-  constructor(getJson: GetJson = httpGetJson(), retries = 2) {
+  /** A failed request is retried `retries` times after backoffMs, 2*backoffMs, ... (a brief outage or rate limit
+   *  should not turn into a failed venue — review 2026-09-26 #3). */
+  constructor(getJson: GetJson = httpGetJson(), retries = 2, backoffMs = 500) {
     this.getJson = getJson;
     this.retries = retries;
+    this.backoffMs = backoffMs;
   }
 
   private async paced(venue: Venue) {
@@ -33,6 +37,7 @@ export class RestSource implements KlineSource {
   async bars(venue: Venue, symbol: string, start: number, end: number, now: number) {
     let error: unknown;
     for (let attempt = 0; attempt <= this.retries; ++attempt) {
+      if (attempt > 0 && this.backoffMs > 0) await new Promise((r) => setTimeout(r, this.backoffMs * 2 ** (attempt - 1)));
       try {
         const out = new Map<number, MinuteBar>();
         const get: GetJson = async (url) => {

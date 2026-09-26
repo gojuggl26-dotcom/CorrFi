@@ -274,6 +274,10 @@ export class Curve {
     this.betaConstZero = p - hmin <= 0n;
     this.qss = ceilDiv(-(h - hmin) * qmax, kq);
     this.q0 = floorDiv((p - h) * qmax, kq);
+    // rounding can invert a pair when its linear piece is shorter than one unit; the piece is then empty and
+    // the branches are unchanged by closing the pair (keeps lo <= hi, as the Solidity walk assumes)
+    if (this.q1 > this.qs) this.qs = this.q1;
+    if (this.qss > this.q0) this.qss = this.q0;
   }
 
   branch(alpha: boolean, q: bigint): Branch {
@@ -352,28 +356,34 @@ function walk(c: Curve, alpha: boolean, q0: bigint, dir: bigint, complement: boo
   }
 }
 
-export function qtyD1ExactIn(c: Curve, q0: bigint, x: bigint): bigint {
-  let q = walk(c, true, q0, -1n, false, x, true);
-  while (q > 0n && payD1(c, q0, q) > x) q -= 1n;
+/** Correction steps after the walk; it is exact up to one rounding, so more means no solution. */
+export const MAX_FIX = 64;
+
+function fix(q: bigint, step: bigint, cond: (q: bigint) => boolean): bigint {
+  for (let i = 0; i < MAX_FIX; i++) {
+    if (!cond(q)) return q;
+    q += step;
+  }
+  if (cond(q)) throw new FixedPointError("book too thin");
   return q;
+}
+
+export function qtyD1ExactIn(c: Curve, q0: bigint, x: bigint): bigint {
+  const q = walk(c, true, q0, -1n, false, x, true);
+  return fix(q, -1n, (q) => q > 0n && payD1(c, q0, q) > x);
 }
 
 export function qtyD3ExactIn(c: Curve, q0: bigint, x: bigint): bigint {
-  let q = walk(c, false, q0, 1n, true, x, true);
-  while (q > 0n && payD3(c, q0, q) > x) q -= 1n;
-  return q;
+  const q = walk(c, false, q0, 1n, true, x, true);
+  return fix(q, -1n, (q) => q > 0n && payD3(c, q0, q) > x);
 }
 
 export function qtyD2ExactOut(c: Curve, q0: bigint, x: bigint): bigint {
-  let q = walk(c, false, q0, 1n, false, x, false);
-  while (receiveD2(c, q0, q) < x) q += 1n;
-  while (q > 0n && receiveD2(c, q0, q - 1n) >= x) q -= 1n;
-  return q;
+  const q = fix(walk(c, false, q0, 1n, false, x, false), 1n, (q) => receiveD2(c, q0, q) < x);
+  return fix(q, -1n, (q) => q > 0n && receiveD2(c, q0, q - 1n) >= x);
 }
 
 export function qtyD4ExactOut(c: Curve, q0: bigint, x: bigint): bigint {
-  let q = walk(c, true, q0, -1n, true, x, false);
-  while (receiveD4(c, q0, q) < x) q += 1n;
-  while (q > 0n && receiveD4(c, q0, q - 1n) >= x) q -= 1n;
-  return q;
+  const q = fix(walk(c, true, q0, -1n, true, x, false), 1n, (q) => receiveD4(c, q0, q) < x);
+  return fix(q, -1n, (q) => q > 0n && receiveD4(c, q0, q - 1n) >= x);
 }

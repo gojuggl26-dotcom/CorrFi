@@ -29,7 +29,7 @@
  },
  "contracts": {
   "buildManifest": "contracts/build-manifest.json",
-  "buildManifestKeccak256": "0x0a36354c33a770304bd8216ddc8a6e324954c5910df6acbc4ed288847567e5a6",
+  "buildManifestKeccak256": "0xf9c6b0b1b019432a347d2a9477d499f3fe2afcb8ce04eb7de2411f925c7ef038",
   "compiler": "0.8.30+commit.73712a01",
   "settings": {
    "remappings": [
@@ -56,11 +56,11 @@
   },
   "foundry": "v1.8.3",
   "creation": {
-   "CorrFiEngine": "0xcefbe35020a9d878203df0fbee9a8bd7db275bebc43ced37f9b625a7ad710153",
-   "CorrFiOrders": "0xb970771a939d5dda2efba16e92c7d6281bd3f7c71f4be20d18cb2878e7b59248",
+   "CorrFiEngine": "0xe2e7c6b9f9c19eadd2e825d2687db23fc38a2b285c168c5bba6cc0849947a1f5",
+   "CorrFiOrders": "0x3bfbaa1d2447cc7f13bc948559d66b1e43bf13a7c126ed07a52f4dadab73916f",
    "CorrFiHub": "0x2b5deebfc285f046a1df1abb487ce23b182a4fb4818fbe970eac24bd30d9848e",
-   "CorrFiRouter": "0x85dc4042b51ba01295261bcd1dee9fc2588d6a982656d9a8b29d24300ff043ef",
-   "CorrFiLens": "0xd47d5136419838dd708600b25af53c94adab1a94e1acc0c3a4169111c992c1b2",
+   "CorrFiRouter": "0x226be6dff849bd2bef419771e9e8f608407f469fa38b7a706ea7abcec929d790",
+   "CorrFiLens": "0x76c464b06f82e30c2ba3b64f76fd4ab0da69f443dd58d3f3c4b0ed9485fb5529",
    "CorrFiVault": "0xbab5b36e549e2f92dfd5f72e73b977b23b7986347aa65a94afcf303af63b30cd",
    "CorrFiToken": "0x2a121b528c5f5b6e88fa9995531dbc98d80a78a0d0e31e1ccff64e81458dc939",
    "TestUSDC": "0x15d1ff6dd60db8f1314a5a95f345a363fc66d17a412ab07c08cc67eef8972a52",
@@ -77,7 +77,7 @@
   },
   "snapshot": {
    "file": "state.hex",
-   "keccak256": "0xf202b8f8c81be0959e00ec88381f4f0fc73102f013dcab4648b1c005618f8f32",
+   "keccak256": "0x2391b9e98a63d4c86c9a38b69e7c162885fa01bfc363fe3bf2c714e1e5d63216",
    "latestBlock": 32
   },
   "anvil": {
@@ -103,10 +103,10 @@
     "--silent"
    ]
   },
-  "addressesKeccak256": "0xb420b7fdc9c5534d14c06f165979bd149c9704d3245013814eec0784a4c4e829"
+  "addressesKeccak256": "0xd9d9fee8d5cebc95a1cad9107b17f839a8d11f1f1f265fbc0108a808e4dba94b"
  },
  "reference": {
-  "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+  "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
   "block": 226,
   "longT": "926108332093189410",
   "isVoid": false,
@@ -120,7 +120,7 @@
   "maxGasUsed": "872416"
  },
  "referenceVoid": {
-  "stateRoot": "0x041fba39ffec46b14489d1f2c98b715c0a05d0d5fc8cc905d1c54e7d03b5ae42",
+  "stateRoot": "0x7d7fb40335809dfb32099fd7f03d632ae572feff8dae1be9b911ea370f7c6a66",
   "block": 222,
   "longT": "500000000000000000",
   "isVoid": true,

@@ -304,7 +304,6 @@ class Curve:
             raise FixedPointError("bad curve parameters")
         self.p, self.h, self.hmin, self.kq, self.qmax = p, h, hmin, kq, qmax
         self.d = 2 * qmax * WAD
-        # breakpoints, floored to integer units (spec F16)
         self.alpha_const_one = p + hmin >= WAD
         # cut points: the clipped (constant) piece is extended — q1 and qss up, qs and q0 down (F16, M-F1)
         self.q1 = -floor_div(-(p + h - WAD) * qmax, kq)
@@ -312,6 +311,10 @@ class Curve:
         self.beta_const_zero = p - hmin <= 0
         self.qss = -floor_div((h - hmin) * qmax, kq)
         self.q0 = floor_div((p - h) * qmax, kq)
+        # rounding can invert a pair when its linear piece is shorter than one unit; the piece is then empty and
+        # the branches are unchanged by closing the pair (keeps lo <= hi, as the Solidity walk assumes)
+        self.qs = max(self.qs, self.q1)
+        self.qss = min(self.qss, self.q0)
 
     # a branch is (A, slope) meaning A - slope*kq/qmax*q with slope in {0, 1}
     def _alpha_branch(self, q: int):
@@ -421,33 +424,36 @@ def _walk(c: Curve, which: str, q0: int, direction: int, complement: bool, r: in
     raise AssertionError("unreachable")
 
 
+MAX_FIX = 64   # correction steps after the walk; it is exact up to one rounding, so more means no solution
+
+
+def _fix(q: int, step: int, cond) -> int:
+    for _ in range(MAX_FIX):
+        if not cond(q):
+            return q
+        q += step
+    if cond(q):
+        raise FixedPointError("book too thin")
+    return q
+
+
 def qty_d1_exact_in(c: Curve, q0: int, x: int) -> int:      # buy Long paying x USDC units
     q = _walk(c, "alpha", q0, -1, False, x * c.d, True)
-    while q > 0 and pay_d1(c, q0, q) > x:
-        q -= 1
-    return q
+    return _fix(q, -1, lambda q: q > 0 and pay_d1(c, q0, q) > x)
 
 
 def qty_d3_exact_in(c: Curve, q0: int, x: int) -> int:      # buy Short paying x USDC units
     q = _walk(c, "beta", q0, +1, True, x * c.d, True)
-    while q > 0 and pay_d3(c, q0, q) > x:
-        q -= 1
-    return q
+    return _fix(q, -1, lambda q: q > 0 and pay_d3(c, q0, q) > x)
 
 
 def qty_d2_exact_out(c: Curve, q0: int, x: int) -> int:     # sell Long receiving x USDC units
     q = _walk(c, "beta", q0, +1, False, x * c.d, False)
-    while receive_d2(c, q0, q) < x:
-        q += 1
-    while q > 0 and receive_d2(c, q0, q - 1) >= x:
-        q -= 1
-    return q
+    q = _fix(q, 1, lambda q: receive_d2(c, q0, q) < x)
+    return _fix(q, -1, lambda q: q > 0 and receive_d2(c, q0, q - 1) >= x)
 
 
 def qty_d4_exact_out(c: Curve, q0: int, x: int) -> int:     # sell Short receiving x USDC units
     q = _walk(c, "alpha", q0, -1, True, x * c.d, False)
-    while receive_d4(c, q0, q) < x:
-        q += 1
-    while q > 0 and receive_d4(c, q0, q - 1) >= x:
-        q -= 1
-    return q
+    q = _fix(q, 1, lambda q: receive_d4(c, q0, q) < x)
+    return _fix(q, -1, lambda q: q > 0 and receive_d4(c, q0, q - 1) >= x)

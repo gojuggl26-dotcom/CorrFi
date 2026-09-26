@@ -135,16 +135,108 @@ test("before executing: re-quote if older than 3 s or a new bar was confirmed, a
   const { t, c, calls } = setup([bd(), bd(), bd({ amountOut: 1_099_000_000n })]);
   c.setInput(INPUT);
   await t.advance(300);
-  let r = await c.beforeExecute();
+  let r = await c.beforeExecute(INPUT);
   assert.deepEqual([r.requoted, r.proceed], [false, true]);
   await t.advance(3_001);
-  r = await c.beforeExecute();
+  r = await c.beforeExecute(INPUT);
   assert.deepEqual([r.requoted, r.changed, r.proceed], [true, false, true]);
   assert.equal(calls.length, 2);
   c.latestConfirmedK = 11; // a ReportAccepted seen (without its re-quote yet)
-  r = await c.beforeExecute();
+  r = await c.beforeExecute(INPUT);
   assert.deepEqual([r.requoted, r.changed, r.proceed], [true, true, false]);
-  assert.equal(r.after!.amountOut, 1_099_000_000n);
+  assert.equal(r.quote!.b.amountOut, 1_099_000_000n);
+  assert.equal(c.quote, r.quote, "the changed quote is the one on screen");
+});
+
+test("only the settled quote of the current input can be executed (review #1)", async () => {
+  let fail = false;
+  const t = fakeTime(1_000_000);
+  const c = new QuoteController<BreakdownLike>({
+    fetch: async (i) => {
+      if (fail) throw new Error("rpc down");
+      return bd({ amountIn: i.amount });
+    },
+    nowMs: t.nowMs,
+    setTimer: t.setTimer,
+    clearTimer: t.clearTimer,
+    onChange: () => {},
+  });
+  c.setInput(INPUT);
+  await t.advance(300);
+  assert.equal(c.view().canExecute, true);
+  // the amount changed: until its re-quote arrives the old quote is not executable, for either input
+  const bigger = { ...INPUT, amount: 2_000_000_000n };
+  c.setInput(bigger);
+  assert.equal(c.view().canExecute, false);
+  assert.equal(c.view().settled, false);
+  assert.equal((await c.beforeExecute(bigger)).proceed, false);
+  assert.equal((await c.beforeExecute(INPUT)).proceed, false);
+  await t.advance(300);
+  assert.equal(c.view().canExecute, true);
+  let r = await c.beforeExecute(bigger);
+  assert.equal(r.proceed, true);
+  assert.equal(r.quote!.b.amountIn, 2_000_000_000n);
+  // a click with a form that differs from the quoted input (e.g. an invalid tolerance that was never quoted)
+  assert.equal((await c.beforeExecute({ ...bigger, delta: DELTA_DEFAULT + 1n })).proceed, false);
+  assert.throws(() => c.setInput({ ...bigger, delta: 1n }));
+  assert.equal(c.view().canExecute, false, "an invalid input clears the executable quote");
+  assert.equal((await c.beforeExecute(bigger)).proceed, false);
+  // a failed re-quote: the last quote stays on screen but is not executable
+  c.setInput(bigger);
+  await t.advance(300);
+  fail = true;
+  await t.advance(10_000);
+  assert.equal(c.view().error, "rpc down");
+  assert.equal(c.view().canExecute, false);
+  r = await c.beforeExecute(bigger);
+  assert.equal(r.proceed, false);
+});
+
+test("the confirming click executes only the quote that was shown; a further change asks again (review #7)", async () => {
+  const a = bd();
+  const b = bd({ amountOut: 1_099_000_000n });
+  const d = bd({ amountOut: 1_098_000_000n });
+  const { t, c } = setup([a, b, b, d, d]);
+  c.setInput(INPUT);
+  await t.advance(300); // a on screen
+  await t.advance(3_001);
+  let r = await c.beforeExecute(INPUT); // first click: fresh b != a -> show b, ask
+  assert.deepEqual([r.changed, r.proceed], [true, false]);
+  assert.equal(c.quote!.b, b);
+  await t.advance(3_001);
+  r = await c.beforeExecute(INPUT); // confirming click, b stale: fresh b == shown b -> execute b
+  assert.deepEqual([r.changed, r.proceed], [false, true]);
+  assert.equal(r.quote!.b, b);
+  await t.advance(3_001);
+  r = await c.beforeExecute(INPUT); // another click: fresh d != shown b -> ask again, never execute d unseen
+  assert.deepEqual([r.changed, r.proceed], [true, false]);
+  assert.equal(c.quote!.b, d);
+  r = await c.beforeExecute(INPUT); // d was shown and is fresh
+  assert.deepEqual([r.requoted, r.proceed], [false, true]);
+  assert.equal(r.quote!.b, d);
+});
+
+test("a re-quote overtaken by a newer request is not executed", async () => {
+  const t = fakeTime(1_000_000);
+  const pending: ((b: BreakdownLike) => void)[] = [];
+  const c = new QuoteController<BreakdownLike>({
+    fetch: () => new Promise((res) => pending.push(res)),
+    nowMs: t.nowMs,
+    setTimer: t.setTimer,
+    clearTimer: t.clearTimer,
+    onChange: () => {},
+  });
+  c.setInput(INPUT);
+  await t.advance(300);
+  pending.shift()!(bd());
+  await t.advance(0);
+  await t.advance(3_001);
+  const click = c.beforeExecute(INPUT); // re-quote #2 starts
+  void c.refresh(); // a report arrives: re-quote #3 starts and supersedes #2
+  pending.shift()!(bd());
+  const r = await click;
+  assert.equal(r.proceed, false);
+  pending.shift()!(bd());
 });
 
 test("fill vs quote: new bar, elapsed time, inventory", () => {

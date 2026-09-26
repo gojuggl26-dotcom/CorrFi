@@ -5,7 +5,8 @@
   "tenorDays": 7
  },
  "bars": "bars_void.json",
- "stateRoot": "0x041fba39ffec46b14489d1f2c98b715c0a05d0d5fc8cc905d1c54e7d03b5ae42",
+ "verification": null,
+ "stateRoot": "0x7d7fb40335809dfb32099fd7f03d632ae572feff8dae1be9b911ea370f7c6a66",
  "block": 222,
  "longT": "500000000000000000",
  "isVoid": true,
@@ -36,6 +37,10 @@
    "q1": "0.000000",
    "q2": "1000.000000",
    "kind": "mint",
+   "aqua": {
+    "pulls": 2,
+    "pushes": 2
+   },
    "pFair": "0.893256",
    "h": "0.005916",
    "hmin": "0.005916",
@@ -68,6 +73,10 @@
    "q1": "400.000000",
    "q2": "0.000000",
    "kind": "paired burn",
+   "aqua": {
+    "pulls": 2,
+    "pushes": 2
+   },
    "pFair": "0.901019",
    "h": "0.005189",
    "hmin": "0.005189",
@@ -146,15 +155,16 @@
   }
  ],
  "timing": {
-  "totalMs": 11910,
+  "verdictMs": 152296,
+  "totalMs": 152297,
   "steps": 179,
-  "stepP50Ms": 63.538800000000265,
-  "stepP99Ms": 111.98320000000058,
-  "stepMaxMs": 127.58660000000009
+  "stepP50Ms": 104.72270000000026,
+  "stepP99Ms": 201.6234999999997,
+  "stepMaxMs": 215.7534999999989
  },
  "gas": {
   "txs": 190,
   "maxGasUsed": "872416",
-  "total": "138465785"
+  "total": "138465928"
  }
 }

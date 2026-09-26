@@ -12,10 +12,9 @@ import { finalizeTick } from "../../../engine/src/finalizer.ts";
 import { MakerOps, MVP_CONFIG } from "../../../engine/src/maker.ts";
 import { Reporter } from "../../../engine/src/reporter.ts";
 import type { KlineSource } from "../../../engine/src/sources.ts";
-import type { Breakdown } from "../../../engine/src/taker.ts";
 import { FixtureSource } from "../../../engine/test/anvil/fixtureSource.ts";
 import { type Chain, ROOT, startChain } from "../../../engine/test/anvil/harness.ts";
-import { CorrFiApp } from "../../src/core/app.ts";
+import { CorrFiApp, type Quoted } from "../../src/core/app.ts";
 import { DELTA_DEFAULT, QuoteController, type QuoteInput } from "../../src/core/quote.ts";
 
 const T0 = 1_789_689_600;
@@ -28,7 +27,7 @@ let localMs = 0; // the UI's local clock (ms), deliberately unrelated to chain t
 const timers: (() => void)[] = [];
 
 function controller() {
-  return new QuoteController<Breakdown>({
+  return new QuoteController<Quoted>({
     fetch: (i) => app.quote(i),
     nowMs: () => localMs,
     setTimer: (fn) => timers.push(fn),
@@ -67,7 +66,9 @@ test("the UI shows the lens breakdown of the quote's block and counts in chain t
   const o = await app.orderFor(0, 0);
   const block = await c.pc.getBlock({ blockTag: "latest" });
   const direct = await c.pc.readContract({ address: c.dep.lens, abi: lensAbi, functionName: "breakdown", args: [o!.order, 0, 0, true, true, 500n * U, DELTA_DEFAULT], blockNumber: block.number });
-  assert.deepEqual(q.b, direct, "UI numbers = lens");
+  const { order, ...lens } = q.b;
+  assert.deepEqual(lens, direct, "UI numbers = lens");
+  assert.equal(order.hash, o!.hash, "the quote carries the order it was computed for");
   assert.equal(q.b.evaluatedAt, block.timestamp);
   localMs += 4_000;
   const v = ctl.view();
@@ -93,11 +94,11 @@ test("execution: the fill is within the limit and any difference is explained", 
   await reporter.tick();
   old.onReport(3);
   localMs += 500;
-  const pre = await old.beforeExecute();
+  const pre = await old.beforeExecute(BUY_LONG);
   assert.equal(pre.requoted, true);
-  assert.equal(pre.after!.k, 3);
+  assert.equal(pre.quote!.b.k, 3);
   const stale = pre.before!;
-  const r = await app.execute(c.wallet("taker"), BUY_LONG, { ...stale, limit: 0n } as Breakdown);
+  const r = await app.execute(c.wallet("taker"), BUY_LONG, { ...stale, limit: 0n });
   assert.ok(r.causes.includes("new-bar"));
 });
 

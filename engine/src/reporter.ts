@@ -6,13 +6,21 @@
 //
 // When a venue gives no bar for t - 60 the reporter must tell "the venue had no bar" (the venue is invalid for that
 // point) from "the reporter could not ask" (unknown). A bar counts as missing only when the venue has already
-// published a later minute or `venueWaitSec` has passed since t; a venue whose request failed counts as missing
-// only after `venueWaitSec` and only if at least three venues answered. Otherwise the point waits: trading stops by
-// T-2 while it waits, and the point is posted later (backfill) — an unknown is never posted as an invalid price.
+// published a later minute or `venueWaitSec` has passed since t. A venue whose request fails is left out of the
+// median only after it has kept failing for `venueWaitSec` since its first failure for that point (not since t: after
+// an outage every backfilled point is past t + venueWaitSec — review 2026-09-26 #3), only if at least three venues
+// answered, and only if the price stays valid without it. Otherwise the point waits: trading stops by T-2 while it
+// waits, and the point is posted later (backfill) — an unknown is never posted as an invalid price.
+//
+// The hub rejects a valid price whose log return to a posted, valid neighbour exceeds 0.5 (M §6.2.1). Such a price
+// would block every later point and report, so the reporter checks it first and posts that asset invalid instead
+// (DEC-29, a judgment the spec leaves open — review #5). A report the hub refuses must not hold back the points or the
+// other markets: the combined transaction falls back to the points alone and one report per market.
 
 import type { Account, Address, Hex, PublicClient, WalletClient } from "viem";
 import { hubAbi } from "./abi.ts";
 import { type Deployment, type MarketView, readMarket, readPoint, signReport } from "./chain.ts";
+import { logRatio } from "./fixedpoint.ts";
 import { type ChainPoint, crank, DELTA, pointTime, type Report, reportFor } from "./market.ts";
 import { MIN_VALID_VENUES, type MinuteBar, pricePoint, SYMBOLS, VENUES, type Venue } from "./prices.ts";
 import type { KlineSource } from "./sources.ts";
@@ -22,9 +30,27 @@ export interface ReporterOptions {
   venueWaitSec: number; // after t + venueWaitSec a missing / failing venue counts as invalid (see above)
   maxPointsPerTx: number;
   maxCrankPerTx: number;
+  readConcurrency: number; // price points read from the chain at once (a long backfill needs thousands — review #14)
 }
 
-export const DEFAULT_OPTIONS: ReporterOptions = { postDelaySec: 10, venueWaitSec: 60, maxPointsPerTx: 48, maxCrankPerTx: 144 };
+export const DEFAULT_OPTIONS: ReporterOptions = { postDelaySec: 10, venueWaitSec: 60, maxPointsPerTx: 48, maxCrankPerTx: 144, readConcurrency: 32 };
+
+/** |ln(P_k / P_k-1)| the hub accepts between posted, valid neighbours (CorrFiHub.MAX_ABS_LOG_RETURN, M §6.2.1). */
+export const MAX_ABS_LOG_RETURN = 5n * 10n ** 17n;
+
+/** `f` over `xs` with at most `n` calls running at a time; results in order. */
+export async function mapLimited<T, R>(xs: readonly T[], n: number, f: (x: T) => Promise<R>): Promise<R[]> {
+  const out: R[] = new Array(xs.length);
+  let next = 0;
+  const worker = async () => {
+    while (next < xs.length) {
+      const i = next++;
+      out[i] = await f(xs[i]);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(n, xs.length) }, worker));
+  return out;
+}
 
 export interface ReporterDeps {
   pc: PublicClient;
@@ -50,15 +76,20 @@ export interface TickResult {
   reports: Report[];
   waiting: { t: number; why: string }[];
   problems: string[];
+  /** assets posted invalid because their log return to a neighbour exceeds 0.5 (DEC-29) */
+  implausible: { t: number; asset: string; logReturn: bigint; neighbour: number }[];
   txs: Hex[];
 }
 
 type VenueAnswer = Map<number, MinuteBar> | Error;
+type SignedReport = { marketId: number; k: number; pFair: bigint; h0: bigint; signature: Hex };
 
 export class Reporter {
   readonly opt: ReporterOptions;
   private readonly d: ReporterDeps;
   private hFloor?: bigint;
+  /** first failure of a venue's request for a point: `${t}/${asset}/${venue}` -> seconds */
+  private readonly failSince = new Map<string, number>();
 
   constructor(deps: ReporterDeps, opt: Partial<ReporterOptions> = {}) {
     this.d = deps;
@@ -82,7 +113,7 @@ export class Reporter {
       for (let k = m.acc.processed; k <= last; ++k) times.add(pointTime(m.params, k));
     }
     const sorted = [...times].sort((a, b) => a - b);
-    const pts = await Promise.all(sorted.map((t) => readPoint(this.d.pc, this.d.dep, t)));
+    const pts = await mapLimited(sorted, this.opt.readConcurrency, (t) => readPoint(this.d.pc, this.d.dep, t));
     sorted.forEach((t, i) => chain.set(t, pts[i]));
     return sorted.filter((t) => !chain.get(t)!.posted);
   }
@@ -113,11 +144,17 @@ export class Reporter {
       for (const asset of Object.keys(SYMBOLS)) {
         const bars: Record<string, MinuteBar | null> = {};
         const answered = VENUES.filter((v) => !(answers[asset][v] instanceof Error)).length;
+        let unknown = 0;
         for (const v of VENUES) {
           const a = answers[asset][v];
           if (a instanceof Error) {
-            if (waited && answered >= MIN_VALID_VENUES) bars[v] = null;
-            else why ||= `${asset} ${v}: request failed (${answered} venues answered)`;
+            const key = `${t}/${asset}/${v}`;
+            const since = this.failSince.get(key) ?? now;
+            this.failSince.set(key, since);
+            if (waited && now >= since + this.opt.venueWaitSec && answered >= MIN_VALID_VENUES) {
+              bars[v] = null;
+              ++unknown;
+            } else why ||= `${asset} ${v}: request failed (${answered} venues answered, failing for ${now - since} s)`;
             continue;
           }
           const b = a.get(t - 60);
@@ -125,12 +162,74 @@ export class Reporter {
           else if (waited || [...a.keys()].some((ot) => ot > t - 60)) bars[v] = null;
           else why ||= `${asset} ${v}: bar ${t - 60} not published yet`;
         }
-        if (!why) prices[asset] = pricePoint(t, bars).priceWad;
+        if (why) continue;
+        const pp = pricePoint(t, bars);
+        // invalid only because of venues that could not be asked: that is an unknown, not an invalid price
+        if (pp.priceWad === null && unknown > 0) why = `${asset}: ${pp.nValidVenues} venues have the bar and ${unknown} could not be asked`;
+        else prices[asset] = pp.priceWad;
       }
       if (why) return { ready, waiting: [{ t, why }] };
+      for (const asset of Object.keys(SYMBOLS)) for (const v of VENUES) this.failSince.delete(`${t}/${asset}/${v}`);
       ready.push({ t: BigInt(t), pA: prices.A ?? 0n, pB: prices.B ?? 0n, validA: prices.A != null, validB: prices.B != null });
     }
     return { ready, waiting: [] };
+  }
+
+  /** Post an asset invalid where its log return to a posted, valid neighbour (on chain or earlier in `ready`) exceeds
+   *  0.5, which the hub would reject (DEC-29). `ready` is ascending and adjusted in place. */
+  private async plausible(ready: PointInput[], chain: Map<number, ChainPoint>, res: TickResult) {
+    const at = async (t: number) => {
+      if (!chain.has(t)) chain.set(t, await readPoint(this.d.pc, this.d.dep, t));
+      return chain.get(t)!;
+    };
+    const assets = [["A", "pA", "validA"], ["B", "pB", "validB"]] as const;
+    for (let i = 0; i < ready.length; ++i) {
+      const p = ready[i];
+      const t = Number(p.t);
+      const prev: ChainPoint = i > 0 && ready[i - 1].t === p.t - BigInt(DELTA) ? { ...ready[i - 1], posted: true } : await at(t - DELTA);
+      const next = await at(t + DELTA);
+      for (const [asset, px, valid] of assets) {
+        if (!p[valid]) continue;
+        const checks = [
+          { nb: prev, nt: t - DELTA, lr: () => logRatio(prev[px], p[px]) },
+          { nb: next, nt: t + DELTA, lr: () => logRatio(p[px], next[px]) },
+        ];
+        for (const { nb, nt, lr } of checks) {
+          if (!nb.posted || !nb[valid]) continue;
+          const r = lr();
+          if (r <= MAX_ABS_LOG_RETURN && r >= -MAX_ABS_LOG_RETURN) continue;
+          res.implausible.push({ t, asset, logReturn: r, neighbour: nt });
+          this.d.log({ ev: "implausible", t, asset, logReturn: r.toString(), neighbour: nt });
+          p[px] = 0n;
+          p[valid] = false;
+          break;
+        }
+      }
+    }
+  }
+
+  /** The points and reports in one transaction; if the hub refuses it, the points alone and then one transaction per
+   *  report, so that one market's report cannot hold back the others (review #5). Returns the accepted reports. */
+  private async postWithReports(points: PointInput[], signed: SignedReport[], res: TickResult): Promise<SignedReport[]> {
+    try {
+      res.txs.push(await this.send("postAndReport", [points, signed]));
+      return signed;
+    } catch (e) {
+      this.d.log({ ev: "combined_failed", error: (e as Error).message.split("\n")[0] });
+    }
+    if (points.length) res.txs.push(await this.send("postPoints", [points]));
+    const ok: SignedReport[] = [];
+    for (const s of signed) {
+      try {
+        res.txs.push(await this.send("postAndReport", [[], [s]]));
+        ok.push(s);
+      } catch (e) {
+        const msg = (e as Error).message.split("\n")[0];
+        res.problems.push(`market ${s.marketId} bar ${s.k}: report refused (${msg})`);
+        this.d.log({ ev: "report_failed", market: s.marketId, k: s.k, error: msg });
+      }
+    }
+    return ok;
   }
 
   private async send(functionName: "postAndReport" | "postPoints" | "crank", args: readonly unknown[]): Promise<Hex> {
@@ -151,13 +250,14 @@ export class Reporter {
 
   async tick(): Promise<TickResult> {
     const now = await this.d.now();
-    const res: TickResult = { now, posted: [], reports: [], waiting: [], problems: [], txs: [] };
+    const res: TickResult = { now, posted: [], reports: [], waiting: [], problems: [], implausible: [], txs: [] };
     const live = await this.markets();
     const chain = new Map<number, ChainPoint>();
     const times = await this.needed(live, now, chain);
     const { ready, waiting } = await this.pricePoints(times, now);
     res.waiting = waiting;
     for (const w of waiting) this.d.log({ ev: "waiting", ...w });
+    await this.plausible(ready, chain, res);
     for (const p of ready) chain.set(Number(p.t), { pA: p.pA, pB: p.pB, posted: true, validA: p.validA, validB: p.validB });
 
     // accumulator after the new points, per market; a report for every market that moves past `confirmed`
@@ -183,12 +283,13 @@ export class Reporter {
       }
     }
 
-    const signed = await Promise.all(
+    const signed: SignedReport[] = await Promise.all(
       reports.map(async ({ r }) => ({ marketId: r.marketId, k: r.k, pFair: r.pFair, h0: r.h0, signature: await signReport(this.d.engine, this.d.dep, r) })),
     );
+    let accepted = signed;
     const crankBars = reports.reduce((s, x) => s + x.bars, 0);
     if (ready.length <= this.opt.maxPointsPerTx && crankBars <= this.opt.maxCrankPerTx) {
-      if (signed.length) res.txs.push(await this.send("postAndReport", [ready, signed]));
+      if (signed.length) accepted = await this.postWithReports(ready, signed, res);
       else if (ready.length) res.txs.push(await this.send("postPoints", [ready]));
     } else {
       // large backfill: points in chunks, the accumulation in chunks, then the reports (trading halts on T-1 meanwhile)
@@ -200,7 +301,7 @@ export class Reporter {
           res.txs.push(await this.send("crank", [m.params.id, this.opt.maxCrankPerTx]));
         }
       }
-      if (signed.length) res.txs.push(await this.send("postAndReport", [[], signed]));
+      if (signed.length) accepted = await this.postWithReports([], signed, res);
     }
     // markets whose report cannot be accepted (PROP-04: final bar outside (0, 1) or zero variance): accumulate
     // anyway so that finalize becomes possible; trading stays halted (T-1)
@@ -210,7 +311,7 @@ export class Reporter {
       }
     }
     res.posted = ready.map((p) => Number(p.t));
-    res.reports = reports.map((x) => x.r);
+    res.reports = reports.filter((x) => accepted.some((s) => s.marketId === x.r.marketId && s.k === x.r.k)).map((x) => x.r);
     if (res.posted.length || res.reports.length) {
       this.d.log({
         ev: "tick",

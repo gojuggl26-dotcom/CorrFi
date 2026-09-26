@@ -123,3 +123,30 @@ test("the engine's accumulator equals the hub's", async () => {
   assert.ok(m.acc.nValid > 0);
   assert.ok(events.some((e) => e.ev === "tx"));
 });
+
+test("a price jump the hub would reject (|ln r| > 0.5) is posted invalid; the feed and the reports continue (DEC-29)", async () => {
+  const t42 = T0 + 42 * 300;
+  // every venue reports ETH at twice its price for the minute before t42 (VWAP = quote / base volume)
+  const doubled: KlineSource = {
+    async bars(venue, symbol, start, end, now) {
+      const m = await source.bars(venue, symbol, start, end, now);
+      const b = m.get(t42 - 60);
+      if (symbol === "ETHUSDT" && b) m.set(t42 - 60, { ...b, quoteVolume: String(Number(b.quoteVolume) * 2) });
+      return m;
+    },
+  };
+  const jumpy = new Reporter({ pc: c.pc, wc: c.wallet("reporter"), dep: c.dep, engine: c.account("engine"), source: doubled, now: c.now, log: () => {} });
+  await c.setTime(t42 + 10);
+  let r = await jumpy.tick();
+  assert.deepEqual(r.posted, [t42]);
+  assert.deepEqual(r.implausible.map((x) => [x.t, x.asset, x.neighbour]), [[t42, "A", t42 - 300]]);
+  assert.equal(r.reports[0].k, 42);
+  const p = await c.pc.readContract({ address: c.dep.hub, abi: hubAbi, functionName: "point", args: [BigInt(t42)] });
+  assert.deepEqual([p.validA, p.pA, p.validB], [false, 0n, true]);
+  await c.setTime(t42 + 300 + 10); // the next point compares with an invalid one: valid again
+  r = await reporter.tick();
+  assert.equal(r.implausible.length, 0);
+  assert.equal(r.reports[0].k, 43);
+  const q = await c.pc.readContract({ address: c.dep.hub, abi: hubAbi, functionName: "quoteState", args: [0] });
+  assert.equal(q.confirmed, 43);
+});

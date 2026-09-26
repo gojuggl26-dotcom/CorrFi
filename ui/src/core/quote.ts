@@ -8,8 +8,11 @@
 //       after which it shows "waiting for the price update" until a report arrives;
 //   - the stop warning from t_stop - 60 s (t_stop = t_k + Δ + g) and the stopped state (reason != 0): execution is
 //     disabled; a stop that a report clears (T-1 / T-2) ends by itself on the next report, T-4 never does;
+//   - only a quote of the current input can be executed: not while an input change waits for its re-quote, while a
+//     request is running or after it failed (review 2026-09-26 #1);
 //   - before executing: re-quote if the quote is older than 3 s or a newer bar has been confirmed, and ask the user
-//     to confirm when the amounts changed.
+//     to confirm when the amounts changed. The confirming click executes only if the fresh quote still equals the
+//     one on screen; otherwise it asks again (#7).
 
 import { REASONS } from "../../../engine/src/taker.ts";
 
@@ -76,6 +79,25 @@ export function validDelta(d: bigint) {
   return d >= DELTA_MIN && d <= DELTA_MAX;
 }
 
+export function sameInput(a: QuoteInput, b: QuoteInput) {
+  return a.marketId === b.marketId && a.side === b.side && a.isBuy === b.isBuy && a.exactIn === b.exactIn && a.amount === b.amount && a.delta === b.delta;
+}
+
+/** What the user would get differs (amounts, limit or tradability). */
+export function quoteChanged(a: BreakdownLike, b: BreakdownLike) {
+  return a.amountIn !== b.amountIn || a.amountOut !== b.amountOut || a.limit !== b.limit || a.limitDefined !== b.limitDefined || a.reason !== b.reason;
+}
+
+export interface PreExecute<B extends BreakdownLike> {
+  /** true: execute `quote` (it matches the input and is what the screen shows) */
+  proceed: boolean;
+  requoted: boolean;
+  /** the fresh quote differs from the one on screen: it is shown now and the user is asked to confirm */
+  changed: boolean;
+  quote?: Quote<B>;
+  before?: B;
+}
+
 export interface ViewState {
   loading: boolean;
   error?: string;
@@ -88,6 +110,8 @@ export interface ViewState {
   reason?: number;
   reasonText?: string;
   clears?: string;
+  /** the quote on screen is for the current input and no request is pending */
+  settled: boolean;
   canExecute: boolean;
 }
 
@@ -115,9 +139,12 @@ export class QuoteController<B extends BreakdownLike = BreakdownLike> {
     this.schedule();
   }
 
-  /** An input change: re-quote after the debounce. */
+  /** An input change: re-quote after the debounce. An invalid input clears the current one (nothing to execute). */
   setInput(input: QuoteInput) {
-    if (!validDelta(input.delta)) throw new Error("tolerance must be 0.0005-0.01 USDC per token");
+    if (!validDelta(input.delta)) {
+      this.clearInput();
+      throw new Error("tolerance must be 0.0005-0.01 USDC per token");
+    }
     this.input = input;
     if (this.debounce !== undefined) this.d.clearTimer(this.debounce);
     this.debounce = this.d.setTimer(() => {
@@ -126,24 +153,47 @@ export class QuoteController<B extends BreakdownLike = BreakdownLike> {
     }, this.settings.debounceMs);
   }
 
+  /** The form holds no valid input: stop quoting it; the last quote stays on screen but cannot be executed. */
+  clearInput() {
+    this.input = undefined;
+    if (this.debounce !== undefined) this.d.clearTimer(this.debounce);
+    this.debounce = undefined;
+    this.d.onChange();
+  }
+
+  /** The quote of the current input, if it is settled (no pending input change, no request running, no error). */
+  current(): Quote<B> | undefined {
+    const q = this.quote;
+    if (!q || !this.input || !sameInput(q.input, this.input) || this.debounce !== undefined || this.loading || this.error) return undefined;
+    return q;
+  }
+
   /** A ReportAccepted event: quote again at once and reset the countdowns. */
   onReport(k: number) {
     if (k > this.latestConfirmedK) this.latestConfirmedK = k;
     if (this.input) void this.refresh();
   }
 
+  /** Quote the current input. Returns this request's own quote (undefined if it failed); it is shown only if no newer
+   *  request started meanwhile. */
   async refresh(): Promise<Quote<B> | undefined> {
     if (!this.input) return undefined;
     const input = this.input;
+    // this request quotes the current input, so a pending debounced request for it is no longer needed
+    if (this.debounce !== undefined) this.d.clearTimer(this.debounce);
+    this.debounce = undefined;
     const my = ++this.seq;
     this.loading = true;
     this.d.onChange();
+    let own: Quote<B> | undefined;
     try {
       const b = await this.d.fetch(input);
-      if (my !== this.seq) return this.quote; // a newer request is running
-      this.quote = { input, b, localMs: this.d.nowMs() };
+      own = { input, b, localMs: this.d.nowMs() };
       if (b.k > this.latestConfirmedK) this.latestConfirmedK = b.k;
-      this.error = undefined;
+      if (my === this.seq) {
+        this.quote = own;
+        this.error = undefined;
+      }
     } catch (e) {
       if (my === this.seq) this.error = e instanceof Error ? e.message : String(e);
     } finally {
@@ -153,7 +203,7 @@ export class QuoteController<B extends BreakdownLike = BreakdownLike> {
         this.d.onChange();
       }
     }
-    return this.quote;
+    return own;
   }
 
   private schedule() {
@@ -176,9 +226,10 @@ export class QuoteController<B extends BreakdownLike = BreakdownLike> {
   }
 
   view(): ViewState {
-    const v: ViewState = { loading: this.loading, error: this.error, waitingForPrice: false, stopWarning: false, canExecute: false };
+    const v: ViewState = { loading: this.loading, error: this.error, waitingForPrice: false, stopWarning: false, settled: false, canExecute: false };
     const q = this.quote;
     if (!q) return v;
+    v.settled = this.current() === q;
     const now = this.chainNow()!;
     v.chainNow = now;
     v.refreshInSec = this.nextRefreshMs === undefined ? undefined : Math.max(0, (this.nextRefreshMs - this.d.nowMs()) / 1000);
@@ -191,21 +242,28 @@ export class QuoteController<B extends BreakdownLike = BreakdownLike> {
     const r = REASONS[q.b.reason];
     v.reasonText = r?.ja ?? `理由コード ${q.b.reason}`;
     v.clears = r?.clears;
-    v.canExecute = q.b.reason === 0 && !this.loading && v.stopInSec > 0;
+    v.canExecute = v.settled && q.b.reason === 0 && q.b.limitDefined && v.stopInSec > 0;
     return v;
   }
 
-  /** Before sending: re-quote when the quote is older than 3 s or a newer bar exists; report what changed. */
-  async beforeExecute(): Promise<{ proceed: boolean; requoted: boolean; before?: B; after?: B; changed: boolean }> {
-    const q = this.quote;
-    if (!q) return { proceed: false, requoted: false, changed: false };
-    const stale = this.d.nowMs() - q.localMs > this.settings.staleQuoteMs || this.latestConfirmedK > q.b.k;
-    if (!stale) return { proceed: q.b.reason === 0, requoted: false, before: q.b, after: q.b, changed: false };
-    const after = await this.refresh();
-    const b = after?.b;
-    if (!b) return { proceed: false, requoted: true, changed: true };
-    const changed = b.amountIn !== q.b.amountIn || b.amountOut !== q.b.amountOut || b.reason !== q.b.reason;
-    return { proceed: b.reason === 0 && !changed, requoted: true, before: q.b, after: b, changed };
+  /** Before sending `input` (the form at the click): the quote on screen must be for it, with no input change waiting
+   *  for its re-quote. Re-quote when that quote is older than 3 s, a newer bar exists, a request is running or the
+   *  last one failed; proceed only with a fresh quote equal to the one on screen — otherwise the fresh one is shown
+   *  and the user confirms with another click (which checks again). */
+  async beforeExecute(input: QuoteInput): Promise<PreExecute<B>> {
+    const shown = this.quote;
+    if (!shown || !this.input || !sameInput(this.input, input) || !sameInput(shown.input, input) || this.debounce !== undefined) {
+      return { proceed: false, requoted: false, changed: false };
+    }
+    const tradable = (b: B) => b.reason === 0 && b.limitDefined;
+    const stale =
+      this.loading || this.error !== undefined || this.d.nowMs() - shown.localMs > this.settings.staleQuoteMs || this.latestConfirmedK > shown.b.k;
+    if (!stale) return { proceed: tradable(shown.b), requoted: false, changed: false, quote: shown, before: shown.b };
+    const fresh = await this.refresh();
+    // failed, or superseded by a newer request (an input change or a report): nothing settled to execute
+    if (!fresh || this.quote !== fresh || !sameInput(fresh.input, input)) return { proceed: false, requoted: true, changed: false, before: shown.b };
+    const changed = quoteChanged(fresh.b, shown.b);
+    return { proceed: tradable(fresh.b) && !changed, requoted: true, changed, quote: fresh, before: shown.b };
   }
 }
 

@@ -4,7 +4,7 @@
 import type { Address, PublicClient, WalletClient } from "viem";
 import { erc20Abi, hubAbi, vaultAbi, aquaAbi } from "../../../engine/src/abi.ts";
 import type { Deployment } from "../../../engine/src/chain.ts";
-import { breakdown, type Breakdown, registeredOrders, type RegisteredOrder, trade, type Fill } from "../../../engine/src/taker.ts";
+import { breakdown, type Breakdown, OrderIndex, type RegisteredOrder, trade, type Fill } from "../../../engine/src/taker.ts";
 import { explainFill, type QuoteInput } from "./quote.ts";
 
 const WAD = 10n ** 18n;
@@ -37,15 +37,20 @@ export interface Position {
   payout?: bigint;
 }
 
+/** A lens breakdown together with the order it was computed for; execution trades against that same order. */
+export type Quoted = Breakdown & { order: RegisteredOrder };
+
 export class CorrFiApp {
   readonly pc: PublicClient;
   readonly dep: Deployment;
   readonly maker: Address;
+  private readonly orders: OrderIndex;
 
   constructor(pc: PublicClient, dep: Deployment, maker: Address) {
     this.pc = pc;
     this.dep = dep;
     this.maker = maker;
+    this.orders = new OrderIndex(pc, dep, maker);
   }
 
   async markets(): Promise<MarketInfo[]> {
@@ -91,7 +96,7 @@ export class CorrFiApp {
 
   /** The default maker's newest shipped (not docked) order for a market and side (M §5.6: the operator's maker). */
   async orderFor(marketId: number, side: number): Promise<RegisteredOrder | undefined> {
-    const all = (await registeredOrders(this.pc, this.dep, this.maker)).filter((o) => o.marketId === marketId && o.side === side);
+    const all = (await this.orders.sync()).filter((o) => o.marketId === marketId && o.side === side);
     all.sort((a, b) => b.generation - a.generation);
     for (const o of all) {
       const [, tokens] = await this.pc.readContract({
@@ -105,17 +110,19 @@ export class CorrFiApp {
     return all[0];
   }
 
-  async quote(input: QuoteInput): Promise<Breakdown> {
+  async quote(input: QuoteInput): Promise<Quoted> {
     const o = await this.orderFor(input.marketId, input.side);
     if (!o) throw new Error("no order for this market and side");
-    return breakdown(this.pc, this.dep, o.order, input.marketId, input.side, input.isBuy, input.exactIn, input.amount, input.delta);
+    const b = await breakdown(this.pc, this.dep, o.order, input.marketId, input.side, input.isBuy, input.exactIn, input.amount, input.delta);
+    return { ...b, order: o };
   }
 
-  /** Execute with the quote's tolerance limit; returns the fill and why it differs from the quote, if it does. */
-  async execute(wc: WalletClient, input: QuoteInput, quoted: Breakdown): Promise<{ fill: Fill; causes: string[] }> {
+  /** Execute a quote for `input` with its tolerance limit, against the order it was quoted on; returns the fill and
+   *  why it differs from the quote, if it does. */
+  async execute(wc: WalletClient, input: QuoteInput, quoted: Quoted): Promise<{ fill: Fill; causes: string[] }> {
     if (quoted.reason !== 0 || !quoted.limitDefined) throw new Error("not tradable");
-    const o = await this.orderFor(input.marketId, input.side);
-    if (!o) throw new Error("no order for this market and side");
+    const o = quoted.order;
+    if (o.marketId !== input.marketId || o.side !== input.side) throw new Error("the quote is for another market or side");
     const token = input.isBuy ? this.dep.usdc : await this.sideToken(input.marketId, input.side);
     const need = input.exactIn ? input.amount : quoted.limit;
     const allowance = await this.pc.readContract({ address: token, abi: erc20Abi, functionName: "allowance", args: [wc.account!.address, this.dep.router] });

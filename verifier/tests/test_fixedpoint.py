@@ -202,3 +202,31 @@ def test_inverse_is_exact_extremum(seed):
             assert fp.receive_d4(c, q0, q) >= x > fp.receive_d4(c, q0, q - 1)
         except fp.FixedPointError:
             assert fp.receive_d4(c, q0, 10**15) < x
+
+
+@pytest.mark.parametrize("seed", range(4))
+def test_inverted_cuts_are_closed(seed):
+    # review 2026-09-26 #2: a linear piece shorter than one unit makes the rounded cuts cross; Curve closes the pair
+    # (the Solidity walk assumes lo <= hi). Tiny qmax makes it common; results stay exact extrema or "too thin".
+    rng = random.Random(200 + seed)
+    for _ in range(400):
+        hmin = rng.randrange(0, 5 * 10**16)
+        c = fp.Curve(rng.randrange(0, WAD + 1), hmin + rng.randrange(0, 7 * 10**17), hmin,
+                     rng.randrange(10**15, WAD), rng.randrange(1, 8))
+        assert c.q1 <= c.qs and c.qss <= c.q0
+        q0, x = rng.randrange(-20, 21), rng.randrange(1, 11)
+        for sell, recv in ((fp.qty_d2_exact_out, fp.receive_d2), (fp.qty_d4_exact_out, fp.receive_d4)):
+            try:
+                q = sell(c, q0, x)
+                assert recv(c, q0, q) >= x and (q == 0 or recv(c, q0, q - 1) < x)
+            except fp.FixedPointError:
+                assert recv(c, q0, 10**6) < x
+
+
+def test_inverted_cuts_reproducer():
+    c = fp.Curve(737018080279891314, 600262631839343899, 9746425217800037, 663423151981851124, 1)
+    assert (c.q1, c.qs) == (1, 1)
+    for sell in (fp.qty_d2_exact_out, fp.qty_d4_exact_out):
+        with pytest.raises(fp.FixedPointError):
+            sell(c, 4, 1)
+    assert fp.qty_d1_exact_in(c, 4, 1) == fp.qty_d3_exact_in(c, 4, 1) == 1

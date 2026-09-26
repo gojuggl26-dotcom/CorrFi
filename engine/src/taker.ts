@@ -5,6 +5,7 @@ import type { Address, BlockTag, Hex, PublicClient, WalletClient } from "viem";
 import { parseEventLogs } from "viem";
 import { lensAbi, routerAbi } from "./abi.ts";
 import type { Deployment } from "./chain.ts";
+import { logsInChunks } from "./logs.ts";
 import type { Order } from "./orders.ts";
 
 /** Reason codes of CorrFiPricing (M §5.8.2 可否) with what the UI shows and whether waiting can clear them. */
@@ -40,14 +41,19 @@ export interface RegisteredOrder {
   block: bigint;
 }
 
-export async function registeredOrders(pc: PublicClient, dep: Deployment, maker?: Address): Promise<RegisteredOrder[]> {
-  const logs = await pc.getContractEvents({
-    address: dep.router,
-    abi: routerAbi,
-    eventName: "CorrOrderRegistered",
-    args: maker ? { maker } : undefined,
-    fromBlock: BigInt(dep.block ?? 0),
-  });
+/** CorrOrderRegistered events in [fromBlock (default: the deployment block), toBlock (default: latest)], fetched in
+ *  chunks the RPC accepts. */
+export async function registeredOrders(
+  pc: PublicClient,
+  dep: Deployment,
+  maker?: Address,
+  fromBlock = BigInt(dep.block ?? 0),
+  toBlock?: bigint,
+): Promise<RegisteredOrder[]> {
+  const to = toBlock ?? (await pc.getBlockNumber());
+  const logs = await logsInChunks(fromBlock, to, (from, end) =>
+    pc.getContractEvents({ address: dep.router, abi: routerAbi, eventName: "CorrOrderRegistered", args: maker ? { maker } : undefined, fromBlock: from, toBlock: end }),
+  );
   return logs.map((l) => ({
     hash: l.args.orderHash!,
     maker: l.args.maker!,
@@ -57,6 +63,39 @@ export async function registeredOrders(pc: PublicClient, dep: Deployment, maker?
     order: { maker: l.args.order!.maker, traits: l.args.order!.traits, data: l.args.order!.data },
     block: l.blockNumber,
   }));
+}
+
+/** The registered orders of one maker, kept up to date incrementally: the first sync reads from the deployment block,
+ *  later ones only the blocks since the last (a quote no longer rescans the whole history — review 2026-09-26 #13). */
+export class OrderIndex {
+  private readonly pc: PublicClient;
+  private readonly dep: Deployment;
+  private readonly maker: Address;
+  private next: bigint;
+  private readonly byHash = new Map<Hex, RegisteredOrder>();
+  private running?: Promise<RegisteredOrder[]>;
+
+  constructor(pc: PublicClient, dep: Deployment, maker: Address) {
+    this.pc = pc;
+    this.dep = dep;
+    this.maker = maker;
+    this.next = BigInt(dep.block ?? 0);
+  }
+
+  /** All orders registered up to the latest block (concurrent calls share one scan). */
+  sync(): Promise<RegisteredOrder[]> {
+    this.running ??= this.scan().finally(() => (this.running = undefined));
+    return this.running;
+  }
+
+  private async scan(): Promise<RegisteredOrder[]> {
+    const latest = await this.pc.getBlockNumber();
+    if (latest >= this.next) {
+      for (const o of await registeredOrders(this.pc, this.dep, this.maker, this.next, latest)) this.byHash.set(o.hash, o);
+      this.next = latest + 1n;
+    }
+    return [...this.byHash.values()];
+  }
 }
 
 export type Breakdown = Awaited<ReturnType<typeof breakdown>>;

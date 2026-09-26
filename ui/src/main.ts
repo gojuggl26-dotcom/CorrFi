@@ -6,8 +6,7 @@
 import { type Address, createPublicClient, createWalletClient, custom, defineChain, http, type PublicClient, type WalletClient } from "viem";
 import { erc20Abi } from "../../engine/src/abi.ts";
 import type { Deployment } from "../../engine/src/chain.ts";
-import type { Breakdown } from "../../engine/src/taker.ts";
-import { CorrFiApp, type MarketInfo, type Position } from "./core/app.ts";
+import { CorrFiApp, type MarketInfo, type Position, type Quoted } from "./core/app.ts";
 import { fmtPct, fmtSec, fmtUnits, fmtUtc, fmtWad, parseDecimal } from "./core/format.ts";
 import { CAUSE_TEXT, DELTA_DEFAULT, QuoteController, type QuoteInput } from "./core/quote.ts";
 
@@ -41,12 +40,13 @@ const state = {
   account: undefined as Address | undefined,
   positions: [] as Position[],
   confirmPending: false,
+  busy: false, // an execution is running
   message: "",
 };
 
 let app: CorrFiApp;
 let pc: PublicClient;
-let ctl: QuoteController<Breakdown>;
+let ctl: QuoteController<Quoted>;
 let unwatch: (() => void) | undefined;
 
 function input(): QuoteInput | undefined {
@@ -68,10 +68,13 @@ function input(): QuoteInput | undefined {
 
 function onInput() {
   state.confirmPending = false;
-  const i = input();
-  if (!i) return renderStatus();
+  state.message = "";
+  const i = input(); // sets state.message when the form does not parse
+  if (!i) {
+    ctl.clearInput();
+    return renderStatus();
+  }
   try {
-    state.message = "";
     ctl.setInput(i);
   } catch (e) {
     state.message = (e as Error).message;
@@ -166,21 +169,26 @@ function renderStatus() {
   const v = ctl?.view();
   const s = $("status");
   s.className = "status";
-  $("execute").toggleAttribute("disabled", !v?.canExecute || !state.wc);
+  // only the settled quote of the form's current input can be executed (review 2026-09-26 #1)
+  $("execute").toggleAttribute("disabled", !v?.canExecute || !state.wc || !!state.message || state.busy);
+  const confirm = state.confirmPending ? "見積もりが変わりました。内容を確認して、もう一度「実行」を押してください。" : "";
   if (state.message) {
     s.textContent = state.message;
     s.classList.add("warn");
-  } else if (!v || v.reason === undefined) {
-    s.textContent = v?.loading ? "見積もり中…" : "";
+  } else if (v?.error) {
+    s.textContent = `見積もりに失敗しました：${v.error.split("\n")[0]}`;
+    s.classList.add("warn");
+  } else if (!v || v.reason === undefined || !v.settled) {
+    s.textContent = v?.loading || v?.reason !== undefined ? "見積もり中…" : "";
   } else if (v.reason !== 0) {
     s.textContent = `取引できません：${v.reasonText}${v.clears === "report" ? "（新しいレポートが確認されれば自動で再開します）" : ""}`;
     s.classList.add("stop");
   } else if (v.stopWarning) {
-    s.textContent = `まもなく価格更新待ち（あと ${fmtSec(v.stopInSec)}）`;
+    s.textContent = [confirm, `まもなく価格更新待ち（あと ${fmtSec(v.stopInSec)}）`].filter(Boolean).join(" ");
     s.classList.add("warn");
   } else {
-    s.textContent = state.confirmPending ? "見積もりが変わりました。内容を確認して、もう一度「実行」を押してください。" : "取引できます";
-    s.classList.add(state.confirmPending ? "warn" : "ok");
+    s.textContent = confirm || "取引できます";
+    s.classList.add(confirm ? "warn" : "ok");
   }
   $("refreshIn").textContent = fmtSec(v?.refreshInSec);
   $("nextUpdate").textContent = v?.waitingForPrice ? "更新待ち" : fmtSec(v?.nextFairValueInSec);
@@ -226,27 +234,35 @@ function selectMarket(id: number) {
 
 async function execute() {
   const i = input();
-  if (!i || !state.wc) return;
+  if (!i || !state.wc || state.message || state.busy) return renderStatus();
+  state.busy = true;
   $("result").textContent = "";
-  const pre = await ctl.beforeExecute();
-  if (pre.requoted && pre.changed && !state.confirmPending) {
-    state.confirmPending = true; // show the new quote and ask again
-    return renderStatus();
-  }
-  state.confirmPending = false;
-  const b = ctl.quote?.b;
-  if (!b || b.reason !== 0) return renderStatus();
+  renderStatus();
+  let sent = false;
   try {
-    $("execute").setAttribute("disabled", "");
-    const { fill, causes } = await app.execute(state.wc, i, b);
+    // executes only the quote on screen for this input; a changed fresh quote is shown and needs another click (#7)
+    const pre = await ctl.beforeExecute(i);
+    if (!pre.proceed) {
+      state.confirmPending = pre.changed;
+      if (!pre.changed && !pre.quote) $("result").textContent = "見積もりを更新しています。表示が更新されてから、もう一度「実行」を押してください。";
+      return;
+    }
+    state.confirmPending = false;
+    sent = true;
+    const { fill, causes } = await app.execute(state.wc, pre.quote!.input, pre.quote!.b);
     const lines = [`約定：入力 ${fmtUnits(fill.amountIn)}・出力 ${fmtUnits(fill.amountOut)}（Q1 ${fmtUnits(fill.q1)}・Q2 ${fmtUnits(fill.q2)}）`];
     for (const c of causes) lines.push(`見積もりとの差：${CAUSE_TEXT[c]}`);
     $("result").innerHTML = lines.join("<br>");
   } catch (e) {
     $("result").textContent = `失敗：${(e as Error).message.split("\n")[0]}`;
+  } finally {
+    state.busy = false;
+    renderStatus();
   }
-  await refreshData();
-  await ctl.refresh();
+  if (sent) {
+    await refreshData();
+    await ctl.refresh();
+  }
 }
 
 async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>) {
@@ -281,7 +297,7 @@ async function main() {
   pc = createPublicClient({ chain, transport: http(cfg.rpcUrl), batch: { multicall: !!cfg.multicall3 }, pollingInterval: 2_000 }) as PublicClient;
   const dep = { ...cfg.deployment, chainId: Number(cfg.deployment.chainId) };
   app = new CorrFiApp(pc, dep, cfg.defaultMaker);
-  ctl = new QuoteController<Breakdown>({
+  ctl = new QuoteController<Quoted>({
     fetch: (i) => app.quote(i),
     nowMs: () => Date.now(),
     setTimer: (fn, ms) => setTimeout(fn, ms),
