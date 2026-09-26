@@ -69,7 +69,12 @@
  },
  "chain": {
   "chainId": 84532,
-  "baseSepoliaBlockGasLimit": null,
+  "baseSepoliaBlockGasLimit": {
+   "value": "1200000000",
+   "block": 47301555,
+   "measuredAt": "2026-09-25T21:43Z",
+   "rpc": "https://sepolia.base.org"
+  },
   "snapshot": {
    "file": "state.hex",
    "keccak256": "0xf202b8f8c81be0959e00ec88381f4f0fc73102f013dcab4648b1c005618f8f32",

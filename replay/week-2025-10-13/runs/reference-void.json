@@ -1,0 +1,160 @@
+{
+ "week": {
+  "obsStart": 1760313600,
+  "obsStartIso": "2025-10-13T00:00Z",
+  "tenorDays": 7
+ },
+ "bars": "bars_void.json",
+ "stateRoot": "0x041fba39ffec46b14489d1f2c98b715c0a05d0d5fc8cc905d1c54e7d03b5ae42",
+ "block": 222,
+ "longT": "500000000000000000",
+ "isVoid": true,
+ "payouts": {
+  "A": "50000000",
+  "B": "300000000",
+  "maker": "300000000"
+ },
+ "reports": 179,
+ "trades": [
+  {
+   "id": "S0a",
+   "op": "mint",
+   "actor": "A",
+   "amount": "100.00",
+   "tx": "0x7885bb4553f35255df42de7471d2b4e9ccb58c784a33d59e817f6371875b2594",
+   "block": 33
+  },
+  {
+   "id": "S0b",
+   "op": "trade",
+   "actor": "B",
+   "dir": 1,
+   "exactIn": false,
+   "qty": "1000.000000",
+   "cash": "900.840540",
+   "avgPrice": "0.900840",
+   "q1": "0.000000",
+   "q2": "1000.000000",
+   "kind": "mint",
+   "pFair": "0.893256",
+   "h": "0.005916",
+   "hmin": "0.005916",
+   "quoteEqualsFill": true,
+   "expected": {
+    "dir": 1,
+    "q1": "0",
+    "q2": "1000000000",
+    "path": "mint"
+   },
+   "tx": "0xc3494accb5be0a5a0c4cbbcf28391f8be017f38422182cd88d9da42b17b5b5ac",
+   "block": 34,
+   "taker": "0x976EA74026E726554dB657fA54763abd0C3a0aa9",
+   "raw": {
+    "amountIn": "900840540",
+    "amountOut": "1000000000",
+    "q1": "0",
+    "q2": "1000000000"
+   }
+  },
+  {
+   "id": "S1",
+   "op": "trade",
+   "actor": "B",
+   "dir": 2,
+   "exactIn": true,
+   "qty": "400.000000",
+   "cash": "358.331940",
+   "avgPrice": "0.895829",
+   "q1": "400.000000",
+   "q2": "0.000000",
+   "kind": "paired burn",
+   "pFair": "0.901019",
+   "h": "0.005189",
+   "hmin": "0.005189",
+   "quoteEqualsFill": true,
+   "expected": {
+    "dir": 2,
+    "q1": "400000000",
+    "q2": "0",
+    "path": "paired burn"
+   },
+   "tx": "0x0e5ac42771a7d64ac844698513bd05cbaa9bae50260ca05a67254dcf2ddd7470",
+   "block": 78,
+   "taker": "0x976EA74026E726554dB657fA54763abd0C3a0aa9",
+   "raw": {
+    "amountIn": "400000000",
+    "amountOut": "358331940",
+    "q1": "400000000",
+    "q2": "0"
+   }
+  },
+  {
+   "id": "S2",
+   "op": "refused",
+   "reason": 6
+  },
+  {
+   "id": "S3a",
+   "op": "refused",
+   "reason": 6
+  },
+  {
+   "id": "S3b",
+   "op": "burn",
+   "actor": "A",
+   "amount": "50.00",
+   "tx": "0xd03d057ed0302810a615e7eb26e51d10c2289dcf777ece34b109ebf1e51cabee",
+   "block": 163
+  },
+  {
+   "id": "S4",
+   "op": "refused",
+   "reason": 6
+  }
+ ],
+ "settlement": [
+  {
+   "step": "finalize",
+   "tx": "0xef2d7b3ae7725618346398b13586ee9f5e13dcf9895e96cde657d3a8b3fb6d89"
+  },
+  {
+   "step": "dock long",
+   "tx": "0x83aa47a792ce1150dccad1f14bddcffb7b6c98546babdad33a5df38f4a6eccc3"
+  },
+  {
+   "step": "dock short",
+   "tx": "0x1c09ee6c76f81f5718fd8d9ed3c712c9f74f7a3ad71847195667e97620a0ab7a"
+  },
+  {
+   "step": "redeem A",
+   "long": "50000000",
+   "short": "50000000",
+   "payout": "50000000",
+   "tx": "0xca138d68a06be4deff7d11f1de357f6a963090c67f05052b4e446f0e81c0a42b"
+  },
+  {
+   "step": "redeem B",
+   "long": "600000000",
+   "short": "0",
+   "payout": "300000000",
+   "tx": "0x0f87955eb15638d48a095cbd10bcd1d2e9d01a61f8f737de29bc0a951801da42"
+  },
+  {
+   "step": "maker claims custody",
+   "payout": "300000000",
+   "tx": "0x15f67df7d44cd97ba46270c99c8d7082e9a2cc7e7fcbcd8fc5ff9fa95e703c62"
+  }
+ ],
+ "timing": {
+  "totalMs": 11910,
+  "steps": 179,
+  "stepP50Ms": 63.538800000000265,
+  "stepP99Ms": 111.98320000000058,
+  "stepMaxMs": 127.58660000000009
+ },
+ "gas": {
+  "txs": 190,
+  "maxGasUsed": "872416",
+  "total": "138465785"
+ }
+}

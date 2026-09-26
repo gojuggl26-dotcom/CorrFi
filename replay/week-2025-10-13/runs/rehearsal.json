@@ -1,0 +1,148 @@
+{
+ "week": {
+  "obsStart": 1760313600,
+  "obsStartIso": "2025-10-13T00:00Z",
+  "tenorDays": 7
+ },
+ "runs": 10,
+ "AC1": {
+  "pass": true,
+  "medianTotalMs": 106561,
+  "maxTotalMs": 106565,
+  "medianVerdictMs": 101560,
+  "note": "totalMs = START to the end of the verification display (R §5.1: 106.6 s); verdictMs = when V1-V8 appear"
+ },
+ "AC2": {
+  "pass": true
+ },
+ "AC3": {
+  "pass": true,
+  "reference": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed"
+ },
+ "AC4": {
+  "pass": null,
+  "note": "not run: needs a machine whose clock can be moved by a day (MI-09); the local clock is never changed"
+ },
+ "AC5": {
+  "pass": true,
+  "maxStepP99Ms": 123.95119999989402
+ },
+ "AC6": {
+  "pass": true,
+  "maxGasUsed": "872416",
+  "baseSepoliaBlockGasLimit": "1200000000"
+ },
+ "AC7": {
+  "pass": true,
+  "tamperedBars": {
+   "stopped": true,
+   "error": "preflight failed: [{\"id\":\"P3\",\"ok\":false,\"detail\":\"hash mismatch: bars.json\"}]"
+  },
+  "replacedState": {
+   "stopped": true,
+   "error": "preflight failed: [{\"id\":\"P1\",\"ok\":false,\"detail\":\"chainId 84532, block 33 at T0-216, code true, addresses true\"}]"
+  }
+ },
+ "results": [
+  {
+   "run": 1,
+   "verdictMs": 101565,
+   "totalMs": 106563,
+   "stepP99Ms": 116.3705000000009,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  },
+  {
+   "run": 2,
+   "verdictMs": 101553,
+   "totalMs": 106564,
+   "stepP99Ms": 117.33739999998943,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  },
+  {
+   "run": 3,
+   "verdictMs": 101554,
+   "totalMs": 106555,
+   "stepP99Ms": 116.59850000002189,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  },
+  {
+   "run": 4,
+   "verdictMs": 101558,
+   "totalMs": 106550,
+   "stepP99Ms": 116.87249999999767,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  },
+  {
+   "run": 5,
+   "verdictMs": 101569,
+   "totalMs": 106565,
+   "stepP99Ms": 117.49950000003446,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  },
+  {
+   "run": 6,
+   "verdictMs": 101560,
+   "totalMs": 106559,
+   "stepP99Ms": 116.87489999993704,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  },
+  {
+   "run": 7,
+   "verdictMs": 101559,
+   "totalMs": 106561,
+   "stepP99Ms": 123.95119999989402,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  },
+  {
+   "run": 8,
+   "verdictMs": 101556,
+   "totalMs": 106558,
+   "stepP99Ms": 119.16099999996368,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  },
+  {
+   "run": 9,
+   "verdictMs": 101567,
+   "totalMs": 106564,
+   "stepP99Ms": 116.33770000003278,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  },
+  {
+   "run": 10,
+   "verdictMs": 101569,
+   "totalMs": 106552,
+   "stepP99Ms": 109.76619999995455,
+   "verifierPass": true,
+   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "sameRoot": true,
+   "maxGasUsed": "872416"
+  }
+ ]
+}

@@ -1,0 +1,249 @@
+{
+ "week": {
+  "obsStart": 1760313600,
+  "obsStartIso": "2025-10-13T00:00Z",
+  "tenorDays": 7
+ },
+ "bars": "bars.json",
+ "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+ "block": 226,
+ "longT": "926108332093189410",
+ "isVoid": false,
+ "payouts": {
+  "A": "46305416",
+  "B": "853477572",
+  "C": "36945833",
+  "maker": "34845406"
+ },
+ "reports": 179,
+ "trades": [
+  {
+   "id": "S0a",
+   "op": "mint",
+   "actor": "A",
+   "amount": "100.00",
+   "tx": "0x7885bb4553f35255df42de7471d2b4e9ccb58c784a33d59e817f6371875b2594",
+   "block": 33
+  },
+  {
+   "id": "S0b",
+   "op": "trade",
+   "actor": "B",
+   "dir": 1,
+   "exactIn": false,
+   "qty": "1000.000000",
+   "cash": "900.840540",
+   "avgPrice": "0.900840",
+   "q1": "0.000000",
+   "q2": "1000.000000",
+   "kind": "mint",
+   "pFair": "0.893256",
+   "h": "0.005916",
+   "hmin": "0.005916",
+   "quoteEqualsFill": true,
+   "expected": {
+    "dir": 1,
+    "q1": "0",
+    "q2": "1000000000",
+    "path": "mint"
+   },
+   "tx": "0xc3494accb5be0a5a0c4cbbcf28391f8be017f38422182cd88d9da42b17b5b5ac",
+   "block": 34,
+   "taker": "0x976EA74026E726554dB657fA54763abd0C3a0aa9",
+   "raw": {
+    "amountIn": "900840540",
+    "amountOut": "1000000000",
+    "q1": "0",
+    "q2": "1000000000"
+   }
+  },
+  {
+   "id": "S1",
+   "op": "trade",
+   "actor": "B",
+   "dir": 2,
+   "exactIn": true,
+   "qty": "400.000000",
+   "cash": "358.444744",
+   "avgPrice": "0.896111",
+   "q1": "400.000000",
+   "q2": "0.000000",
+   "kind": "paired burn",
+   "pFair": "0.901301",
+   "h": "0.005190",
+   "hmin": "0.005190",
+   "quoteEqualsFill": true,
+   "expected": {
+    "dir": 2,
+    "q1": "400000000",
+    "q2": "0",
+    "path": "paired burn"
+   },
+   "tx": "0x2c26c7ae513ef94b86978643cc7620fe4d665a0d7db19cbfe248641f487d18e3",
+   "block": 78,
+   "taker": "0x976EA74026E726554dB657fA54763abd0C3a0aa9",
+   "raw": {
+    "amountIn": "400000000",
+    "amountOut": "358444744",
+    "q1": "400000000",
+    "q2": "0"
+   }
+  },
+  {
+   "id": "S2",
+   "op": "trade",
+   "actor": "C",
+   "dir": 3,
+   "exactIn": false,
+   "qty": "500.000000",
+   "cash": "47.531977",
+   "avgPrice": "0.095063",
+   "q1": "500.000000",
+   "q2": "0.000000",
+   "kind": "from custody",
+   "pFair": "0.909967",
+   "h": "0.005031",
+   "hmin": "0.005031",
+   "quoteEqualsFill": true,
+   "expected": {
+    "dir": 3,
+    "q1": "500000000",
+    "q2": "0",
+    "path": "from custody"
+   },
+   "tx": "0xe9b249e5d7c19bc52bbef54ab4d69cd4670c0a9ca4eaf9728416a2238f5bd2fc",
+   "block": 121,
+   "taker": "0x14dC79964da2C08b23698B3D3cc7Ca32193d9955",
+   "raw": {
+    "amountIn": "47531977",
+    "amountOut": "500000000",
+    "q1": "500000000",
+    "q2": "0"
+   }
+  },
+  {
+   "id": "S3a",
+   "op": "trade",
+   "actor": "A",
+   "dir": 4,
+   "exactIn": true,
+   "qty": "50.000000",
+   "cash": "3.596838",
+   "avgPrice": "0.071936",
+   "q1": "0.000000",
+   "q2": "50.000000",
+   "kind": "bought into custody",
+   "pFair": "0.922611",
+   "h": "0.005034",
+   "hmin": "0.005034",
+   "quoteEqualsFill": true,
+   "expected": {
+    "dir": 4,
+    "q1": "0",
+    "q2": "50000000",
+    "path": "bought into custody"
+   },
+   "tx": "0x4421fb354c167235d5af0ba28383f050af9907c1f1f29ce8b3f4b13e850708a8",
+   "block": 164,
+   "taker": "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
+   "raw": {
+    "amountIn": "50000000",
+    "amountOut": "3596838",
+    "q1": "0",
+    "q2": "50000000"
+   }
+  },
+  {
+   "id": "S3b",
+   "op": "burn",
+   "actor": "A",
+   "amount": "50.00",
+   "tx": "0x7c5e4d7d1ea700b6bf01c953fc5c34187e59c3d92bc9b88d0ca3a110765f75bd",
+   "block": 165
+  },
+  {
+   "id": "S4",
+   "op": "trade",
+   "actor": "B",
+   "dir": 1,
+   "exactIn": true,
+   "qty": "321.574229",
+   "cash": "300.000000",
+   "avgPrice": "0.932910",
+   "q1": "0.000000",
+   "q2": "321.574229",
+   "kind": "mint",
+   "pFair": "0.926844",
+   "h": "0.005030",
+   "hmin": "0.005030",
+   "quoteEqualsFill": true,
+   "expected": {
+    "dir": 1,
+    "q1": "0",
+    "q2": "Q4",
+    "path": "mint"
+   },
+   "tx": "0x0488834f9569788604ce752ae6dfaf4d51a3fcc84fdb0d81f8f25eefa8ee0247",
+   "block": 200,
+   "taker": "0x976EA74026E726554dB657fA54763abd0C3a0aa9",
+   "raw": {
+    "amountIn": "300000000",
+    "amountOut": "321574229",
+    "q1": "0",
+    "q2": "321574229"
+   }
+  }
+ ],
+ "settlement": [
+  {
+   "step": "finalize",
+   "tx": "0xef2d7b3ae7725618346398b13586ee9f5e13dcf9895e96cde657d3a8b3fb6d89"
+  },
+  {
+   "step": "dock long",
+   "tx": "0x83aa47a792ce1150dccad1f14bddcffb7b6c98546babdad33a5df38f4a6eccc3"
+  },
+  {
+   "step": "dock short",
+   "tx": "0x1c09ee6c76f81f5718fd8d9ed3c712c9f74f7a3ad71847195667e97620a0ab7a"
+  },
+  {
+   "step": "redeem A",
+   "long": "50000000",
+   "short": "0",
+   "payout": "46305416",
+   "tx": "0xbb3c8f0c149e34118a6bc845f3920a683649983e353b03172dcb43401ac001a7"
+  },
+  {
+   "step": "redeem B",
+   "long": "921574229",
+   "short": "0",
+   "payout": "853477572",
+   "tx": "0x8bef297dea2d05d7da73f2398c4dc98cc0f8449bac3feaa7799a25999dad3d46"
+  },
+  {
+   "step": "redeem C",
+   "long": "0",
+   "short": "500000000",
+   "payout": "36945833",
+   "tx": "0xc53d50844ad30701eff3efdfd64898b93c04ba43ad48fed1c48c3f8256a7332b"
+  },
+  {
+   "step": "maker claims custody",
+   "payout": "34845406",
+   "tx": "0x15f67df7d44cd97ba46270c99c8d7082e9a2cc7e7fcbcd8fc5ff9fa95e703c62"
+  }
+ ],
+ "timing": {
+  "totalMs": 12137,
+  "steps": 179,
+  "stepP50Ms": 63.58260000000064,
+  "stepP99Ms": 127.13720000000012,
+  "stepMaxMs": 173.12870000000112
+ },
+ "gas": {
+  "txs": 194,
+  "maxGasUsed": "872416",
+  "total": "139688000"
+ }
+}

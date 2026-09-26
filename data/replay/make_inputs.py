@@ -166,7 +166,9 @@ def main() -> None:
                       "buildManifestKeccak256": keccak_hex(canonical(build)),
                       "compiler": build["compiler"], "settings": build["settings"], "foundry": build["foundry"],
                       "creation": {n: v["creationLinked"] for n, v in build["contracts"].items()}},
-        "chain": {"chainId": 84532, "baseSepoliaBlockGasLimit": None, "snapshot": None, "anvil": None},
+        # measured on Base Sepolia (S08, read-only): eth_getBlockByNumber latest
+        "chain": {"chainId": 84532, "baseSepoliaBlockGasLimit": {"value": "1200000000", "block": 47301555,
+                  "measuredAt": "2026-09-25T21:43Z", "rpc": "https://sepolia.base.org"}, "snapshot": None, "anvil": None},
         "reference": None,
     }
     write(out / "manifest.json", manifest)
