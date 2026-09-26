@@ -141,6 +141,53 @@ a { color: inherit; text-decoration: none; }
   .flow-markets { flex-direction: column; }
 }
 
+/* ---------------------------------------------------------------- home: fade-up on scroll */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1), transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1), border-color 120ms ease; transition-delay: var(--d, 0ms), var(--d, 0ms), 0ms; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* ---------------------------------------------------------------- home: bid / ask chart */
+.spread-card { background: var(--paper); border: 1px solid rgba(34, 29, 29, 0.08); border-radius: var(--r-card); padding: 24px 24px 16px; }
+.sc-legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--iron); margin-bottom: 12px; }
+.sc-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.key { display: inline-block; flex: none; }
+.key-base { width: 18px; height: 12px; border-radius: 3px; background: #fce1d2; border: 1px solid #f7c3a3; }
+.key-risk { width: 18px; height: 12px; border-radius: 3px; border: 1px solid #f7c3a3; background: repeating-linear-gradient(45deg, rgba(242, 107, 29, 0.45) 0 1.4px, #fef6f1 1.4px 5px); }
+.key-line { width: 18px; height: 2px; border-radius: 2px; background: var(--accent); }
+.key-fair { width: 18px; height: 0; border-top: 2px dashed var(--ink); }
+.sc-plot { position: relative; overflow-x: auto; }
+.sc-plot svg { display: block; width: 100%; min-width: 640px; height: auto; font-family: var(--font); outline: none; }
+.sc-plot svg:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 12px; }
+.sc-grid { stroke: rgba(34, 29, 29, 0.08); stroke-width: 1; }
+.sc-tick, .sc-axis-title { fill: var(--iron); font-size: 13px; }
+.sc-phase { fill: var(--ink); font-size: 14px; font-weight: var(--w-medium); }
+.sc-hatch-bg { fill: #fef6f1; }
+.sc-hatch-line { stroke: rgba(242, 107, 29, 0.42); stroke-width: 1.4; }
+.sc-risk { fill: url(#sc-hatch); }
+.sc-base { fill: #fce1d2; }
+.sc-edge { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.sc-fair { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-dasharray: 6 5; stroke-linecap: round; }
+.sc-end-edge { fill: var(--accent); stroke: var(--paper); stroke-width: 2; }
+.sc-end-fair { fill: var(--ink); stroke: var(--paper); stroke-width: 2; }
+.sc-label { fill: var(--ink); font-size: 15px; font-weight: var(--w-medium); }
+.sc-value { fill: var(--iron); font-size: 14px; font-variant-numeric: tabular-nums; }
+.sc-time { stroke: var(--ash); stroke-width: 1.2; fill: none; }
+.sc-cross-line { stroke: rgba(34, 29, 29, 0.35); stroke-width: 1; }
+.sc-hit { fill: transparent; cursor: crosshair; }
+.sc-tip { position: absolute; pointer-events: none; background: var(--paper); border: 1px solid rgba(34, 29, 29, 0.1); border-radius: 14px; padding: 10px 12px; box-shadow: 0 6px 20px rgba(19, 19, 19, 0.06); font-size: 13px; min-width: 196px; z-index: 2; }
+.sc-tip-head { color: var(--iron); margin-bottom: 6px; }
+.sc-tip-row { display: flex; align-items: center; gap: 8px; line-height: 1.7; }
+.sc-tip-row b { font-weight: var(--w-medium); font-variant-numeric: tabular-nums; min-width: 52px; color: var(--ink); }
+.sc-tip-row span { color: var(--iron); }
+.sc-tip-foot { margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(34, 29, 29, 0.08); color: var(--iron); }
+.sc-table { margin-top: 8px; }
+.sc-table summary { cursor: pointer; color: var(--iron); font-size: 14px; padding: 6px 0; }
+.sc-table table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.sc-table th, .sc-table td { padding: 6px 8px; border-bottom: 1px solid rgba(34, 29, 29, 0.08); text-align: right; color: var(--ink); font-weight: var(--w-regular); }
+.sc-table th { color: var(--iron); font-weight: var(--w-medium); }
+.sc-table td:first-child, .sc-table th:first-child { text-align: left; color: var(--iron); }
+.sc-note { font-size: 13px; color: var(--graphite); margin: 12px 0 0; }
+
 /* ---------------------------------------------------------------- trade page (Uniswap-style: flat white, hairlines, one orange) */
 .trade-page {
   --t-ink: #131313; /* text */

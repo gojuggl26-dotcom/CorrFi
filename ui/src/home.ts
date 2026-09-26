@@ -6,6 +6,7 @@ import { erc20Abi } from "../../engine/src/abi.ts";
 import type { Deployment } from "../../engine/src/chain.ts";
 import { CorrFiApp, type MarketInfo } from "./core/app.ts";
 import { fmtUtc, fmtWad } from "./core/format.ts";
+import { renderSpreadChart } from "./spread-chart.ts";
 
 interface UiConfig {
   chainId: number;
@@ -18,6 +19,35 @@ interface UiConfig {
 
 const WAD = 10n ** 18n;
 const $ = (id: string) => document.getElementById(id) as HTMLElement;
+
+// ---- fade-up on scroll: every .reveal rises into place once, when it enters the viewport
+const revealed = new Set<string>(); // keys of re-rendered cards already shown (they never animate twice)
+let io: IntersectionObserver | undefined;
+function observeReveals() {
+  const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal:not(.in):not([data-watched])"));
+  if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    els.forEach((e) => e.classList.add("in"));
+    return;
+  }
+  io ??= new IntersectionObserver(
+    (entries) => {
+      for (const en of entries) {
+        if (!en.isIntersecting) continue;
+        const el = en.target as HTMLElement;
+        el.classList.add("in");
+        if (el.dataset.key) revealed.add(el.dataset.key);
+        io!.unobserve(el);
+      }
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+  );
+  for (const e of els) {
+    e.dataset.watched = "1";
+    io.observe(e);
+  }
+}
+/** Class and delay for a card that may be re-rendered: shown at once if it already faded in. */
+const reveal = (key: string, i: number) => `reveal${revealed.has(key) ? " in" : ""}" data-key="${key}" style="--d: ${i * 70}ms`;
 
 /** The market the "Start trading" button opens: the shortest one still trading (7D first), else the newest. */
 function featured(ms: MarketInfo[]) {
@@ -36,11 +66,11 @@ const COMING_SOON = [
 ];
 const TENORS = [7, 14, 28];
 
-function liveCard(m: MarketInfo) {
+function liveCard(m: MarketInfo, i: number) {
   const done = m.finalized;
   const long = done ? m.longT! : m.pFair;
   const pct = Math.min(100, (m.confirmed / Math.max(1, m.n)) * 100);
-  return `<a class="mkt" href="trade.html?market=${m.id}">
+  return `<a class="mkt ${reveal(`m${m.id}`, i)}" href="trade.html?market=${m.id}">
     <div class="mkt-top"><span class="mkt-name">${m.tenorDays}D · #${m.id}</span><span class="mkt-state${done ? " done" : ""}">${done ? (m.isVoid ? "Void" : "Settled") : "Live"}</span></div>
     <div class="mkt-dates">${fmtUtc(m.obsStart).slice(0, 16)} → ${fmtUtc(m.obsEnd).slice(0, 16)} UTC</div>
     <div class="mkt-prices">
@@ -52,8 +82,8 @@ function liveCard(m: MarketInfo) {
   </a>`;
 }
 
-function soonCard(pair: string, tenor: number) {
-  return `<div class="mkt soon" aria-disabled="true">
+function soonCard(pair: string, tenor: number, i: number) {
+  return `<div class="mkt soon ${reveal(`${pair}-${tenor}`, i)}" aria-disabled="true">
     <div class="mkt-top"><span class="mkt-name">${tenor}D</span><span class="mkt-state soon-tag">Coming soon</span></div>
     <div class="mkt-dates">${pair} realized correlation</div>
     <div class="mkt-prices">
@@ -67,18 +97,21 @@ function soonCard(pair: string, tenor: number) {
 
 function group(pair: string, note: string, live: boolean, cards: string) {
   return `<div class="pair-group">
-    <div class="pair-head"><span class="pair-name">${pair}</span><span class="pair-note">${note}</span>${live ? '<span class="pair-live">Live</span>' : ""}</div>
+    <div class="pair-head ${reveal(`h-${pair}`, 0)}"><span class="pair-name">${pair}</span><span class="pair-note">${note}</span>${live ? '<span class="pair-live">Live</span>' : ""}</div>
     <div class="markets-grid">${cards}</div>
   </div>`;
 }
 
 function renderMarkets(ms: MarketInfo[]) {
-  let html = group("ETH / BTC", "Ether vs. Bitcoin", true, ms.map(liveCard).join(""));
-  for (const c of COMING_SOON) html += group(c.pair, c.note, false, TENORS.map((t) => soonCard(c.pair, t)).join(""));
+  let html = group("ETH / BTC", "Ether vs. Bitcoin", true, ms.map((m, i) => liveCard(m, i)).join(""));
+  for (const c of COMING_SOON) html += group(c.pair, c.note, false, TENORS.map((t, i) => soonCard(c.pair, t, i)).join(""));
   $("marketsGrid").innerHTML = html;
+  observeReveals();
 }
 
 async function main() {
+  renderSpreadChart($("spreadChart"));
+  observeReveals();
   const cfg = (await (await fetch("./config.json")).json()) as UiConfig;
   const chain = defineChain({
     id: cfg.chainId,

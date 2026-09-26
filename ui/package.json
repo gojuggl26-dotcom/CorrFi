@@ -12,7 +12,8 @@
     "test": "node --test \"test/*.test.ts\"",
     "test:anvil": "node --test --test-concurrency=1 \"test/anvil/*.test.ts\"",
     "typecheck": "tsc -p .",
-    "smoke": "node scripts/smoke.ts"
+    "smoke": "node scripts/smoke.ts",
+    "live": "node scripts/live.ts"
   },
   "dependencies": {
     "viem": "2.56.9"
