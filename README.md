@@ -14,9 +14,8 @@ You can take Long and Short views on future correlation.
 <br>**5.Deployments and on-chain proof**
 <br>**6.Demo and try it**
 <br>**7.Verification and tests**
-<br>**8.What this does not claim**
-<br>**9.Tech Stack**
-<br>**10.License**
+<br>**8.Tech Stack**
+<br>**9.License**
 
 ## 0.For 1inch judges: where to look
 
@@ -400,11 +399,7 @@ Used as deployed on Base Sepolia: Multicall3 [`0xcA11bde05977b3631167028862bE2a1
 
 <!-- Invariants (quote = breakdown = swap; collateral = supply; Solidity / TypeScript / Python fixed-point results identical to the bit; the replay's V1-V8 checks and deterministic final state) and a table: suite -> what it proves -> count -> command. Backtest in 2-3 lines: B1 pass and the adopted parameters. -->
 
-## 8.What this does not claim
-
-<!-- Testnet only; SwapVM main is unaudited; the reporter is trusted for the price points (the contract enforces the math); tUSDC is a test token; the gold pairs are not listed yet. -->
-
-## 9.Tech Stack
+## 8.Tech Stack
 
 | Layer | Stack |
 |---|---|
@@ -418,7 +413,7 @@ Used as deployed on Base Sepolia: Multicall3 [`0xcA11bde05977b3631167028862bE2a1
 | Network | Base Sepolia (OP Stack) · Multicall3 · BaseScan |
 | Tests and CI | Foundry unit, fuzz and invariant tests · node:test · pytest · Playwright · GitHub Actions |
 
-## 10.License
+## 9.License
 
 | Part | License |
 |---|---|
