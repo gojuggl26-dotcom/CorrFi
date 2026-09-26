@@ -1,5 +1,6 @@
 // Writes the UI's config.json from a deployment (the UI serves it from its public directory).
 //   node bin/ui-config.ts <deployment.json> <rpcUrl> <defaultMaker> <out.json> [--multicall3 0x...] [--dev-account 0x...]
+//     [--explorer https://sepolia.basescan.org] [--chain-name "Base Sepolia"]
 // --dev-account only for a local Anvil whose accounts are unlocked; testnet users connect their own wallet.
 import { readFileSync, writeFileSync } from "node:fs";
 
@@ -10,6 +11,15 @@ const opt = (k: string) => {
   return i > 0 ? process.argv[i + 1] : undefined;
 };
 const deployment = JSON.parse(readFileSync(depPath, "utf8"));
-const cfg = { chainId: Number(deployment.chainId), rpcUrl, deployment, defaultMaker, multicall3: opt("multicall3"), devAccount: opt("dev-account") };
+const cfg = {
+  chainId: Number(deployment.chainId),
+  chainName: opt("chain-name"),
+  rpcUrl,
+  deployment,
+  defaultMaker,
+  multicall3: opt("multicall3"),
+  devAccount: opt("dev-account"),
+  explorer: opt("explorer"),
+};
 writeFileSync(out, JSON.stringify(cfg, null, 2) + "\n");
 console.log(`${out}: chain ${cfg.chainId}, maker ${defaultMaker}${cfg.multicall3 ? ", multicall3" : ""}`);

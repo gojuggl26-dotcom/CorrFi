@@ -1,10 +1,10 @@
 // Read-only view of one maker (the maker page): the wallet and its single approval to Aqua, every book (order) with its
 // Aqua virtual balances, custody and capital utilization across markets, and the latest fill broken down from its
-// receipt — what Aqua pulled from the maker's wallet and pushed back, and each book's balance before and after that
-// block. Runs in the browser and, for the tests, in Node.
+// receipt alone — what Aqua pulled from the maker's wallet and pushed back per book, and what went into custody.
+// Nothing reads old state (public RPCs prune it within minutes). Runs in the browser and, for the tests, in Node.
 
 import { type Address, type Hex, parseEventLogs, type PublicClient } from "viem";
-import { aquaAbi, erc20Abi, hubAbi, routerAbi, vaultAbi } from "../../../engine/src/abi.ts";
+import { aquaAbi, erc20Abi, routerAbi, vaultAbi } from "../../../engine/src/abi.ts";
 import type { Deployment } from "../../../engine/src/chain.ts";
 import { riskCapital, utilization } from "../../../engine/src/fixedpoint.ts";
 import { logsInChunks } from "../../../engine/src/logs.ts";
@@ -48,6 +48,7 @@ export interface AquaMove {
 export interface FillView {
   hash: Hex;
   block: bigint;
+  timestamp: bigint;
   orderHash: Hex;
   marketId: number;
   dir: number; // 1 buy Long, 2 sell Long, 3 buy Short, 4 sell Short
@@ -58,27 +59,39 @@ export interface FillView {
   amountIn: bigint;
   amountOut: bigint;
   moves: AquaMove[]; // the maker's Aqua pulls and pushes in this transaction
-  walletBefore: bigint;
-  walletAfter: bigint;
-  custodyBefore: { long: bigint; short: bigint }; // the maker's custody in the fill's market
-  custodyAfter: { long: bigint; short: bigint };
-  books: { hash: Hex; marketId: number; side: number; before: bigint; after: bigint }[]; // quote-token balances
 }
 
-/** Everything the page shows, derived from a fill: what Aqua took from the maker's wallet for the mint, and which
- *  books moved. Pure, so it is tested on its own. */
+export const fillSide = (dir: number) => (dir <= 2 ? 0 : 1); // D1 / D2 trade Long, D3 / D4 Short
+export const fillIsBuy = (dir: number) => dir === 1 || dir === 3;
+
+/** Everything the page shows about a fill, from its events alone. Aqua moves only the traded book's balances, so
+ *  every other book is unchanged by construction. Custody follows the router's hooks: a buy serves Q1 of the side from
+ *  custody and keeps the minted pair's other side (Q2); a sell burns Q1 against the other side and keeps Q2 of the
+ *  side bought in. Pure, so it is tested on its own. */
 export function summarizeFill(f: FillView, usdc: Address) {
-  const sum = (kind: AquaMove["kind"]) =>
-    f.moves.filter((m) => m.kind === kind && m.token.toLowerCase() === usdc.toLowerCase()).reduce((s, m) => s + m.amount, 0n);
-  const changed = f.books.filter((b) => b.after !== b.before);
+  const isUsdc = (m: AquaMove) => m.token.toLowerCase() === usdc.toLowerCase();
+  const sum = (kind: AquaMove["kind"]) => f.moves.filter((m) => m.kind === kind && isUsdc(m)).reduce((s, m) => s + m.amount, 0n);
+  const bookDelta = new Map<string, bigint>();
+  for (const m of f.moves.filter(isUsdc)) {
+    const k = m.orderHash.toLowerCase();
+    bookDelta.set(k, (bookDelta.get(k) ?? 0n) + (m.kind === "push" ? m.amount : -m.amount));
+  }
+  const side = fillSide(f.dir);
+  const custody = [0n, 0n]; // [Long, Short]
+  if (fillIsBuy(f.dir)) {
+    custody[side] -= f.q1;
+    custody[1 - side] += f.q2;
+  } else {
+    custody[1 - side] -= f.q1;
+    custody[side] += f.q2;
+  }
   return {
-    custodyLong: f.custodyAfter.long - f.custodyBefore.long,
-    custodyShort: f.custodyAfter.short - f.custodyBefore.short,
     pulledUsdc: sum("pull"), // out of the maker's wallet (a buy: exactly the mint Q2)
     pushedUsdc: sum("push"), // into the maker's wallet (a buy: the taker's payment)
-    walletChange: f.walletAfter - f.walletBefore,
-    changed,
-    unchanged: f.books.filter((b) => b.after === b.before),
+    walletChange: sum("push") - sum("pull"),
+    bookDelta, // lower-case order hash -> quote-token change of that book
+    custodyLong: custody[0],
+    custodyShort: custody[1],
   };
 }
 
@@ -89,6 +102,7 @@ export class MakerView {
   private readonly orders: OrderIndex;
   private nextFillBlock: bigint;
   private lastFill?: { hash: Hex; block: bigint; orderHash: Hex; marketId: number; dir: number; qty: bigint; q1: bigint; q2: bigint };
+  private fillView?: FillView; // the last fill's breakdown, read once
 
   constructor(pc: PublicClient, dep: Deployment, maker: Address) {
     this.pc = pc;
@@ -117,17 +131,17 @@ export class MakerView {
     const block = await this.pc.getBlockNumber();
     const orders = await this.orders.sync();
     const [wallet, approval, cfg] = await Promise.all([
-      this.pc.readContract({ address: this.dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [this.maker], blockNumber: block }),
-      this.pc.readContract({ address: this.dep.usdc, abi: erc20Abi, functionName: "allowance", args: [this.maker, this.dep.aqua], blockNumber: block }),
-      this.pc.readContract({ address: this.dep.router, abi: routerAbi, functionName: "makerConfig", args: [this.maker], blockNumber: block }),
+      this.pc.readContract({ address: this.dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [this.maker] }),
+      this.pc.readContract({ address: this.dep.usdc, abi: erc20Abi, functionName: "allowance", args: [this.maker, this.dep.aqua] }),
+      this.pc.readContract({ address: this.dep.router, abi: routerAbi, functionName: "makerConfig", args: [this.maker] }),
     ]);
     const books = await Promise.all(
       orders.map(async (o) => {
         const m = markets.find((x) => x.id === o.marketId);
         const sideToken = o.side === 0 ? m?.longToken : m?.shortToken;
         const [q, s] = await Promise.all([
-          this.aquaBalance(o, this.dep.usdc, block),
-          sideToken ? this.aquaBalance(o, sideToken, block) : Promise.resolve({ balance: 0n, docked: false }),
+          this.aquaBalance(o, this.dep.usdc),
+          sideToken ? this.aquaBalance(o, sideToken) : Promise.resolve({ balance: 0n, docked: false }),
         ]);
         return { hash: o.hash, marketId: o.marketId, side: o.side, generation: o.generation, usdc: q.balance, sideTokens: s.balance, docked: q.docked };
       }),
@@ -135,8 +149,8 @@ export class MakerView {
     const custody = await Promise.all(
       markets.map(async (m) => {
         const [long, short] = await Promise.all([
-          this.pc.readContract({ address: m.vault, abi: vaultAbi, functionName: "depositLong", args: [this.maker], blockNumber: block }),
-          this.pc.readContract({ address: m.vault, abi: vaultAbi, functionName: "depositShort", args: [this.maker], blockNumber: block }),
+          this.pc.readContract({ address: m.vault, abi: vaultAbi, functionName: "depositLong", args: [this.maker] }),
+          this.pc.readContract({ address: m.vault, abi: vaultAbi, functionName: "depositShort", args: [this.maker] }),
         ]);
         return { marketId: m.id, long, short };
       }),
@@ -175,6 +189,7 @@ export class MakerView {
     }
     const f = this.lastFill;
     if (!f) return undefined;
+    if (this.fillView?.hash === f.hash) return this.fillView;
     const receipt = await this.pc.getTransactionReceipt({ hash: f.hash });
     const swapped = parseEventLogs({ abi: routerAbi, logs: receipt.logs, eventName: "Swapped" }).find((e) => e.args.orderHash === f.orderHash);
     // Aqua's events have no indexed fields: decode only the logs Aqua emitted
@@ -185,44 +200,15 @@ export class MakerView {
         const x = e.args as { strategyHash: Hex; token: Address; amount: bigint };
         return { kind: e.eventName === "Pulled" ? "pull" : "push", orderHash: x.strategyHash, token: x.token, amount: x.amount } as AquaMove;
       });
-    const before = f.block - 1n;
-    const orders = await this.orders.sync();
-    const vault = await this.pc.readContract({ address: this.dep.hub, abi: hubAbi, functionName: "marketVault", args: [f.marketId] });
-    const custodyAt = async (blockNumber: bigint) => {
-      const [long, short] = await Promise.all([
-        this.pc.readContract({ address: vault, abi: vaultAbi, functionName: "depositLong", args: [this.maker], blockNumber }),
-        this.pc.readContract({ address: vault, abi: vaultAbi, functionName: "depositShort", args: [this.maker], blockNumber }),
-      ]);
-      return { long, short };
-    };
-    const [custodyBefore, custodyAfter, walletBefore, walletAfter, books] = await Promise.all([
-      custodyAt(before),
-      custodyAt(f.block),
-      this.pc.readContract({ address: this.dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [this.maker], blockNumber: before }),
-      this.pc.readContract({ address: this.dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [this.maker], blockNumber: f.block }),
-      Promise.all(
-        orders
-          .filter((o) => o.block <= before)
-          .map(async (o) => ({
-            hash: o.hash,
-            marketId: o.marketId,
-            side: o.side,
-            before: (await this.aquaBalance(o, this.dep.usdc, before)).balance,
-            after: (await this.aquaBalance(o, this.dep.usdc, f.block)).balance,
-          })),
-      ),
-    ]);
-    return {
+    const block = await this.pc.getBlock({ blockNumber: f.block });
+    this.fillView = {
       ...f,
+      timestamp: block.timestamp,
       taker: swapped?.args.taker ?? ("0x" as Address),
       amountIn: swapped?.args.amountIn ?? 0n,
       amountOut: swapped?.args.amountOut ?? 0n,
       moves,
-      walletBefore,
-      walletAfter,
-      custodyBefore,
-      custodyAfter,
-      books: books.sort((a, b) => a.marketId - b.marketId || a.side - b.side),
     };
+    return this.fillView;
   }
 }

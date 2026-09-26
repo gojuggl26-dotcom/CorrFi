@@ -6,7 +6,7 @@
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
 import { join } from "node:path";
-import { erc20Abi, lensAbi, testUsdcAbi } from "../../../engine/src/abi.ts";
+import { aquaAbi, erc20Abi, lensAbi, testUsdcAbi, vaultAbi } from "../../../engine/src/abi.ts";
 import { createMarket, marketInputFromCalib } from "../../../engine/src/createMarket.ts";
 import { finalizeTick } from "../../../engine/src/finalizer.ts";
 import { MakerOps, MVP_CONFIG } from "../../../engine/src/maker.ts";
@@ -103,7 +103,7 @@ test("execution: the fill is within the limit and any difference is explained", 
   assert.ok(r.causes.includes("new-bar"));
 });
 
-test("maker page: Aqua pulled exactly the mint from the maker's wallet, and only the traded book moved", async () => {
+test("maker page: the fill's events alone give what Aqua pulled (the mint) and how each book and custody moved", async () => {
   const maker = c.account("maker").address;
   const view = new MakerView(c.pc, c.dep, maker);
   const f = (await view.latestFill())!;
@@ -112,14 +112,21 @@ test("maker page: Aqua pulled exactly the mint from the maker's wallet, and only
   assert.ok(f.q2 > 0n);
   assert.equal(s.pulledUsdc, f.q2, "pulled from the maker's wallet = the tUSDC minted into the new pair");
   assert.equal(s.pushedUsdc, f.amountIn, "the taker's payment went to the maker's wallet");
-  assert.equal(s.walletChange, f.amountIn - f.q2);
-  assert.equal(s.custodyShort, f.q2, "the new pair's Short stays in the maker's custody");
-  assert.equal(s.custodyLong, -f.q1);
-  assert.deepEqual(s.changed.map((b) => [b.side, b.after - b.before]), [[0, f.amountIn - f.q2]]);
-  assert.equal(s.unchanged.length, 1, "the Short book did not move");
+  // cross-check against the state before and after the block (Anvil keeps it; the page never reads old state)
+  const at = (blockNumber: bigint) => ({ blockNumber });
+  const wallet = (b: bigint) => c.pc.readContract({ address: c.dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [maker], ...at(b) });
+  assert.equal((await wallet(f.block)) - (await wallet(f.block - 1n)), s.walletChange);
+  const [m] = await app.markets();
+  const custody = async (b: bigint) =>
+    Promise.all((["depositLong", "depositShort"] as const).map((fn) => c.pc.readContract({ address: m.vault, abi: vaultAbi, functionName: fn, args: [maker], ...at(b) })));
+  const [c0, c1] = [await custody(f.block - 1n), await custody(f.block)];
+  assert.deepEqual([c1[0] - c0[0], c1[1] - c0[1]], [s.custodyLong, s.custodyShort]);
+  for (const o of await view.books()) {
+    const bal = async (b: bigint) => (await c.pc.readContract({ address: c.dep.aqua, abi: aquaAbi, functionName: "rawBalances", args: [maker, c.dep.router, o.hash, c.dep.usdc], ...at(b) }))[0];
+    assert.equal((await bal(f.block)) - (await bal(f.block - 1n)), s.bookDelta.get(o.hash.toLowerCase()) ?? 0n, `book ${o.side}`);
+  }
   const snap = await view.snapshot(await app.markets());
   assert.equal(snap.books.length, 2);
-  assert.equal(snap.wallet, await c.pc.readContract({ address: c.dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [maker] }));
   assert.ok(snap.utilization > 0n);
 });
 

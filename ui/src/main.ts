@@ -25,6 +25,7 @@ interface UiConfig {
   defaultMaker: Address;
   devAccount?: Address;
   multicall3?: Address;
+  explorer?: string; // block explorer base URL, e.g. https://sepolia.basescan.org
 }
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -52,6 +53,7 @@ let pc: PublicClient;
 let dep: Deployment;
 let ctl: QuoteController<Quoted>;
 let unwatch: (() => void) | undefined;
+let explorer: string | undefined;
 
 const tokenName = sideName; // "ETH/BTC Long" / "ETH/BTC Short" (DEC-31)
 
@@ -61,6 +63,10 @@ function failure(e: unknown): string {
     if (x.data?.errorName === "CorrReject") {
       const code = Number(x.data.args?.[0]);
       return `not tradable now — ${REASONS[code]?.en ?? `reason ${code}`}. Check the quote and try again.`;
+    }
+    // SwapVM's limit checks: the price moved past the tolerance between the quote and the block
+    if (x.data?.errorName === "TakerTraitsInsufficientMinOutputAmount" || x.data?.errorName === "TakerTraitsExceedingMaxInputAmount") {
+      return "the price moved beyond your tolerance. Check the new quote and try again.";
     }
   }
   return walletError(e);
@@ -401,7 +407,8 @@ async function execute() {
     const { fill, causes } = await app.execute(state.wc, q.input, q.b);
     const lines = [`Filled: in ${fmtUnits(fill.amountIn)} · out ${fmtUnits(fill.amountOut)} (Q1 ${fmtUnits(fill.q1)} · Q2 ${fmtUnits(fill.q2)})`];
     for (const c of causes) lines.push(`Differs from the quote: ${CAUSE_TEXT[c]}`);
-    lines.push(`<span class="muted">Transaction ${fill.hash} · block ${fill.block}</span>`);
+    const txLabel = `${fill.hash.slice(0, 10)}…${fill.hash.slice(-6)}`;
+    lines.push(explorer ? `<a href="${explorer}/tx/${fill.hash}" target="_blank" rel="noopener">View transaction ${txLabel} ↗</a>` : `<span class="muted">Transaction ${fill.hash} · block ${fill.block}</span>`);
     $("result").innerHTML = lines.join("<br>");
     // a bought side token can be added to the wallet's asset list (EIP-747), so the wallet shows it arriving
     const m = state.markets.find((x) => x.id === q.input.marketId);
@@ -467,6 +474,7 @@ async function main() {
   });
   pc = createPublicClient({ chain, transport: http(cfg.rpcUrl), batch: { multicall: !!cfg.multicall3 }, pollingInterval: 2_000 }) as PublicClient;
   dep = { ...cfg.deployment, chainId: Number(cfg.deployment.chainId) };
+  explorer = cfg.explorer?.replace(/\/$/, "");
   app = new CorrFiApp(pc, dep, cfg.defaultMaker);
   ctl = new QuoteController<Quoted>({
     fetch: (i) => app.quote(i),

@@ -55,7 +55,7 @@ function reloadOnChange(eth: Eip1193, chain: Chain, account: Address) {
  *  chain on another port), the page would wait for receipts that never come: compare a block hash first. */
 async function sameNode(eth: Eip1193, pc: PublicClient, chain: Chain) {
   const n = await pc.getBlockNumber();
-  const at = n > 0n ? n - 1n : 0n;
+  const at = n > 5n ? n - 5n : 0n; // a few blocks back: on a live network the wallet's RPC can trail the page's
   const [ours, theirs] = await Promise.all([
     pc.getBlock({ blockNumber: at }),
     (eth.request({ method: "eth_getBlockByNumber", params: [toHex(at), false] }) as Promise<{ hash?: Hex } | null>).catch(() => null),

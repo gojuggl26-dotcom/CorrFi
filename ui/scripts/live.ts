@@ -57,6 +57,13 @@ const calib = (tenor: number, cutoff: string) => {
 };
 
 const log = (s: string) => console.log(`${new Date().toISOString().slice(11, 19)} ${s}`);
+if (metamask) {
+  // a node already on the fixed port would answer for the new one (the new Anvil cannot bind and exits)
+  const busy = await fetch(`http://127.0.0.1:${rpcPort}`, { method: "POST", headers: { "content-type": "application/json" }, body: '{"jsonrpc":"2.0","id":1,"method":"eth_chainId","params":[]}' })
+    .then(() => true)
+    .catch(() => false);
+  if (busy) throw new Error(`port ${rpcPort} is in use: stop the previous chain (Ctrl+C in its window) and run this again`);
+}
 const c = await startChain({ genesis: (settledWeek ? T_OLD : T0) - 3600, blockTime: 2, port: metamask ? rpcPort : undefined });
 let server: Awaited<ReturnType<typeof createServer>> | undefined;
 const stop = async () => {
@@ -156,7 +163,7 @@ try {
     log(`MetaMask: add a network — name "Anvil (local)", RPC URL ${c.rpc}, chain ID ${c.dep.chainId}, currency ETH`);
     if (arg("taker")) log(`MetaMask: account ${who} funded with 100 ETH and 10,000 tUSDC`);
     else log(`MetaMask: import Anvil's public test account #8 ${who} (private key ${bytesToHex(test8.getHdKey().privateKey!)}); funded with 100 ETH and 10,000 tUSDC`);
-    log("MetaMask: after every restart of this script use Settings → Advanced → Clear activity tab data (old nonces and blocks)");
+    log("MetaMask: after every restart of this script, restart the browser (or turn MetaMask off and on), then Settings → Advanced → Clear activity tab data (old nonces and blocks)");
   }
   log(`open http://localhost:${port}/  (trade: /trade.html, Get tUSDC: /faucet.html, redeem: /redeem.html, maker: /maker.html) — Ctrl+C stops`);
   setInterval(() => void tick(), 5_000);
