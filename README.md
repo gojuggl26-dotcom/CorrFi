@@ -84,7 +84,7 @@ The same program runs in the read-only `quote` and in the real `swap`, so a quot
 Every $\Delta = 300$ s (at $t_k = t_{\text{start}} + k\Delta$) the reporter takes, for ETH and for BTC, the volume-weighted average price of the 1-minute candle $[t_k - 60\,\text{s},\, t_k)$ on five exchanges (Binance, Bybit, OKX, KuCoin, Bitget) and posts the **median**:
 
 $$
-P_k = \operatorname{median}_{v \in \text{valid}} \mathrm{VWAP}_v\left([t_k - 60,\ t_k)\right) \qquad \text{(needs at least 3 valid venues, otherwise the bar is invalid)}
+P_k = \mathrm{median}_{v \in \text{valid}}\, \mathrm{VWAP}_v\left([t_k - 60,\ t_k)\right) \qquad \text{(needs at least 3 valid venues, otherwise the bar is invalid)}
 $$
 
 The hub rejects a point whose log return is implausible, $|\ln(P_k/P_{k-1})| > 0.5$.
