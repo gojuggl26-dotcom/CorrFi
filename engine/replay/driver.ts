@@ -224,9 +224,12 @@ export async function runReplay(o: {
       const qty: bigint = tr.isBuy ? sw.args.amountOut : sw.args.amountIn;
       const cash: bigint = tr.isBuy ? sw.args.amountIn : sw.args.amountOut;
       const kind = dir === 1 || dir === 3 ? (cs.args.q1 > 0n ? "from custody" : "mint") : cs.args.q1 > 0n ? "paired burn" : "bought into custody";
+      // R §8.1: how many times Aqua moved the maker's balances in this trade
+      const aq = parseEventLogs({ abi: aquaAbi, logs }).filter((x) => x.address.toLowerCase() === dep.aqua.toLowerCase());
+      const aqua = { pulls: aq.filter((x) => x.eventName === "Pulled").length, pushes: aq.filter((x) => x.eventName === "Pushed").length };
       const e = {
         id: tr.id, op: "trade", actor: tr.actor, dir, exactIn: tr.exactIn, qty: dec(qty, 6, 6), cash: dec(cash, 6, 6), avgPrice: dec((cash * WAD) / qty),
-        q1: dec(cs.args.q1, 6, 6), q2: dec(cs.args.q2, 6, 6), kind, pFair: dec(cs.args.pFair), h: dec(cs.args.h), hmin: dec(cs.args.hmin),
+        q1: dec(cs.args.q1, 6, 6), q2: dec(cs.args.q2, 6, 6), kind, aqua, pFair: dec(cs.args.pFair), h: dec(cs.args.h), hmin: dec(cs.args.hmin),
         quoteEqualsFill: quote.amountIn === sw.args.amountIn && quote.amountOut === sw.args.amountOut && quote.q1 === cs.args.q1 && quote.q2 === cs.args.q2,
         expected: tr.expect, tx: rc.transactionHash, block: Number(rc.blockNumber), taker: sw.args.taker ?? null,
         raw: { amountIn: sw.args.amountIn.toString(), amountOut: sw.args.amountOut.toString(), q1: cs.args.q1.toString(), q2: cs.args.q2.toString() },
@@ -326,9 +329,10 @@ export async function runReplay(o: {
     const longT = await c.pc.readContract({ address: vault, abi: vaultAbi, functionName: "longT" });
     const isVoid = await c.pc.readContract({ address: vault, abi: vaultAbi, functionName: "isVoid" });
     const final = await c.pc.getBlock({ blockTag: "latest" });
-    await stateFrame("settlement", { settlement: settle, longT: dec(longT), isVoid, payouts });
+    await stateFrame("settlement", { settlement: settle, longT: dec(longT, 18, 18), isVoid, payouts });
     deadline += sched.pacing.settlementMs;
     await wait(deadline);
+    frame({ type: "phase", phase: "verification" }); // R §5.1: the V1-V8 results are shown after the settlement
 
     // the Verifier follows the chain on its own; keep the chain up until it has its result
     let verification: unknown = null;
@@ -342,13 +346,15 @@ export async function runReplay(o: {
         await new Promise((res) => setTimeout(res, 100));
       }
     }
+    // the verdict is on screen once the verification phase has begun and the Verifier has its result (AC1)
+    const verdictMs = elapsed();
     deadline += sched.pacing.verificationMs;
     await wait(deadline);
     const sorted = [...stepMs].sort((a, b) => a - b);
     const result = {
       week: manifest.week, bars: o.barsFile, verification, stateRoot: final.stateRoot, block: Number(final.number), longT: longT.toString(), isVoid, payouts,
       reports: reportsAccepted.length, trades: tradeLog, settlement: settle,
-      timing: { totalMs: elapsed(), steps: stepMs.length, stepP50Ms: sorted[Math.floor(sorted.length / 2)], stepP99Ms: sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * 0.99) - 1)], stepMaxMs: sorted[sorted.length - 1] },
+      timing: { verdictMs, totalMs: elapsed(), steps: stepMs.length, stepP50Ms: sorted[Math.floor(sorted.length / 2)], stepP99Ms: sorted[Math.min(sorted.length - 1, Math.ceil(sorted.length * 0.99) - 1)], stepMaxMs: sorted[sorted.length - 1] },
       gas: { txs: c.gasLog.length, maxGasUsed: c.gasLog.reduce((m, g) => (g.gasUsed > m ? g.gasUsed : m), 0n).toString(), total: c.gasLog.reduce((s, g) => s + g.gasUsed, 0n).toString() },
     };
     frame({ type: "done", result: { stateRoot: result.stateRoot, longT: dec(longT), isVoid, payouts, timing: result.timing } });

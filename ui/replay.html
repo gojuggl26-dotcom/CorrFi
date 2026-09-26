@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CorrFi — 7D replay</title>
+    <link rel="stylesheet" href="/src/replay/replay.css" />
+  </head>
+  <body data-status="connecting">
+    <header>
+      <div class="brand">CorrFi <span class="sub">ETH/BTC 実現相関 7D 市場のリプレイ（実データ・ローカルチェーン）</span></div>
+      <div class="week" id="week">—</div>
+      <div class="ctl"><span id="preflight"></span> <span id="status">接続中…</span> <button id="start" disabled>START</button></div>
+    </header>
+    <main>
+      <section class="panel clock">
+        <h2>時計</h2>
+        <dl>
+          <dt>チェーン時刻</dt><dd id="chainTime">—</dd>
+          <dt>τ（処理済みバー / N）</dt><dd id="tau">—</dd>
+          <dt>実時間</dt><dd id="elapsed">—</dd>
+          <dt></dt><dd id="remaining"></dd>
+          <dt>フェーズ</dt><dd id="phase">—</dd>
+        </dl>
+      </section>
+      <section class="panel chart">
+        <h2>公正価格（Long）<small class="note">Fair value: hourly in replay — 決済値はこの簡略化の影響を受けない</small></h2>
+        <canvas id="chart"></canvas>
+        <div class="legend">
+          <span class="k fair">P_fair</span><span class="k band">bid / ask 帯</span><span class="k forecast">τ = 0 の予測 (1+ρ̂₀)/2</span>
+          <span class="k realized">観測済みの実現 (1+ρ_obs)/2</span><span class="k buy">買い</span><span class="k sell">売り</span><span class="k settle">Long_T</span>
+        </div>
+        <div class="now">P_fair <b id="pFair">—</b>　bid / ask <b id="bidAsk">—</b>　<span id="spread"></span></div>
+      </section>
+      <section class="panel weight">
+        <h2>重み：実現と予測</h2>
+        <div class="gauge"><div id="wObs" class="obs"></div><div id="wRem" class="rem"></div></div>
+        <div class="gauge-labels"><span id="wObsLabel"></span><span id="wRemLabel"></span></div>
+      </section>
+      <section class="panel inventory">
+        <h2>在庫と担保</h2>
+        <dl>
+          <dt>Maker 在庫 q</dt><dd id="q">—</dd>
+          <dt>預かり N_L / N_S</dt><dd><span id="nl">—</span> / <span id="ns">—</span></dd>
+          <dt>資本使用率 U</dt><dd id="u">—</dd>
+          <dt>担保（USDC (replay)）</dt><dd id="collateral">—</dd>
+          <dt>Long / Short 供給</dt><dd><span id="supplyL">—</span> / <span id="supplyS">—</span></dd>
+          <dt>A1</dt><dd id="a1">—</dd>
+        </dl>
+      </section>
+      <section class="panel log">
+        <h2>取引ログ</h2>
+        <table>
+          <thead><tr><th>ID</th><th>方向</th><th>数量</th><th>USDC</th><th>平均価格</th><th>内部処理</th><th>Q1 / Q2</th></tr></thead>
+          <tbody id="trades"></tbody>
+        </table>
+        <div class="settle">Long_T <b id="longT">—</b>　<span id="payouts"></span></div>
+      </section>
+      <section class="panel verify">
+        <h2>検証（独立の Verifier）</h2>
+        <ul id="verify"></ul>
+        <dl class="lt">
+          <dt>Long_T on-chain</dt><dd id="ltChain">—</dd>
+          <dt>V2（50 桁、仕様の式）</dt><dd id="ltV2">—</dd>
+          <dt>V3（固定小数点の移植）</dt><dd id="ltV3">—</dd>
+        </dl>
+        <div class="verdict" id="verdict"></div>
+        <div class="root" id="root"></div>
+      </section>
+    </main>
+    <footer>
+      <div class="stage" id="stageNote">リプレイ完成・testnet（Base Sepolia）の実満期は確認中</div>
+      Powered by SwapVM — © Degensoft Ltd 2025 · Aqua — © Degensoft Ltd 2025 · CorrFi は 1inch Aqua / SwapVM を利用した MVP（1inch・Degensoft とは無関係）。
+      過去の実データ（5 venue の 1 分足）を、Base Sepolia と同じバイトコードのローカルチェーンで再生。USDC (replay) は価値のないテストトークン。
+    </footer>
+    <script type="module" src="/src/replay/main.ts"></script>
+  </body>
+</html>

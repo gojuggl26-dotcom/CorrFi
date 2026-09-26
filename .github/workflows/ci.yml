@@ -71,7 +71,11 @@ jobs:
       - name: pinned build (compiler, settings, sources, creation / runtime bytecode hashes) is reproduced here
         working-directory: engine
         run: node scripts/build_manifest.ts --check
-      - name: integration on a local Anvil (deploy script, reporter, finalizer, CLIs, UI chain side)
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install "mpmath==1.3.0"
+      - name: integration on a local Anvil (deploy script, reporter, finalizer, CLIs, UI chain side, 7D replay + Verifier)
         run: |
           (cd engine && npm run test:anvil)
           (cd ui && npm ci && npm run test:anvil)

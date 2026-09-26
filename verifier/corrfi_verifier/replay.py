@@ -5,6 +5,7 @@ package's fixed-point port (V3, V5, V6) and with 50-digit arithmetic straight fr
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 
 import mpmath
@@ -98,7 +99,9 @@ class Verifier:
         a1 = s["finalized"] or (s["supL"] == s["supS"] == s["coll"] == s["usdcV"])
         a2 = s["nl"] == 0 or s["ns"] == 0
         a5 = s["lInV"] == s["nl"] and s["sInV"] == s["ns"] and s["orderL"] == 0 and s["orderS"] == 0
-        self.ok("V4", a1 and a2 and a5, f"{label} @{block}: A1 {a1} A2 {a2} A5 {a5}")
+        self.ok("V4", a1 and a2 and a5, f"{label} @{block}: A1 {a1} A2 {a2} A5 {a5} "
+                                        f"(nl {s['nl']} ns {s['ns']} L in vault {s['lInV']} S in vault {s['sInV']} "
+                                        f"orders {s['orderL']}/{s['orderS']} supply {s['supL']}/{s['supS']} coll {s['coll']} usdc {s['usdcV']})")
         return s
 
     def golden_check(self, block: int, event: str):
@@ -289,11 +292,17 @@ class Verifier:
 
     # ---- following the chain
     def poll(self) -> bool:
+        # Read only settled blocks: a block below the latest one, or the latest once no new block has come for
+        # 300 ms. Reading the newest block while the next one is being mined gave an inconsistent state (S11).
         latest = int(self.rpc.call("eth_blockNumber"), 16)
-        if latest <= self.last_block:
+        now = time.monotonic()
+        if latest != getattr(self, "_seen", None):
+            self._seen, self._seen_at = latest, now
+        upto = latest if now - self._seen_at >= 0.3 else latest - 1
+        if upto <= self.last_block:
             return self.done
-        evs = logs(self.rpc, self.table, self.last_block + 1, latest)
-        self.last_block = latest
+        evs = logs(self.rpc, self.table, self.last_block + 1, upto)
+        self.last_block = upto
         pending_cs = None
         for e in evs:
             name, a = e["_name"], e["_address"]
