@@ -60,7 +60,8 @@ async function sameNode(eth: Eip1193, pc: PublicClient, chain: Chain) {
     pc.getBlock({ blockNumber: at }),
     (eth.request({ method: "eth_getBlockByNumber", params: [toHex(at), false] }) as Promise<{ hash?: Hex } | null>).catch(() => null),
   ]);
-  if (theirs?.hash !== ours.hash) {
+  // only a hash that differs proves another node; a block the wallet's RPC does not have yet (or an error) proves nothing
+  if (theirs?.hash && theirs.hash !== ours.hash) {
     throw new Error(`Your wallet's network for chain ${chain.id} reads a different node. Set its RPC URL to ${chain.rpcUrls.default.http[0]} (MetaMask: Settings → Networks).`);
   }
 }

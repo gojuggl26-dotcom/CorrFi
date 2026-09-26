@@ -7,7 +7,7 @@ import { type Address, type Hex, parseEventLogs, type PublicClient } from "viem"
 import { aquaAbi, erc20Abi, routerAbi, vaultAbi } from "../../../engine/src/abi.ts";
 import type { Deployment } from "../../../engine/src/chain.ts";
 import { riskCapital, utilization } from "../../../engine/src/fixedpoint.ts";
-import { logsInChunks } from "../../../engine/src/logs.ts";
+import { lastLogBackwards, logsInChunks } from "../../../engine/src/logs.ts";
 import { OrderIndex, type RegisteredOrder } from "../../../engine/src/taker.ts";
 import type { MarketInfo } from "./app.ts";
 
@@ -100,7 +100,7 @@ export class MakerView {
   readonly dep: Deployment;
   readonly maker: Address;
   private readonly orders: OrderIndex;
-  private nextFillBlock: bigint;
+  private nextFillBlock?: bigint; // undefined until the first search (backwards from the latest block)
   private lastFill?: { hash: Hex; block: bigint; orderHash: Hex; marketId: number; dir: number; qty: bigint; q1: bigint; q2: bigint };
   private fillView?: FillView; // the last fill's breakdown, read once
 
@@ -109,7 +109,6 @@ export class MakerView {
     this.dep = dep;
     this.maker = maker;
     this.orders = new OrderIndex(pc, dep, maker);
-    this.nextFillBlock = BigInt(dep.block ?? 0);
   }
 
   books(): Promise<RegisteredOrder[]> {
@@ -176,11 +175,14 @@ export class MakerView {
   /** The maker's most recent fill (CorrSwap), broken down from its receipt; undefined before the first one. */
   async latestFill(): Promise<FillView | undefined> {
     const latest = await this.pc.getBlockNumber();
-    if (latest >= this.nextFillBlock) {
-      const logs = await logsInChunks(this.nextFillBlock, latest, (fromBlock, toBlock) =>
-        this.pc.getContractEvents({ address: this.dep.router, abi: routerAbi, eventName: "CorrSwap", args: { maker: this.maker }, fromBlock, toBlock }),
-      );
-      const l = logs[logs.length - 1];
+    const get = (fromBlock: bigint, toBlock: bigint) =>
+      this.pc.getContractEvents({ address: this.dep.router, abi: routerAbi, eventName: "CorrSwap", args: { maker: this.maker }, fromBlock, toBlock });
+    if (this.nextFillBlock === undefined || latest >= this.nextFillBlock) {
+      // the first time search backwards (cheap however old the deployment); afterwards only the new blocks
+      const l =
+        this.nextFillBlock === undefined
+          ? await lastLogBackwards(BigInt(this.dep.block ?? 0), latest, get)
+          : (await logsInChunks(this.nextFillBlock, latest, get)).at(-1);
       if (l) {
         const a = l.args;
         this.lastFill = { hash: l.transactionHash, block: l.blockNumber, orderHash: a.orderHash!, marketId: a.marketId!, dir: a.dir!, qty: a.qty!, q1: a.q1!, q2: a.q2! };

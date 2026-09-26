@@ -1,6 +1,8 @@
 // Writes the UI's config.json from a deployment (the UI serves it from its public directory).
 //   node bin/ui-config.ts <deployment.json> <rpcUrl> <defaultMaker> <out.json> [--multicall3 0x...] [--dev-account 0x...]
-//     [--explorer https://sepolia.basescan.org] [--chain-name "Base Sepolia"]
+//     [--explorer https://sepolia.basescan.org] [--chain-name "Base Sepolia"] [--from-block <n>]
+// --from-block: where the pages start scanning logs (default the deployment block); on a public RPC use the block of
+// the maker's order registration (after testnet.sh maker) so a page load needs fewer eth_getLogs.
 // --dev-account only for a local Anvil whose accounts are unlocked; testnet users connect their own wallet.
 import { readFileSync, writeFileSync } from "node:fs";
 
@@ -15,7 +17,7 @@ const cfg = {
   chainId: Number(deployment.chainId),
   chainName: opt("chain-name"),
   rpcUrl,
-  deployment,
+  deployment: opt("from-block") ? { ...deployment, block: Number(opt("from-block")) } : deployment,
   defaultMaker,
   multicall3: opt("multicall3"),
   devAccount: opt("dev-account"),
