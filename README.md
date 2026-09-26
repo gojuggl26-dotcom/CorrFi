@@ -8,19 +8,13 @@ You can take Long and Short views on future correlation.
 ## Table of contents
 **0.For 1inch judges: where to look**
 <br>**1.Problem**
-<br>**2.Solution**
-<br>**3.protocol Overview**
-<br>**4.How do you use?**
-<br>**5.How does it work?**
-<br>**6.Why Aqua and SwapVM?**
-<br>**7.How did I use Aqua and SwapVM?**
-<br>**8.Architecture**
-<br>**9.Deployments and on-chain proof**
-<br>**10.Demo**
-<br>**11.Invariants and verification**
-<br>**12.Tests**
-<br>**13.Backtest evidence**
-<br>**14.What this does not claim**
+<br>**2.Solution and overview**
+<br>**3.How it works**
+<br>**4.Aqua and SwapVM: why and how**
+<br>**5.Deployments and on-chain proof**
+<br>**6.Demo and try it**
+<br>**7.Verification and tests**
+<br>**8.What this does not claim**
 
 ## 0.For 1inch judges: where to look
 
@@ -39,12 +33,12 @@ It is extremely difficult to hedge correlation risk using only existing on-chain
 
 
 
-## 2.Solution
+## 2.Solution and overview
 
 CorrFi provides the direct way to hedge against Correlation.
 With CorrFi, users can take long or short positions on future correlation. This enables them to directly hedge exposure to price correlation between assets during extreme market regimes in on-chain financial markets.
 
-## 3.protocol overview
+### Protocol overview
 
 CorrFi is an MVP protocol for correlation derivatives based on the realized correlation between ETH and BTC. Users can mint Long and Short tokens using 1 USDC as collateral, with settlement determined by the realized correlation at maturity across three markets: 7, 14, and 28 days.
 
@@ -58,47 +52,36 @@ Risk-management controls, including inventory caps and circuit-breaker condition
 
 **This is an MVP built for ETHGlobal Tokyo 2026 and currently supports only BTC/ETH correlation. The broader goal, however, is to provide correlation markets across multiple asset pairs.**
 
+## 3.How it works
 
-## 4.How do you use?
+<!-- Fair value on-chain; bid / ask from the fair value (base spread + risk surcharge); settlement value Long_T = (1 + rho) / 2. Architecture diagram (mermaid): reporter -> hub (fair value); taker -> router (SwapVM program) <-> Aqua <-> maker wallet; hooks -> vault (mint / burn). -->
 
-<!-- Get tUSDC (faucet page) -> trade Long / Short on the trade page -> redeem after maturity. -->
+## 4.Aqua and SwapVM: why and how
 
-## 5.How does it work?
-
-<!-- Fair value on-chain, bid / ask from the fair value (base spread + risk surcharge), settlement value Long_T = (1 + rho) / 2. -->
-
-## 6.Why Aqua and SwapVM?
+### Why Aqua and SwapVM
 
 <!-- Why a correlation market needs Aqua's shared liquidity and SwapVM's custom pricing; alternatives we rejected. -->
 
-## 7.How did I use Aqua and SwapVM?
+### How we use them
 
 <!-- Custom opcodes 0xd0 CorrReport / 0xd1 CorrCurve / 0xd2 CorrGuard (name, file, role); the program Deadline -> CorrReport -> CorrCurve -> CorrGuard; the router as SwapVM router, Aqua app and maker hook; ship -> pull / push -> dock; pinned versions (Aqua v1.0.0 official and unmodified, SwapVM pinned commit inherited by the router). -->
 
-## 8.Architecture
-
-<!-- Diagram (mermaid): reporter -> hub (fair value); taker -> router (SwapVM program) <-> Aqua <-> maker wallet; hooks -> vault (mint / burn). -->
-
-## 9.Deployments and on-chain proof
+## 5.Deployments and on-chain proof
 
 <!-- Base Sepolia addresses with verified explorer links (Aqua official and unmodified, CorrFiRouter, hub, lens, vaults, tUSDC, libraries) and transaction links: ship, the four swap directions, a hook mint, finalize, redeem. -->
 
-## 10.Demo
+## 6.Demo and try it
 
-<!-- Demo video, live site, and how to run it locally (cd ui && npm run live; the 7D replay demo). -->
+<!-- Demo video and live site. Try it: get tUSDC on the faucet page -> trade Long / Short on the trade page -> redeem after maturity. Run it locally: cd ui && npm run live; the 7D replay demo. -->
 
-## 11.Invariants and verification
+## 7.Verification and tests
 
-<!-- quote = breakdown = swap; collateral = supply; Solidity / TypeScript / Python fixed-point results identical to the bit; the replay's V1-V8 checks and deterministic final state. -->
+<!-- Invariants (quote = breakdown = swap; collateral = supply; Solidity / TypeScript / Python fixed-point results identical to the bit; the replay's V1-V8 checks and deterministic final state) and a table: suite -> what it proves -> count -> command. Backtest in 2-3 lines: B1 pass and the adopted parameters. -->
 
-## 12.Tests
-
-<!-- Table: suite -> what it proves -> count -> command. -->
-
-## 13.Backtest evidence
-
-<!-- S06 results: B1 pass, adopted parameters, and the commands that reproduce them. -->
-
-## 14.What this does not claim
+## 8.What this does not claim
 
 <!-- Testnet only; SwapVM main is unaudited; the reporter is trusted for the price points (the contract enforces the math); tUSDC is a test token; the gold pairs are not listed yet. -->
+
+---
+
+Powered by SwapVM — © Degensoft Ltd 2025 · Aqua — © Degensoft Ltd 2025. CorrFi is not affiliated with 1inch or Degensoft.
