@@ -11,7 +11,7 @@
 #   verify              V7: creation bytecode of every deployment tx and runtime bytecode on the chain vs the manifest
 #   calib               fetch this month's 1-minute bars, then calib_{7,14,28}.json with cutoff = the next obsStart
 #   markets             create the 7D / 14D / 28D markets inside the cutoff's 5-minute window (DEC-27)
-#   maker               mint tUSDC to the maker, set the M §8.1 settings, open both books of every market
+#   maker               mint tUSDC to the maker (as the deployer), set the M §8.1 settings, open both books of every market
 #   bots                start the reporter + finalizer supervisor in the background (DEC-26)
 #   e2e <market>        4 directions x inventory paths with quote = swap checks (bin/e2e.ts trades)
 #   status <market>     trading state now (bin/e2e.ts status)
@@ -91,7 +91,8 @@ markets)
   done
   ;;
 maker)
-  FROM_KEY="$MAKER_KEY" eng node bin/fund.ts tusdc "$MAKER_ADDRESS" "${MAKER_TUSDC:-200000}"
+  # tUSDC mint is owner-only (the deployer); the maker gets 1,000,000 (user decision 2026-09-26)
+  FROM_KEY="$DEPLOYER_KEY" eng node bin/fund.ts tusdc "$MAKER_ADDRESS" "${MAKER_TUSDC:-1000000}"
   eng node bin/maker.ts config
   hub="$(node -p "require(process.argv[1]).hub" "$(cygpath -w "$DEPLOYMENT" 2>/dev/null || echo "$DEPLOYMENT")")"
   n="$(cast call "$hub" 'marketCount()(uint8)' --rpc-url "$RPC_URL")"

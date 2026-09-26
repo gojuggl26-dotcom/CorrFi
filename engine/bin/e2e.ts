@@ -66,7 +66,8 @@ async function trades() {
   ]);
   // funding and approvals (test token, DEC-13)
   const bal = await pc.readContract({ address: dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [me] });
-  if (bal < U("5000")) record({ step: "mint tUSDC", tx: await send(dep.usdc, testUsdcAbi, "mint", [me, U("10000")]) });
+  // the public faucet (mint is owner-only): up to 10,000 per wallet in each 24-hour window
+  if (bal < U("5000")) record({ step: "faucet tUSDC", tx: await send(dep.usdc, testUsdcAbi, "faucet", [U("10000")]) });
   for (const [token, spender] of [[dep.usdc, dep.router], [dep.usdc, vault], [lt, dep.router], [st, dep.router]] as const) {
     const a = await pc.readContract({ address: token, abi: erc20Abi, functionName: "allowance", args: [me, spender] });
     if (a < U("1000000")) await send(token, erc20Abi, "approve", [spender, 2n ** 255n]);

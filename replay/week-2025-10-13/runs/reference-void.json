@@ -6,7 +6,7 @@
  },
  "bars": "bars_void.json",
  "verification": null,
- "stateRoot": "0x00528d92445d8c3bae83b77aa332d64012e9c9666e5f45d835bb44b5e6434873",
+ "stateRoot": "0x9564ef21e2e7e58a07e54a98bd2a72674b4ada11254edc89ac4308d0ba9cb4e7",
  "block": 222,
  "longT": "500000000000000000",
  "isVoid": true,
@@ -155,16 +155,16 @@
   }
  ],
  "timing": {
-  "verdictMs": 145154,
-  "totalMs": 145154,
+  "verdictMs": 145539,
+  "totalMs": 145539,
   "steps": 179,
-  "stepP50Ms": 64.20580000000155,
-  "stepP99Ms": 117.60620000000017,
-  "stepMaxMs": 126.91499999999996
+  "stepP50Ms": 65.21279999999933,
+  "stepP99Ms": 116.99040000000059,
+  "stepMaxMs": 130.60690000000022
  },
  "gas": {
   "txs": 190,
   "maxGasUsed": "872416",
-  "total": "138465928"
+  "total": "138466754"
  }
 }

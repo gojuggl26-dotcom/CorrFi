@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Get tUSDC — CorrFi (testnet)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..600&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="/src/assets/favicon.png" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="trade-page">
+    <div class="orbs" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span><span class="orb o4"></span><span class="orb o5"></span></div>
+
+    <header class="unav">
+      <div class="unav-row">
+        <div class="unav-left">
+          <a class="brand" href="./"><img class="logo" src="/src/assets/corrfi-mark-96.png" alt="" width="60" height="24" />CorrFi</a>
+          <nav class="unav-links"><a href="./">Home</a><a href="trade.html">Trade</a><a href="faucet.html" class="active" aria-current="page">Get tUSDC</a><a href="redeem.html">Redeem</a></nav>
+        </div>
+        <div class="unav-right">
+          <span id="network" class="chip-net">—</span>
+          <span id="account" class="chip-acct"></span>
+          <button id="connect" class="btn-primary">Connect</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="faucet-wrap">
+      <section class="swap-card faucet-card">
+        <div class="card-head"><span class="tab">Get tUSDC</span></div>
+        <div class="panel faucet-panel">
+          <div class="leg-label">Amount to mint</div>
+          <div class="leg-row"><input id="claimAmount" class="big" inputmode="decimal" value="10000" aria-label="Amount of tUSDC to mint" /><span class="token token-static"><span class="coin coin-cash">$</span><span class="cash">tUSDC</span></span></div>
+          <div class="leg-sub"><span id="availSub">Up to 10,000 per wallet every 24 hours</span><button id="maxBtn" class="link" hidden>Max</button></div>
+        </div>
+        <dl class="facts faucet-facts">
+          <div class="fact"><dt>Your balance</dt><dd id="balance">—</dd></div>
+          <div class="fact"><dt>Available in this window</dt><dd id="available">—</dd></div>
+          <div class="fact"><dt>Window resets</dt><dd id="resets">—</dd></div>
+          <div class="fact"><dt>Gas balance</dt><dd id="gasBalance">—</dd></div>
+        </dl>
+        <div id="status" class="status"></div>
+        <button id="claim" class="btn-cta soft">Connect wallet</button>
+        <div id="result" class="faucet-result"></div>
+      </section>
+
+      <section class="faucet-notes">
+        <div class="note">
+          <h3>What is tUSDC?</h3>
+          <p><span class="cash">tUSDC</span> is the test token CorrFi uses as collateral on the testnet. It has no value and is not Circle USDC. One <span class="cash">tUSDC</span> mints one Long and one Short token.</p>
+        </div>
+        <div class="note" id="gasNote">
+          <h3>Need ETH for gas?</h3>
+          <p>Claiming and trading send transactions, so your wallet needs a little Base Sepolia ETH. Free faucets: <a href="https://portal.cdp.coinbase.com/products/faucet" target="_blank" rel="noopener">Coinbase Developer Platform</a>, <a href="https://www.alchemy.com/faucets/base-sepolia" target="_blank" rel="noopener">Alchemy</a>, <a href="https://faucet.quicknode.com/base/sepolia" target="_blank" rel="noopener">QuickNode</a>.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div id="testToken" class="warn-line"></div>
+        <div>Powered by SwapVM — © Degensoft Ltd 2025 · Aqua — © Degensoft Ltd 2025</div>
+        <div class="muted">CorrFi is a testnet MVP built on 1inch Aqua / SwapVM and is not affiliated with 1inch or Degensoft.</div>
+      </div>
+    </footer>
+    <script type="module" src="/src/faucet.ts"></script>
+  </body>
+</html>

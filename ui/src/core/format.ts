@@ -28,9 +28,9 @@ export function fmtSec(s: number | undefined): string {
 /** Parse a user decimal string into units of `decimals` (truncating extra digits is refused). */
 export function parseDecimal(s: string, decimals: number): bigint {
   const m = /^\s*(\d*)(?:\.(\d*))?\s*$/.exec(s);
-  if (!m || (m[1] === "" && !m[2])) throw new Error("数値を入力してください");
+  if (!m || (m[1] === "" && !m[2])) throw new Error("Enter a number");
   const frac = m[2] ?? "";
-  if (frac.length > decimals) throw new Error(`小数点以下は ${decimals} 桁までです`);
+  if (frac.length > decimals) throw new Error(`At most ${decimals} decimal places`);
   return BigInt(m[1] || "0") * 10n ** BigInt(decimals) + BigInt(frac.padEnd(decimals, "0") || "0");
 }
 

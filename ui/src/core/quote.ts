@@ -240,7 +240,7 @@ export class QuoteController<B extends BreakdownLike = BreakdownLike> {
     v.stopWarning = v.stopInSec <= this.settings.warnBeforeStopSec;
     v.reason = q.b.reason;
     const r = REASONS[q.b.reason];
-    v.reasonText = r?.ja ?? `理由コード ${q.b.reason}`;
+    v.reasonText = r?.en ?? `Reason code ${q.b.reason}`;
     v.clears = r?.clears;
     v.canExecute = v.settled && q.b.reason === 0 && q.b.limitDefined && v.stopInSec > 0;
     return v;
@@ -287,7 +287,7 @@ export function explainFill(q: BreakdownLike, f: FillFacts): string[] {
 }
 
 export const CAUSE_TEXT: Record<string, string> = {
-  "new-bar": "見積もりの後に新しいバーが確認され、公正価格が更新されました",
-  "elapsed-time": "見積もりから約定までの経過時間で鮮度の上乗せ（h_O）が増えました",
-  inventory: "見積もりの後に他の約定があり、Maker の在庫（または使用率の上乗せ h_U）が変わりました",
+  "new-bar": "a new bar was confirmed after the quote and the fair value moved",
+  "elapsed-time": "time since the quote raised the staleness spread (h_O)",
+  inventory: "another trade changed the maker's inventory (or the utilization spread h_U)",
 };

@@ -1,6 +1,6 @@
 // Operator funding (S08): RPC_URL, FROM_KEY (the paying account, from the environment only); DEPLOYMENT for tUSDC.
 //   node bin/fund.ts eth <address> <ether> [<address> <ether> ...]   send ETH for gas (before the deployment exists)
-//   node bin/fund.ts tusdc <address> <amount>                         mint the test token (DEC-13; anyone may mint)
+//   node bin/fund.ts tusdc <address> <amount>                         mint the test token (DEC-13; owner only: FROM_KEY = the deployer)
 import { type Address, createPublicClient, createWalletClient, defineChain, type Hex, http, parseEther, parseUnits } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { testUsdcAbi } from "../src/abi.ts";

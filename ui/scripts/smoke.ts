@@ -46,8 +46,8 @@ try {
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on("pageerror", (e) => console.log("page error:", e.message));
-    await page.goto("http://localhost:5199/");
-    await page.getByText("平均価格").waitFor({ timeout: 30_000 });
+    await page.goto("http://localhost:5199/trade.html");
+    await page.getByText("Average price").waitFor({ timeout: 30_000 });
     await page.click("#connect");
     await page.locator("#account").filter({ hasText: "0x" }).waitFor();
     await page.locator("#status.ok").waitFor({ timeout: 15_000 });
@@ -55,7 +55,7 @@ try {
     await page.screenshot({ path: s1, fullPage: true });
     shots.push(s1);
     await page.click("#execute");
-    await page.locator("#result").filter({ hasText: "約定" }).waitFor({ timeout: 30_000 });
+    await page.locator("#result").filter({ hasText: "Filled" }).waitFor({ timeout: 30_000 });
     await page.waitForTimeout(500);
     const s2 = join(out, "2-filled.png");
     await page.screenshot({ path: s2, fullPage: true });

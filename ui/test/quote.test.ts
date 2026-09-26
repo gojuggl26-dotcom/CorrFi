@@ -115,7 +115,7 @@ test("stopped: execution disabled with the reason; a report clears T-2, T-4 stay
   assert.equal(v.canExecute, false);
   assert.equal(v.reason, 4);
   assert.equal(v.clears, "report");
-  assert.match(v.reasonText!, /価格更新待ち/);
+  assert.match(v.reasonText!, /stale/);
   c.onReport(11); // ReportAccepted -> immediate re-quote
   await t.advance(0);
   assert.equal(calls.length, 2);

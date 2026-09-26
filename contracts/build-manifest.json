@@ -100,10 +100,10 @@
   },
   "TestUSDC": {
    "source": "src/TestUSDC.sol",
-   "creationLinked": "0x15d1ff6dd60db8f1314a5a95f345a363fc66d17a412ab07c08cc67eef8972a52",
-   "creationSize": 2614,
-   "runtimeMasked": "0xc4a47bbb9afd4065f429744591422092ccf3cebfa09f659bd24d0a4b916491cb",
-   "runtimeSize": 1707
+   "creationLinked": "0x66bbd0d2befcd8add8e0eadf58eaa3bbf9934d142504d521f4e45dcee193f026",
+   "creationSize": 3771,
+   "runtimeMasked": "0x6aa97683585c1bff342b3b5ad49cb0b6f4570f7c4840e8f87b1381c4ded1e819",
+   "runtimeSize": 2771
   },
   "Aqua": {
    "source": "lib/aqua/src/Aqua.sol",
@@ -196,6 +196,6 @@
   "src/lib/CorrFiMath.sol": "0xa8f1a42fb19d4a013ee90f2de6d7ad95234cd355692d04dbd692b8f8fea4d100",
   "src/lib/CorrFiOrders.sol": "0xdfbf2f7010c190e2d7c44a565331be6eb56f30153b96f786c59dd01871c4466b",
   "src/lib/CorrFiPricing.sol": "0x186f62276aef96bac4f5ddd751afbf46bbfc495c3a6ad1b75f68339313f61e60",
-  "src/TestUSDC.sol": "0x9a6a1109d59cd286613a32a2f9adfcfaee91c0605ff997e207a9011fc6774fc8"
+  "src/TestUSDC.sol": "0xad14d1624ed53bd91f531a810ebf62bdf68af639e2ae368746e78099ebdfd4e9"
  }
 }

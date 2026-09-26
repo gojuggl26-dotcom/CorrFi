@@ -1,57 +1,122 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>CorrFi — ETH/BTC correlation (testnet)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..500&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="/src/assets/favicon.png" />
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <header>
-      <div class="brand">CorrFi <span class="sub">ETH/BTC 5 分リターンの実現相関（ETH/BTC Long / Short）</span></div>
-      <div class="net"><span id="network">—</span> <button id="connect">接続</button> <span id="account"></span></div>
-    </header>
-    <nav id="markets"></nav>
-    <main>
-      <section class="panel" id="trade">
-        <h2>取引</h2>
-        <div class="row" role="group" aria-label="ETH/BTC Long / ETH/BTC Short">
-          <button data-side="0" class="seg">ETH/BTC Long</button><button data-side="1" class="seg">ETH/BTC Short</button>
+    <div class="light">
+      <header class="topnav">
+        <div class="container topnav-row">
+          <a class="brand" href="./"><img class="logo" src="/src/assets/corrfi-mark-96.png" alt="" width="60" height="24" />CorrFi</a>
+          <div class="net">
+            <span id="network" class="netname">—</span>
+            <a class="nav-link" href="faucet.html">Get tUSDC</a>
+            <a class="nav-link" href="redeem.html">Redeem</a>
+            <a class="pill pill-dark" href="trade.html">Launch app</a>
+          </div>
         </div>
-        <div class="row" role="group" aria-label="指定方法">
-          <button data-mode="buy-in" class="seg">買う：支払う USDC</button>
-          <button data-mode="buy-out" class="seg">買う：受け取る数量</button>
-          <button data-mode="sell-in" class="seg">売る：売る数量</button>
-          <button data-mode="sell-out" class="seg">売る：受け取る USDC</button>
+      </header>
+      <section class="hero">
+        <div class="container hero-inner">
+          <h1 class="display">Trade correlation.</h1>
+          <p class="lede">Go Long or Short on the realized correlation of ETH and BTC five-minute returns. 1 <span class="cash">USDC</span> mints one Long and one Short token, settled at maturity on the realized correlation.</p>
+          <div class="cta-row"><a id="heroCta" class="pill pill-dark" href="trade.html">Start trading</a></div>
         </div>
-        <label>金額または数量 <input id="amount" inputmode="decimal" value="1000" /> <span id="amountUnit"></span></label>
-        <label>許容幅 δ（<span id="deltaUnit">USDC / token</span>）<input id="delta" inputmode="decimal" value="0.002" /> <small>0.0005〜0.01</small></label>
-        <label>見積もりの自動更新
-          <select id="refresh"><option>5</option><option>7</option><option selected>10</option><option>12</option><option>15</option></select> 秒</label>
-        <div id="status" class="status"></div>
-        <button id="execute" class="primary" disabled>実行</button>
-        <div id="result"></div>
       </section>
-      <section class="panel" id="clocks">
-        <h2>見積もりの有効期間</h2>
-        <div class="ring"><span id="refreshIn">—</span><small>見積もりの自動更新まで</small></div>
-        <div class="ring"><span id="nextUpdate">—</span><small>公正価格の次回更新まで</small></div>
-        <div id="chainTime" class="muted"></div>
-      </section>
-      <section class="panel" id="breakdown">
-        <h2>見積もりの内訳</h2>
-        <table id="bd"></table>
-      </section>
-      <section class="panel" id="positions">
-        <h2>保有と償還</h2>
-        <table id="pos"></table>
-      </section>
-    </main>
-    <footer>
-      <div id="testToken" class="warn-line"></div>
-      <div>Powered by SwapVM — © Degensoft Ltd 2025 · Aqua — © Degensoft Ltd 2025</div>
-      <div class="muted">CorrFi は 1inch Aqua / SwapVM を利用した testnet MVP です（1inch・Degensoft とは無関係）。見積もりは確約ではなく、保護は許容幅が担います。</div>
-    </footer>
-    <script type="module" src="/src/main.ts"></script>
+    </div>
+
+    <div class="home-body">
+      <div class="container band">
+        <div class="section-head">
+          <div>
+            <h2 class="heading-lg">Markets</h2>
+            <p class="sub">7D, 14D and 28D maturities, with the fair value recomputed on-chain every five minutes. ETH / BTC is live; gold pairs are coming soon.</p>
+          </div>
+        </div>
+        <div id="marketsGrid"></div>
+      </div>
+
+      <div class="container band">
+        <div class="section-head">
+          <div>
+            <h2 class="heading-lg">How it works</h2>
+            <p class="sub">Fair value on-chain, shared liquidity on Aqua, custom pricing on SwapVM.</p>
+          </div>
+        </div>
+        <div class="features">
+          <article class="feature">
+            <span class="eyebrow">Fair value</span>
+            <h3>Recomputed on-chain</h3>
+            <p>Every five minutes a reporter posts ETH and BTC prices (the median across five exchanges). The contract recomputes the fair value itself and rejects any report that does not match.</p>
+          </article>
+          <article class="feature">
+            <span class="eyebrow">Liquidity</span>
+            <h3>One balance, six books</h3>
+            <p>Makers keep their USDC in their own wallet. Aqua lends virtual balances of it to every maturity and side, and missing Long / Short tokens are minted inside the trade.</p>
+          </article>
+          <article class="feature">
+            <span class="eyebrow">Pricing</span>
+            <h3>Custom SwapVM opcodes</h3>
+            <p>The price is integrated along the maker's inventory path and checked against risk limits after the trade. The same bytecode runs in quote and swap, so what you see is what you get.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="container band">
+        <div class="section-head">
+          <div>
+            <h2 class="heading-lg">One pool of capital, three markets.</h2>
+            <p class="sub">Makers never split their capital market by market. When a trade settles, only what it needs is drawn from the shared pool.</p>
+          </div>
+        </div>
+        <div class="flow" role="img" aria-label="A market maker holds 100,000 dollars in their own wallet and approves Aqua once. Aqua shares that same capital across the ETH / BTC 7-day, 14-day and 28-day markets.">
+          <div class="flow-node">
+            <span class="flow-eyebrow">Market maker</span>
+            <b class="flow-value">$100,000</b>
+            <span class="flow-note">Held in the maker's own wallet</span>
+          </div>
+          <div class="flow-link" aria-hidden="true">
+            <svg viewBox="0 0 200 40" preserveAspectRatio="none"><line x1="0" y1="20" x2="196" y2="20" /><path d="M189 14 L196 20 L189 26" /></svg>
+            <span class="flow-pill">Approve once</span>
+          </div>
+          <div class="flow-node flow-aqua">
+            <span class="flow-eyebrow">Aqua</span>
+            <b class="flow-title">Shared liquidity</b>
+            <span class="flow-note">The same capital backs all three markets</span>
+          </div>
+          <div class="flow-branch" aria-hidden="true">
+            <svg viewBox="0 0 120 312" width="120" height="312">
+              <path id="br1" d="M0 156 C 64 156, 56 44, 118 44" /><path d="M111 38 L118 44 L111 50" />
+              <path id="br2" d="M0 156 L118 156" /><path d="M111 150 L118 156 L111 162" />
+              <path id="br3" d="M0 156 C 64 156, 56 268, 118 268" /><path d="M111 262 L118 268 L111 274" />
+              <circle class="flow-dot" r="3.5"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#br1" /></animateMotion></circle>
+              <circle class="flow-dot" r="3.5"><animateMotion dur="2.6s" begin="0.85s" repeatCount="indefinite"><mpath href="#br2" /></animateMotion></circle>
+              <circle class="flow-dot" r="3.5"><animateMotion dur="2.6s" begin="1.7s" repeatCount="indefinite"><mpath href="#br3" /></animateMotion></circle>
+            </svg>
+          </div>
+          <div class="flow-markets">
+            <a class="flow-node flow-mkt" data-tenor="7" href="trade.html"><b>ETH / BTC · 7D</b><span>7-day market</span></a>
+            <a class="flow-node flow-mkt" data-tenor="14" href="trade.html"><b>ETH / BTC · 14D</b><span>14-day market</span></a>
+            <a class="flow-node flow-mkt" data-tenor="28" href="trade.html"><b>ETH / BTC · 28D</b><span>28-day market</span></a>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="container footer-inner">
+          <div id="testToken" class="warn-line"></div>
+          <div>Powered by SwapVM — © Degensoft Ltd 2025 · Aqua — © Degensoft Ltd 2025</div>
+          <div class="muted">CorrFi is a testnet MVP built on 1inch Aqua / SwapVM and is not affiliated with 1inch or Degensoft.</div>
+        </div>
+      </footer>
+    </div>
+    <script type="module" src="/src/home.ts"></script>
   </body>
 </html>

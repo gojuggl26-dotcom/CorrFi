@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Redeem — CorrFi (testnet)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..600&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="/src/assets/favicon.png" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="trade-page">
+    <div class="orbs" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span><span class="orb o4"></span><span class="orb o5"></span></div>
+
+    <header class="unav">
+      <div class="unav-row">
+        <div class="unav-left">
+          <a class="brand" href="./"><img class="logo" src="/src/assets/corrfi-mark-96.png" alt="" width="60" height="24" />CorrFi</a>
+          <nav class="unav-links"><a href="./">Home</a><a href="trade.html">Trade</a><a href="faucet.html">Get tUSDC</a><a href="redeem.html" class="active" aria-current="page">Redeem</a></nav>
+        </div>
+        <div class="unav-right">
+          <span id="network" class="chip-net">—</span>
+          <span id="account" class="chip-acct"></span>
+          <button id="connect" class="btn-primary">Connect</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="redeem-wrap">
+      <div class="redeem-top">
+        <section class="swap-card">
+          <div class="card-head"><span class="tab">Redeem</span></div>
+          <div class="panel">
+            <div class="leg-label">Redeemable now</div>
+            <div class="leg-row"><span id="total" class="big big-static">—</span><span class="token token-static"><span class="coin coin-cash">$</span><span class="cash">tUSDC</span></span></div>
+            <div class="leg-sub"><span id="totalSub">Connect to see your positions</span></div>
+          </div>
+          <div id="status" class="status"></div>
+          <button id="redeemAll" class="btn-cta soft">Connect wallet</button>
+          <div id="result" class="faucet-result"></div>
+        </section>
+        <section class="note how">
+          <h3>How settlement works</h3>
+          <p>At maturity the market fixes its settlement value <b>Long_T = (1 + ρ) / 2</b>, where ρ is the realized correlation of ETH and BTC five-minute returns over the whole window.</p>
+          <p>Each <b>Long</b> then pays Long_T <span class="cash">tUSDC</span> and each <b>Short</b> pays 1 − Long_T, so a Long + Short pair always pays exactly 1. If the market is void, both pay 0.5.</p>
+          <p>Settlement needs the final price report. Anyone can trigger it once that report is confirmed; the operator's bot does it too.</p>
+        </section>
+      </div>
+
+      <h2 class="redeem-heading">Your markets</h2>
+      <div id="markets" class="redeem-grid"></div>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div id="testToken" class="warn-line"></div>
+        <div>Powered by SwapVM — © Degensoft Ltd 2025 · Aqua — © Degensoft Ltd 2025</div>
+        <div class="muted">CorrFi is a testnet MVP built on 1inch Aqua / SwapVM and is not affiliated with 1inch or Degensoft.</div>
+      </div>
+    </footer>
+    <script type="module" src="/src/redeem.ts"></script>
+  </body>
+</html>

@@ -1,15 +1,19 @@
-// CorrFi MVP swap screen (M §5.8, §8.3). Reads ./config.json: { chainId, rpcUrl, deployment, defaultMaker,
+// CorrFi trade page (M §5.8, §8.3). Reads ./config.json: { chainId, rpcUrl, deployment, defaultMaker,
 // devAccount?, multicall3? }. With devAccount (a local Anvil account, unlocked on the node) transactions go through
 // the node; otherwise an injected wallet (EIP-1193) is used. State reads are batched with Multicall3 when the chain
 // has it (config.multicall3; confirm its presence at deployment — M §8.3).
+//
+// Layout: one swap column. Typing in the top field fixes what you pay / sell (exact-in); typing in the bottom field
+// fixes what you receive (exact-out). The flip button switches between buying and selling the chosen token.
 
 import { type Address, createPublicClient, createWalletClient, custom, defineChain, http, type PublicClient, type WalletClient } from "viem";
 import { erc20Abi } from "../../engine/src/abi.ts";
 import type { Deployment } from "../../engine/src/chain.ts";
 import { CorrFiApp, type MarketInfo, type Position, type Quoted } from "./core/app.ts";
-import { fmtPct, fmtSec, fmtUnits, fmtUtc, fmtWad, parseDecimal } from "./core/format.ts";
-import { CAUSE_TEXT, DELTA_DEFAULT, QuoteController, type QuoteInput } from "./core/quote.ts";
+import { fmtFixed, fmtPct, fmtSec, fmtUnits, fmtUtc, fmtWad, parseDecimal } from "./core/format.ts";
+import { CAUSE_TEXT, DELTA_DEFAULT, QuoteController, type QuoteInput, sameInput } from "./core/quote.ts";
 import { LONG, SHORT, sideName } from "./core/labels.ts";
+import { openPicker, type PickOption } from "./picker.ts";
 
 interface UiConfig {
   chainId: number;
@@ -21,25 +25,20 @@ interface UiConfig {
   multicall3?: Address;
 }
 
-type Mode = "buy-in" | "buy-out" | "sell-in" | "sell-out";
-const MODES: Record<Mode, { isBuy: boolean; exactIn: boolean; unit: "USDC" | "token" }> = {
-  "buy-in": { isBuy: true, exactIn: true, unit: "USDC" },
-  "buy-out": { isBuy: true, exactIn: false, unit: "token" },
-  "sell-in": { isBuy: false, exactIn: true, unit: "token" },
-  "sell-out": { isBuy: false, exactIn: false, unit: "USDC" },
-};
-
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+const WAD = 10n ** 18n;
 
 const state = {
   cash: "USDC", // the quote token's symbol, read from the chain (tUSDC on Base Sepolia: DEC-13)
   markets: [] as MarketInfo[],
   sel: 0,
   side: 0,
-  mode: "buy-in" as Mode,
+  isBuy: true,
+  exactIn: true, // true: the top field is fixed; false: the bottom field is fixed
   wc: undefined as WalletClient | undefined,
   account: undefined as Address | undefined,
   positions: [] as Position[],
+  cashBal: undefined as bigint | undefined,
   confirmPending: false,
   busy: false, // an execution is running
   message: "",
@@ -47,20 +46,35 @@ const state = {
 
 let app: CorrFiApp;
 let pc: PublicClient;
+let dep: Deployment;
 let ctl: QuoteController<Quoted>;
 let unwatch: (() => void) | undefined;
 
+const tokenName = sideName; // "ETH/BTC Long" / "ETH/BTC Short" (DEC-31)
+const payToken = () => (state.isBuy ? state.cash : tokenName(state.side));
+const getToken = () => (state.isBuy ? tokenName(state.side) : state.cash);
+/** Shrink a big amount field so long numbers stay inside it (44px up to 9 characters, then proportionally). */
+function fit(el: HTMLInputElement) {
+  const n = Math.max(9, el.value.length || el.placeholder.length);
+  el.style.fontSize = `${Math.max(24, Math.floor((44 * 9) / n))}px`;
+}
+/** Units as a plain decimal for an input field: no thousands separators, no trailing zeros. */
+const plain = (x: bigint) => fmtFixed(x, 6, 6).replace(/,/g, "").replace(/\.?0+$/, "") || "0";
+
+function readInput(): QuoteInput {
+  return {
+    marketId: state.sel,
+    side: state.side,
+    isBuy: state.isBuy,
+    exactIn: state.exactIn,
+    amount: parseDecimal(($(state.exactIn ? "amount" : "amountOut") as HTMLInputElement).value, 6),
+    delta: parseDecimal(($("delta") as HTMLInputElement).value, 18),
+  };
+}
+
 function input(): QuoteInput | undefined {
   try {
-    const m = MODES[state.mode];
-    return {
-      marketId: state.sel,
-      side: state.side,
-      isBuy: m.isBuy,
-      exactIn: m.exactIn,
-      amount: parseDecimal(($("amount") as HTMLInputElement).value, 6),
-      delta: parseDecimal(($("delta") as HTMLInputElement).value, 18),
-    };
+    return readInput();
   } catch (e) {
     state.message = (e as Error).message;
     return undefined;
@@ -83,35 +97,105 @@ function onInput() {
   renderStatus();
 }
 
-const tokenName = sideName;
+// ---------------------------------------------------------------- rendering
+
+// ---- tokens: "cash" (tUSDC) or a side ("0" Long, "1" Short); exactly one leg is always cash
+type Tok = "cash" | "0" | "1";
+const coin = (t: Tok) =>
+  t === "cash" ? `<span class="coin coin-cash">$</span>` : `<span class="coin coin-${t === "0" ? "long" : "short"}">${t === "0" ? "L" : "S"}</span>`;
+const tokLabel = (t: Tok) => (t === "cash" ? state.cash : tokenName(Number(t)));
+const payTok = (): Tok => (state.isBuy ? "cash" : (String(state.side) as Tok));
+const getTok = (): Tok => (state.isBuy ? (String(state.side) as Tok) : "cash");
+
+function tokenChip(leg: "pay" | "get") {
+  const t = leg === "pay" ? payTok() : getTok();
+  return `<button type="button" class="token" id="${leg}Chip" aria-haspopup="listbox" aria-expanded="false">${coin(t)}${tokLabel(t)}<span class="chev" aria-hidden="true"></span></button>`;
+}
+
+function balanceOf(t: Tok): bigint | undefined {
+  if (!state.account) return undefined;
+  if (t === "cash") return state.cashBal;
+  const p = state.positions.find((x) => x.marketId === state.sel);
+  return p ? (t === "0" ? p.long : p.short) : 0n;
+}
+
+/** Choosing a token on one leg: tUSDC on a leg makes the other leg the side token, and vice versa (Long ↔ Short never trade directly). */
+function pickToken(leg: "pay" | "get", t: Tok) {
+  const wasBuy = state.isBuy;
+  if (leg === "pay") state.isBuy = t === "cash";
+  else state.isBuy = t !== "cash";
+  if (t !== "cash") state.side = Number(t);
+  if (state.isBuy !== wasBuy) {
+    // the legs swapped: what was received is now what is given
+    const top = $<HTMLInputElement>("amount");
+    const bottom = $<HTMLInputElement>("amountOut");
+    if (bottom.value) top.value = bottom.value;
+    bottom.value = "";
+    fit(top);
+    fit(bottom);
+    state.exactIn = true;
+  }
+  renderMarkets();
+  onInput();
+}
+
+function openTokenPicker(leg: "pay" | "get") {
+  const m = state.markets.find((x) => x.id === state.sel);
+  const tag = m ? `${m.tenorDays}D #${m.id}` : "";
+  const fair = (t: Tok) => (m && t !== "cash" ? ` · fair ${fmtWad(t === "0" ? m.pFair : WAD - m.pFair, 4)}` : "");
+  const opts: PickOption[] = (["cash", "0", "1"] as Tok[]).map((t) => {
+    const bal = balanceOf(t);
+    return {
+      value: t,
+      label: tokLabel(t),
+      sub: t === "cash" ? "Test USDC · collateral" : `${tokLabel(t)} token · ${tag}${fair(t)}`,
+      right: bal === undefined ? undefined : fmtUnits(bal, 2),
+      icon: coin(t),
+    };
+  });
+  openPicker($(`${leg}Chip`), leg === "pay" ? "Select the token you give" : "Select the token you get", opts, leg === "pay" ? payTok() : getTok(), (v) => pickToken(leg, v as Tok));
+}
+
+const COMING_SOON = ["ETH / XAUT", "BTC / XAUT"];
+
+function openMarketPicker() {
+  const opts: PickOption[] = state.markets.map((m) => ({
+    value: String(m.id),
+    label: `${m.tenorDays}D · #${m.id}`,
+    sub: m.finalized ? `Settled · Long_T ${fmtWad(m.longT!, 4)}${m.isVoid ? " (VOID)" : ""} — redeem on the Redeem page` : `Ends ${fmtUtc(m.obsEnd).slice(0, 16)} UTC`,
+    right: m.finalized ? undefined : `Long ${fmtWad(m.pFair, 4)}`,
+    group: "ETH / BTC",
+    disabled: m.finalized,
+  }));
+  for (const pair of COMING_SOON) opts.push({ value: pair, label: pair, sub: "7D · 14D · 28D", right: "Coming soon", group: "Coming soon", disabled: true });
+  openPicker($("marketSel"), "Select a market", opts, String(state.sel), (v) => selectMarket(Number(v)));
+}
 
 function renderMarkets() {
-  const nav = $("markets");
-  nav.innerHTML = "";
-  for (const m of state.markets) {
-    const b = document.createElement("button");
-    b.className = m.id === state.sel ? "on" : "";
-    const status = m.finalized ? `決済済み Long_T ${fmtWad(m.longT!, 4)}${m.isVoid ? "（VOID）" : ""}` : `P_fair ${fmtWad(m.pFair, 4)} · バー ${m.confirmed}/${m.n}`;
-    b.innerHTML = `<b>${m.tenorDays}D #${m.id}</b><br><small>${fmtUtc(m.obsStart).slice(0, 16)} → ${fmtUtc(m.obsEnd).slice(0, 16)}</small><br><small>${status}</small>`;
-    b.onclick = () => selectMarket(m.id);
-    nav.appendChild(b);
-  }
-  document.querySelectorAll<HTMLButtonElement>("[data-side]").forEach((b) => {
-    b.classList.toggle("on", Number(b.dataset.side) === state.side);
-    b.textContent = sideName(Number(b.dataset.side));
-  });
-  const modeText: Record<Mode, string> = {
-    "buy-in": `買う：支払う ${state.cash}`,
-    "buy-out": "買う：受け取る数量",
-    "sell-in": "売る：売る数量",
-    "sell-out": `売る：受け取る ${state.cash}`,
-  };
-  document.querySelectorAll<HTMLButtonElement>("[data-mode]").forEach((b) => {
-    b.classList.toggle("on", b.dataset.mode === state.mode);
-    b.textContent = modeText[b.dataset.mode as Mode];
-  });
+  const m = state.markets.find((x) => x.id === state.sel);
+  $("marketSel").textContent = m ? `ETH / BTC · ${m.tenorDays}D · #${m.id} · ends ${fmtUtc(m.obsEnd).slice(5, 16)} UTC` : "Select a market";
+  $("payLabel").textContent = state.isBuy ? "You pay" : "You sell";
+  $("getLabel").textContent = state.isBuy ? "You buy" : "You receive";
+  $("payToken").innerHTML = tokenChip("pay");
+  $("getToken").innerHTML = tokenChip("get");
+  $("payChip").onclick = () => openTokenPicker("pay");
+  $("getChip").onclick = () => openTokenPicker("get");
   $("deltaUnit").textContent = `${state.cash} / token`;
-  $("amountUnit").textContent = MODES[state.mode].unit === "USDC" ? state.cash : tokenName(state.side);
+  renderBalance();
+}
+
+/** Balance of what you pay / sell, with Max. */
+function balanceOfPay(): bigint | undefined {
+  if (!state.account) return undefined;
+  if (state.isBuy) return state.cashBal;
+  const p = state.positions.find((x) => x.marketId === state.sel);
+  return p ? (state.side === 0 ? p.long : p.short) : 0n;
+}
+
+function renderBalance() {
+  const bal = balanceOfPay();
+  $("paySub").textContent = bal === undefined ? "Connect to see your balance" : `Balance ${fmtUnits(bal, 2)} ${payToken()}`;
+  $("maxBtn").hidden = bal === undefined || bal === 0n;
 }
 
 function row(label: string, value: string) {
@@ -122,7 +206,9 @@ function renderBreakdown() {
   const q = ctl.quote;
   const t = $("bd");
   if (!q) {
-    t.innerHTML = row("—", ctl.error ?? "見積もり中");
+    t.innerHTML = row("—", ctl.error ?? "Quoting…");
+    for (const id of ["rateVal", "fairVal", "devVal", "limitVal"]) $(id).textContent = "—";
+    $("getSub").textContent = "";
     return;
   }
   const b = q.b;
@@ -134,38 +220,64 @@ function renderBreakdown() {
   // rejected before the curve: the lens computed no amounts — show the reason, not zeros
   const priced = b.amountIn + b.amountOut > 0n;
   const dash = (x: string) => (priced ? x : "—");
-  const fair = q.input.side === 0 ? b.pFair : 10n ** 18n - b.pFair; // the traded side's own fair value
+  const fair = q.input.side === 0 ? b.pFair : WAD - b.pFair; // the traded side's own fair value
+
+  // the field you did not type in shows the quoted counterpart (never overwrite the field being edited)
+  const cur = (() => {
+    try {
+      return readInput();
+    } catch {
+      return undefined;
+    }
+  })();
+  if (cur && sameInput(cur, q.input)) {
+    const other = $<HTMLInputElement>(q.input.exactIn ? "amountOut" : "amount");
+    if (document.activeElement !== other) {
+      other.value = priced ? plain(q.input.exactIn ? b.amountOut : b.amountIn) : "";
+      fit(other);
+    }
+  }
+
+  // the headline facts
+  $("rateVal").textContent = dash(`1 ${tok} = ${fmtWad(b.avgPrice, 6)} ${cash}`);
+  $("fairVal").textContent = b.pFair > 0n ? `${fmtWad(fair, 6)} ${cash}` : "—";
+  $("devVal").textContent = dash(`${fmtPct(b.deviationRate)} · ${fmtUnits(b.deviation, 2)} ${cash}`);
+  $("limitLabel").textContent = q.input.exactIn ? "Minimum received" : buy ? "Maximum paid" : "Maximum sold";
+  $("limitVal").textContent = dash(b.limitDefined ? `${fmtUnits(b.limit)} ${q.input.exactIn ? outUnit : inUnit}` : "Undefined (average price ≤ δ)");
+  $("getSub").textContent = !priced ? "" : buy ? `≈ ${fmtUnits((b.amountOut * fair) / WAD, 2)} ${cash} at fair value` : `${fmtWad(b.avgPrice, 4)} ${cash} per ${tok}`;
+
+  // the full breakdown (collapsed by default)
   let html = "";
-  html += `<tr class="group"><td colspan="2">可否</td></tr>`;
-  html += row(b.reason === 0 ? "取引できます" : "取引できません", b.reason === 0 ? "" : ctl.view().reasonText ?? "");
-  html += `<tr class="group"><td colspan="2">数量</td></tr>`;
-  html += row("入力量", dash(`${fmtUnits(b.amountIn)} ${inUnit}`));
-  html += row("出力量", dash(`${fmtUnits(b.amountOut)} ${outUnit}`));
-  const limitLabel = q.input.exactIn ? "最小受取（許容幅適用）" : buy ? "最大支払（許容幅適用）" : "最大の売却数（許容幅適用）";
-  html += row(limitLabel, dash(b.limitDefined ? `${fmtUnits(b.limit)} ${q.input.exactIn ? outUnit : inUnit}` : "定義できません（平均価格 ≤ δ）"));
-  html += `<tr class="group"><td colspan="2">価格（${tok} 1 枚あたり）</td></tr>`;
-  html += row("平均価格", dash(`${fmtWad(b.avgPrice)} ${cash}`));
-  html += row(`公正価格（${tok}）`, b.pFair > 0n ? `${fmtWad(fair)} ${cash}` : "—");
-  html += row("公正価格からの乖離", dash(`${fmtUnits(b.deviation)} ${cash}（${fmtPct(b.deviationRate)}）`));
-  html += row("　うちスプレッド下限分（h_min·Q）", dash(`${fmtUnits(b.devHmin)} ${cash}`));
-  html += row("　うち使用率の上乗せ分（h_U·Q）", dash(`${fmtUnits(b.devHU)} ${cash}`));
-  html += row("　うち在庫の傾きによるサイズ分", dash(`${fmtUnits(b.devSize)} ${cash}`));
-  html += `<tr class="group"><td colspan="2">スプレッドの構成</td></tr>`;
+  html += `<tr class="group"><td colspan="2">Status</td></tr>`;
+  html += row(b.reason === 0 ? "Tradable" : "Not tradable", b.reason === 0 ? "" : ctl.view().reasonText ?? "");
+  html += `<tr class="group"><td colspan="2">Amounts</td></tr>`;
+  html += row("Amount in", dash(`${fmtUnits(b.amountIn)} ${inUnit}`));
+  html += row("Amount out", dash(`${fmtUnits(b.amountOut)} ${outUnit}`));
+  const limitLabel = q.input.exactIn ? "Minimum received (with tolerance)" : buy ? "Maximum paid (with tolerance)" : "Maximum sold (with tolerance)";
+  html += row(limitLabel, dash(b.limitDefined ? `${fmtUnits(b.limit)} ${q.input.exactIn ? outUnit : inUnit}` : "Undefined (average price ≤ δ)"));
+  html += `<tr class="group"><td colspan="2">Price (per ${tok} token)</td></tr>`;
+  html += row("Average price", dash(`${fmtWad(b.avgPrice)} ${cash}`));
+  html += row(`Fair value (${tok})`, b.pFair > 0n ? `${fmtWad(fair)} ${cash}` : "—");
+  html += row("Deviation from fair value", dash(`${fmtUnits(b.deviation)} ${cash} (${fmtPct(b.deviationRate)})`));
+  html += row("　of which min spread (h_min·Q)", dash(`${fmtUnits(b.devHmin)} ${cash}`));
+  html += row("　of which utilization (h_U·Q)", dash(`${fmtUnits(b.devHU)} ${cash}`));
+  html += row("　of which inventory slope", dash(`${fmtUnits(b.devSize)} ${cash}`));
+  html += `<tr class="group"><td colspan="2">Spread components</td></tr>`;
   html += row("h₀", fmtWad(b.h0));
   html += row("h_M", fmtWad(b.hM));
-  html += row("h_O（現在の経過時間）", fmtWad(b.hO));
+  html += row("h_O (current age)", fmtWad(b.hO));
   html += row("h_U", fmtWad(b.hU));
-  html += `<tr class="group"><td colspan="2">在庫と mint</td></tr>`;
-  html += row(buy ? "Q1 在庫から充当" : "Q1 対当 burn", dash(`${fmtUnits(b.q1)} ${tok}`));
-  html += row(buy ? "Q2 新たな mint" : "Q2 買取（預かりへ）", dash(`${fmtUnits(b.q2)} ${tok}`));
-  html += row(`Maker 在庫 q（${LONG} 換算）`, dash(`${fmtUnits(b.inv0)} → ${fmtUnits(b.inv1)}`));
-  html += row("Maker 使用率 U", dash(`${fmtPct(b.uPre)} → ${fmtPct(b.uPost)}`));
-  html += `<tr class="group"><td colspan="2">有効期間</td></tr>`;
-  html += row("価格確認済みバー k", String(b.k));
-  html += row("その確定時刻 t_k", fmtUtc(b.tK));
-  html += row("次のバーの確定予定 t_k+1", fmtUtc(b.tNext));
-  html += row("停止予定（t_k + Δ + g）", fmtUtc(b.tStop));
-  html += row("評価に使ったチェーン時刻", fmtUtc(b.evaluatedAt));
+  html += `<tr class="group"><td colspan="2">Inventory &amp; mint</td></tr>`;
+  html += row(buy ? "Q1 from inventory" : "Q1 paired burn", dash(`${fmtUnits(b.q1)} ${tok}`));
+  html += row(buy ? "Q2 newly minted" : "Q2 bought into custody", dash(`${fmtUnits(b.q2)} ${tok}`));
+  html += row(`Maker inventory q (${LONG})`, dash(`${fmtUnits(b.inv0)} → ${fmtUnits(b.inv1)}`));
+  html += row("Maker utilization U", dash(`${fmtPct(b.uPre)} → ${fmtPct(b.uPost)}`));
+  html += `<tr class="group"><td colspan="2">Validity</td></tr>`;
+  html += row("Confirmed bar k", String(b.k));
+  html += row("Confirmed at t_k", fmtUtc(b.tK));
+  html += row("Next bar due t_k+1", fmtUtc(b.tNext));
+  html += row("Halts at t_k + Δ + g", fmtUtc(b.tStop));
+  html += row("Evaluated at (chain time)", fmtUtc(b.evaluatedAt));
   t.innerHTML = html;
 }
 
@@ -173,40 +285,46 @@ function renderStatus() {
   const v = ctl?.view();
   const s = $("status");
   s.className = "status";
-  // only the settled quote of the form's current input can be executed (review 2026-09-26 #1)
-  $("execute").toggleAttribute("disabled", !v?.canExecute || !state.wc || !!state.message || state.busy);
-  const confirm = state.confirmPending ? "見積もりが変わりました。内容を確認して、もう一度「実行」を押してください。" : "";
+  // before connecting, the card's button is the soft "Connect wallet"; after, the one filled orange action.
+  // Only the settled quote of the form's current input can be executed (review 2026-09-26 #1).
+  const exec = $<HTMLButtonElement>("execute");
+  exec.classList.toggle("soft", !state.wc);
+  exec.toggleAttribute("disabled", !!state.wc && (!v?.canExecute || !!state.message || state.busy));
+  exec.textContent = !state.wc ? "Connect wallet" : state.busy ? "Sending…" : `${state.isBuy ? "Buy" : "Sell"} ${tokenName(state.side)}`;
+  const confirm = state.confirmPending ? "The quote changed. Review it and press the button again." : "";
   if (state.message) {
     s.textContent = state.message;
     s.classList.add("warn");
   } else if (v?.error) {
-    s.textContent = `見積もりに失敗しました：${v.error.split("\n")[0]}`;
+    s.textContent = `Quote failed: ${v.error.split("\n")[0]}`;
     s.classList.add("warn");
   } else if (!v || v.reason === undefined || !v.settled) {
-    s.textContent = v?.loading || v?.reason !== undefined ? "見積もり中…" : "";
+    s.textContent = v?.loading || v?.reason !== undefined ? "Quoting…" : "";
   } else if (v.reason !== 0) {
-    s.textContent = `取引できません：${v.reasonText}${v.clears === "report" ? "（新しいレポートが確認されれば自動で再開します）" : ""}`;
+    s.textContent = `Not tradable: ${v.reasonText}${v.clears === "report" ? " — resumes automatically once the next report is confirmed" : ""}`;
     s.classList.add("stop");
   } else if (v.stopWarning) {
-    s.textContent = [confirm, `まもなく価格更新待ち（あと ${fmtSec(v.stopInSec)}）`].filter(Boolean).join(" ");
+    s.textContent = [confirm, `Price update due soon (halts in ${fmtSec(v.stopInSec)})`].filter(Boolean).join(" ");
     s.classList.add("warn");
   } else {
-    s.textContent = confirm || "取引できます";
+    s.textContent = confirm || "Tradable";
     s.classList.add(confirm ? "warn" : "ok");
   }
   $("refreshIn").textContent = fmtSec(v?.refreshInSec);
-  $("nextUpdate").textContent = v?.waitingForPrice ? "更新待ち" : fmtSec(v?.nextFairValueInSec);
-  $("chainTime").textContent = v?.chainNow ? `チェーン時刻 ${fmtUtc(Math.floor(v.chainNow))}` : "";
+  $("nextUpdate").textContent = v?.waitingForPrice ? "Waiting for the next report" : fmtSec(v?.nextFairValueInSec);
+  $("chainTime").textContent = v?.chainNow ? `Chain time ${fmtUtc(Math.floor(v.chainNow))}` : "";
+  $("tolVal").textContent = `${($("delta") as HTMLInputElement).value} ${state.cash} / token`;
 }
 
 function renderPositions() {
   const t = $("pos");
-  let html = `<tr><th>市場</th><th>${LONG}</th><th>${SHORT}</th><th>公正価値での評価（${state.cash}）</th><th>償還額（決済後）</th><th></th></tr>`;
+  let html = `<tr><th>Market</th><th>${LONG}</th><th>${SHORT}</th><th>Value at fair price (${state.cash})</th><th>Payout (after settlement)</th><th></th></tr>`;
   for (const p of state.positions) {
     const m = state.markets.find((x) => x.id === p.marketId)!;
-    const redeem = m.finalized && p.long + p.short > 0n ? `<button data-redeem="${m.id}" class="seg">償還</button>` : "";
+    const redeem = m.finalized && p.long + p.short > 0n ? `<button data-redeem="${m.id}" class="seg">Redeem</button>` : "";
     html += `<tr><td>${m.tenorDays}D #${m.id}</td><td>${fmtUnits(p.long)}</td><td>${fmtUnits(p.short)}</td><td>${fmtUnits(p.value)}</td><td>${p.payout === undefined ? "—" : fmtUnits(p.payout)}</td><td>${redeem}</td></tr>`;
   }
+  if (!state.account) html += `<tr><td colspan="6">Connect to see your positions.</td></tr>`;
   t.innerHTML = html;
   t.querySelectorAll<HTMLButtonElement>("[data-redeem]").forEach((b) => {
     b.onclick = async () => {
@@ -218,15 +336,23 @@ function renderPositions() {
   });
 }
 
+// ---------------------------------------------------------------- data and actions
+
 async function refreshData() {
   state.markets = await app.markets();
-  if (state.account) state.positions = await app.positions(state.account, state.markets);
+  if (state.account) {
+    [state.positions, state.cashBal] = await Promise.all([
+      app.positions(state.account, state.markets),
+      pc.readContract({ address: dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [state.account] }),
+    ]);
+  }
   renderMarkets();
   renderPositions();
 }
 
 function selectMarket(id: number) {
   state.sel = id;
+  history.replaceState(null, "", `?market=${id}`);
   unwatch?.();
   unwatch = app.watchReports(id, (k) => {
     ctl.onReport(k);
@@ -248,17 +374,17 @@ async function execute() {
     const pre = await ctl.beforeExecute(i);
     if (!pre.proceed) {
       state.confirmPending = pre.changed;
-      if (!pre.changed && !pre.quote) $("result").textContent = "見積もりを更新しています。表示が更新されてから、もう一度「実行」を押してください。";
+      if (!pre.changed && !pre.quote) $("result").textContent = "Updating the quote. Press the button again once it shows.";
       return;
     }
     state.confirmPending = false;
     sent = true;
     const { fill, causes } = await app.execute(state.wc, pre.quote!.input, pre.quote!.b);
-    const lines = [`約定：入力 ${fmtUnits(fill.amountIn)}・出力 ${fmtUnits(fill.amountOut)}（Q1 ${fmtUnits(fill.q1)}・Q2 ${fmtUnits(fill.q2)}）`];
-    for (const c of causes) lines.push(`見積もりとの差：${CAUSE_TEXT[c]}`);
+    const lines = [`Filled: in ${fmtUnits(fill.amountIn)} · out ${fmtUnits(fill.amountOut)} (Q1 ${fmtUnits(fill.q1)} · Q2 ${fmtUnits(fill.q2)})`];
+    for (const c of causes) lines.push(`Differs from the quote: ${CAUSE_TEXT[c]}`);
     $("result").innerHTML = lines.join("<br>");
   } catch (e) {
-    $("result").textContent = `失敗：${(e as Error).message.split("\n")[0]}`;
+    $("result").textContent = `Failed: ${(e as Error).message.split("\n")[0]}`;
   } finally {
     state.busy = false;
     renderStatus();
@@ -276,7 +402,7 @@ async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>) {
   } else {
     const eth = (window as unknown as { ethereum?: Parameters<typeof custom>[0] }).ethereum;
     if (!eth) {
-      state.message = "ウォレットが見つかりません";
+      state.message = "No wallet found";
       return renderStatus();
     }
     const wc = createWalletClient({ chain, transport: custom(eth) });
@@ -285,8 +411,14 @@ async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>) {
     state.account = addr;
   }
   $("account").textContent = `${state.account.slice(0, 6)}…${state.account.slice(-4)}`;
+  $("connect").hidden = true;
   await refreshData();
   renderStatus();
+}
+
+function setField(exactIn: boolean) {
+  state.exactIn = exactIn;
+  onInput();
 }
 
 async function main() {
@@ -299,7 +431,7 @@ async function main() {
     contracts: cfg.multicall3 ? { multicall3: { address: cfg.multicall3 } } : undefined,
   });
   pc = createPublicClient({ chain, transport: http(cfg.rpcUrl), batch: { multicall: !!cfg.multicall3 }, pollingInterval: 2_000 }) as PublicClient;
-  const dep = { ...cfg.deployment, chainId: Number(cfg.deployment.chainId) };
+  dep = { ...cfg.deployment, chainId: Number(cfg.deployment.chainId) };
   app = new CorrFiApp(pc, dep, cfg.defaultMaker);
   ctl = new QuoteController<Quoted>({
     fetch: (i) => app.quote(i),
@@ -311,25 +443,62 @@ async function main() {
       renderStatus();
     },
   });
-  $("network").textContent = `${chain.name}（chainId ${cfg.chainId}）`;
+  $("network").textContent = `${chain.name} · chainId ${cfg.chainId}`;
   const [sym, name] = await Promise.all([
     pc.readContract({ address: dep.usdc, abi: erc20Abi, functionName: "symbol" }),
     pc.readContract({ address: dep.usdc, abi: erc20Abi, functionName: "name" }),
   ]);
   state.cash = sym;
+  document.querySelectorAll(".cash").forEach((e) => (e.textContent = sym));
   if (sym !== "USDC" || /test|replay/i.test(name)) {
-    $("testToken").textContent = `${sym}（${name}）はテスト用のトークンです。Circle の USDC ではなく、価値はありません。`;
+    $("testToken").textContent = `${sym} (${name}) is a test token. It is not Circle USDC and has no value.`;
   }
   ($("delta") as HTMLInputElement).value = fmtWad(DELTA_DEFAULT, 3);
-  document.querySelectorAll<HTMLButtonElement>("[data-side]").forEach((b) => (b.onclick = () => ((state.side = Number(b.dataset.side)), renderMarkets(), onInput())));
-  document.querySelectorAll<HTMLButtonElement>("[data-mode]").forEach((b) => (b.onclick = () => ((state.mode = b.dataset.mode as Mode), renderMarkets(), onInput())));
-  $("amount").oninput = onInput;
+  $("amount").oninput = () => (fit($("amount")), setField(true));
+  $("amountOut").oninput = () => (fit($("amountOut")), setField(false));
   $("delta").oninput = onInput;
   ($("refresh") as HTMLSelectElement).onchange = (e) => ctl.setRefreshSec(Number((e.target as HTMLSelectElement).value));
-  $("execute").onclick = () => void execute();
+  $("marketSel").onclick = () => openMarketPicker();
+  $("flip").onclick = () => {
+    state.isBuy = !state.isBuy;
+    // like any swap screen: what you were receiving becomes what you give
+    const top = $<HTMLInputElement>("amount");
+    const bottom = $<HTMLInputElement>("amountOut");
+    if (bottom.value) top.value = bottom.value;
+    bottom.value = "";
+    fit(top);
+    fit(bottom);
+    renderMarkets();
+    setField(true);
+  };
+  $("maxBtn").onclick = () => {
+    const bal = balanceOfPay();
+    if (bal === undefined) return;
+    $<HTMLInputElement>("amount").value = plain(bal);
+    fit($("amount"));
+    setField(true);
+  };
+  const toggleSettings = () => {
+    const s = $("settings");
+    s.hidden = !s.hidden;
+    $("settingsBtn").setAttribute("aria-expanded", String(!s.hidden));
+  };
+  $("settingsBtn").onclick = toggleSettings;
+  $("editTol").onclick = () => {
+    if ($("settings").hidden) toggleSettings();
+    $<HTMLInputElement>("delta").focus();
+  };
+  $("execute").onclick = () => void (state.wc ? execute() : connect(cfg, chain));
   $("connect").onclick = () => void connect(cfg, chain);
   await refreshData();
-  if (state.markets.length) selectMarket(state.markets[state.markets.length - 1].id);
+  if (state.markets.length) {
+    // the market in ?market= if it still trades, else the first one that does
+    const want = Number(new URLSearchParams(location.search).get("market"));
+    const live = state.markets.filter((x) => !x.finalized);
+    const m = live.find((x) => x.id === want) ?? live[0] ?? state.markets[state.markets.length - 1];
+    selectMarket(m.id);
+  }
+  renderPositions();
   setInterval(renderStatus, 250);
 }
 

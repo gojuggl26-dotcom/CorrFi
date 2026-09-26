@@ -29,7 +29,7 @@
  },
  "contracts": {
   "buildManifest": "contracts/build-manifest.json",
-  "buildManifestKeccak256": "0xe2494f92d1423c885a7cf97338984695f4e44e6029ef20551c6fae15247f5bf9",
+  "buildManifestKeccak256": "0x9e5793e6ae4c2a5261f7213e66579096d14045187b2ce8681a836e83dcdc5760",
   "compiler": "0.8.30+commit.73712a01",
   "settings": {
    "remappings": [
@@ -63,7 +63,7 @@
    "CorrFiLens": "0x76c464b06f82e30c2ba3b64f76fd4ab0da69f443dd58d3f3c4b0ed9485fb5529",
    "CorrFiVault": "0xbab5b36e549e2f92dfd5f72e73b977b23b7986347aa65a94afcf303af63b30cd",
    "CorrFiToken": "0x2a121b528c5f5b6e88fa9995531dbc98d80a78a0d0e31e1ccff64e81458dc939",
-   "TestUSDC": "0x15d1ff6dd60db8f1314a5a95f345a363fc66d17a412ab07c08cc67eef8972a52",
+   "TestUSDC": "0x66bbd0d2befcd8add8e0eadf58eaa3bbf9934d142504d521f4e45dcee193f026",
    "Aqua": "0x0cc9a69ac6bbe135ad99c21cfc3fd52349e3f85ac431129a30bf505f53c94ea3"
   }
  },
@@ -77,7 +77,7 @@
   },
   "snapshot": {
    "file": "state.hex",
-   "keccak256": "0x9ef26c986f7ba75c7c608c66b15ab0c6a54d928974ee689daea53b72cc4c83f1",
+   "keccak256": "0x72f97e9dbda5b0291e3d762b3367a63c8fd7127324015fb570ac28a3e6d17675",
    "latestBlock": 32
   },
   "anvil": {
@@ -103,10 +103,10 @@
     "--silent"
    ]
   },
-  "addressesKeccak256": "0xb0c4a498c96564d067b76f60ed596ec5944cf25deab9847408a90255fb89b970"
+  "addressesKeccak256": "0xdf3c32ce29b7ff346a1f3be291a889dd771ecedf231363099009877826a92e40"
  },
  "reference": {
-  "stateRoot": "0x7290f13d7c365de2d6e9481413018b12dd7e6d52e23b220c1f624af069ac55da",
+  "stateRoot": "0xc22d4782644b97713e0aa78da85f0945b39956e5e16063c9f97d099250279435",
   "block": 226,
   "longT": "926108332093189410",
   "isVoid": false,
@@ -120,7 +120,7 @@
   "maxGasUsed": "872416"
  },
  "referenceVoid": {
-  "stateRoot": "0x00528d92445d8c3bae83b77aa332d64012e9c9666e5f45d835bb44b5e6434873",
+  "stateRoot": "0x9564ef21e2e7e58a07e54a98bd2a72674b4ada11254edc89ac4308d0ba9cb4e7",
   "block": 222,
   "longT": "500000000000000000",
   "isVoid": true,
