@@ -15,7 +15,8 @@ You can take Long and Short views on future correlation.
 <br>**6.Demo and try it**
 <br>**7.Verification and tests**
 <br>**8.Tech Stack**
-<br>**9.License**
+<br>**9.Limitations**
+<br>**10.License**
 
 ## 0.For 1inch judges: where to look
 
@@ -413,7 +414,14 @@ Used as deployed on Base Sepolia: Multicall3 [`0xcA11bde05977b3631167028862bE2a1
 | Network | Base Sepolia (OP Stack) · Multicall3 · BaseScan |
 | Tests and CI | Foundry unit, fuzz and invariant tests · node:test · pytest · Playwright · GitHub Actions |
 
-## 9.License
+## 9.Limitations
+
+- **Testnet only.** CorrFi runs on Base Sepolia. Nothing is deployed on mainnet and no real funds are involved.
+- **SwapVM is an unaudited commit.** The router builds on SwapVM [`feb1641`](https://github.com/1inch/swap-vm/tree/feb16411738331f7d05ae71d4a664154068018fc), a commit on `main`; 1inch's audits cover release branches, not `main`.
+- **The reporter is trusted for the price points.** The contracts cannot check a posted ETH or BTC price against the exchanges. They do enforce the math: the hub recomputes every report's fair value and base spread from its own sums and rejects it unless they match exactly ([3.4](#34-fair-value-before-maturity)).
+- **tUSDC is a test token.** It is not Circle USDC and has no value. The owner mints it, and anyone can take up to 10,000 per wallet every 24 hours from the faucet page.
+
+## 10.License
 
 | Part | License |
 |---|---|
