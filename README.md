@@ -13,10 +13,9 @@ You can take Long and Short views on future correlation.
 <br>**4.Aqua and SwapVM: why and how**
 <br>**5.Deployments and on-chain proof**
 <br>**6.Demo and try it**
-<br>**7.Verification and tests**
-<br>**8.Tech Stack**
-<br>**9.Limitations**
-<br>**10.License**
+<br>**7.Tech Stack**
+<br>**8.Limitations**
+<br>**9.License**
 
 ## 0.For 1inch judges: where to look
 
@@ -394,11 +393,7 @@ Used as deployed on Base Sepolia: Multicall3 [`0xcA11bde05977b3631167028862bE2a1
 
 <!-- Demo video and live site. Try it: get tUSDC on the faucet page -> trade Long / Short on the trade page -> redeem after maturity. Run it locally: cd ui && npm run live; the 7D replay demo. -->
 
-## 7.Verification and tests
-
-<!-- Invariants (quote = breakdown = swap; collateral = supply; Solidity / TypeScript / Python fixed-point results identical to the bit; the replay's V1-V8 checks and deterministic final state) and a table: suite -> what it proves -> count -> command. Backtest in 2-3 lines: B1 pass and the adopted parameters. -->
-
-## 8.Tech Stack
+## 7.Tech Stack
 
 | Layer | Stack |
 |---|---|
@@ -412,14 +407,14 @@ Used as deployed on Base Sepolia: Multicall3 [`0xcA11bde05977b3631167028862bE2a1
 | Network | Base Sepolia (OP Stack) · Multicall3 · BaseScan |
 | Tests and CI | Foundry unit, fuzz and invariant tests · node:test · pytest · Playwright · GitHub Actions |
 
-## 9.Limitations
+## 8.Limitations
 
 - **Testnet only.** CorrFi runs on Base Sepolia. Nothing is deployed on mainnet and no real funds are involved.
 - **SwapVM is an unaudited commit.** The router builds on SwapVM [`feb1641`](https://github.com/1inch/swap-vm/tree/feb16411738331f7d05ae71d4a664154068018fc), a commit on `main`; 1inch's audits cover release branches, not `main`.
 - **The reporter is trusted for the price points.** The contracts cannot check a posted ETH or BTC price against the exchanges. They do enforce the math: the hub recomputes every report's fair value and base spread from its own sums and rejects it unless they match exactly ([3.4](#34-fair-value-before-maturity)).
 - **tUSDC is a test token.** It is not Circle USDC and has no value. The owner mints it, and anyone can take up to 10,000 per wallet every 24 hours from the faucet page.
 
-## 10.License
+## 9.License
 
 | Part | License |
 |---|---|
