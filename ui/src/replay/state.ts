@@ -1,6 +1,8 @@
 // Replay UI state (R §8): a pure reducer over the Driver's frames (ws :8787) and the Verifier's messages (ws :8789).
 // The UI never reads the chain (R §8.1); rendering (view.ts) only reads this state, so the design can change freely.
 
+import { LONG, SHORT } from "../core/labels.ts";
+
 export type Status = "connecting" | "preflight" | "ready" | "running" | "settled" | "done" | "failed";
 export const V_ITEMS = ["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8"] as const;
 export type VItem = (typeof V_ITEMS)[number];
@@ -146,4 +148,4 @@ export const PHASE_NAMES: Record<string, string> = { scene1: "シーン 1", A: "
 
 /** The verdict is revealed in the verification phase (R §5.1), after the settlement has been shown. */
 export const showVerdict = (s: ReplayState) => s.verify.done && (s.phase === "verification" || s.status === "done");
-export const DIR_NAMES: Record<number, string> = { 1: "D1 Long を買う", 2: "D2 Long を売る", 3: "D3 Short を買う", 4: "D4 Short を売る" };
+export const DIR_NAMES: Record<number, string> = { 1: `D1 ${LONG} を買う`, 2: `D2 ${LONG} を売る`, 3: `D3 ${SHORT} を買う`, 4: `D4 ${SHORT} を売る` };

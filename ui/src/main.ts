@@ -9,6 +9,7 @@ import type { Deployment } from "../../engine/src/chain.ts";
 import { CorrFiApp, type MarketInfo, type Position, type Quoted } from "./core/app.ts";
 import { fmtPct, fmtSec, fmtUnits, fmtUtc, fmtWad, parseDecimal } from "./core/format.ts";
 import { CAUSE_TEXT, DELTA_DEFAULT, QuoteController, type QuoteInput } from "./core/quote.ts";
+import { LONG, SHORT, sideName } from "./core/labels.ts";
 
 interface UiConfig {
   chainId: number;
@@ -82,7 +83,7 @@ function onInput() {
   renderStatus();
 }
 
-const tokenName = (side: number) => (side === 0 ? "Long" : "Short");
+const tokenName = sideName;
 
 function renderMarkets() {
   const nav = $("markets");
@@ -95,7 +96,10 @@ function renderMarkets() {
     b.onclick = () => selectMarket(m.id);
     nav.appendChild(b);
   }
-  document.querySelectorAll<HTMLButtonElement>("[data-side]").forEach((b) => b.classList.toggle("on", Number(b.dataset.side) === state.side));
+  document.querySelectorAll<HTMLButtonElement>("[data-side]").forEach((b) => {
+    b.classList.toggle("on", Number(b.dataset.side) === state.side);
+    b.textContent = sideName(Number(b.dataset.side));
+  });
   const modeText: Record<Mode, string> = {
     "buy-in": `買う：支払う ${state.cash}`,
     "buy-out": "買う：受け取る数量",
@@ -154,7 +158,7 @@ function renderBreakdown() {
   html += `<tr class="group"><td colspan="2">在庫と mint</td></tr>`;
   html += row(buy ? "Q1 在庫から充当" : "Q1 対当 burn", dash(`${fmtUnits(b.q1)} ${tok}`));
   html += row(buy ? "Q2 新たな mint" : "Q2 買取（預かりへ）", dash(`${fmtUnits(b.q2)} ${tok}`));
-  html += row("Maker 在庫 q（Long 換算）", dash(`${fmtUnits(b.inv0)} → ${fmtUnits(b.inv1)}`));
+  html += row(`Maker 在庫 q（${LONG} 換算）`, dash(`${fmtUnits(b.inv0)} → ${fmtUnits(b.inv1)}`));
   html += row("Maker 使用率 U", dash(`${fmtPct(b.uPre)} → ${fmtPct(b.uPost)}`));
   html += `<tr class="group"><td colspan="2">有効期間</td></tr>`;
   html += row("価格確認済みバー k", String(b.k));
@@ -197,7 +201,7 @@ function renderStatus() {
 
 function renderPositions() {
   const t = $("pos");
-  let html = `<tr><th>市場</th><th>Long</th><th>Short</th><th>公正価値での評価（${state.cash}）</th><th>償還額（決済後）</th><th></th></tr>`;
+  let html = `<tr><th>市場</th><th>${LONG}</th><th>${SHORT}</th><th>公正価値での評価（${state.cash}）</th><th>償還額（決済後）</th><th></th></tr>`;
   for (const p of state.positions) {
     const m = state.markets.find((x) => x.id === p.marketId)!;
     const redeem = m.finalized && p.long + p.short > 0n ? `<button data-redeem="${m.id}" class="seg">償還</button>` : "";

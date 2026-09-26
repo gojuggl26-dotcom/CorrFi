@@ -3,6 +3,7 @@ pragma solidity 0.8.30;
 
 import {CorrFiFixture} from "./helpers/CorrFiFixture.sol";
 import {CorrFiHub} from "../src/CorrFiHub.sol";
+import {CorrFiVault} from "../src/CorrFiVault.sol";
 import {ICorrFiHub} from "../src/interfaces/ICorrFiHub.sol";
 import {CorrFiMath} from "../src/lib/CorrFiMath.sol";
 
@@ -28,6 +29,16 @@ contract HubTest is CorrFiFixture {
         // tau = 0 price is forecast only: rho_hat = 5e12 / 6.25e12 = 0.8 -> P = 0.9; h0 = max(0.005, 0.15*0.038)
         assertEq(q.pFair, 9e17);
         assertEq(q.h0, 57e14);
+    }
+
+    /// DEC-31: the token names and symbols carry the asset pair.
+    function test_tokenNamesShowThePair() public {
+        uint8 id = createMarket(defaultInput());
+        CorrFiVault v = CorrFiVault(hub.marketVault(id));
+        assertEq(v.longToken().name(), "CorrFi ETH/BTC 7D #0 Long");
+        assertEq(v.longToken().symbol(), "ETHBTC-L");
+        assertEq(v.shortToken().name(), "CorrFi ETH/BTC 7D #0 Short");
+        assertEq(v.shortToken().symbol(), "ETHBTC-S");
     }
 
     function test_nMinPerTenor() public {

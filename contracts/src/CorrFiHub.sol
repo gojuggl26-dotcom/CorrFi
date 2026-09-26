@@ -238,8 +238,9 @@ contract CorrFiHub is ICorrFiHub, Ownable, EIP712 {
         address longToken = Clones.clone(tokenImplementation);
         address shortToken = Clones.clone(tokenImplementation);
         string memory tag = string.concat(Strings.toString(p.tenorDays), "D #", Strings.toString(id));
-        CorrFiToken(longToken).initialize(vault, string.concat("CorrFi ETH/BTC ", tag, " Long"), "CFL");
-        CorrFiToken(shortToken).initialize(vault, string.concat("CorrFi ETH/BTC ", tag, " Short"), "CFS");
+        // the pair in the name and the symbol makes the inter-asset correlation explicit (DEC-31)
+        CorrFiToken(longToken).initialize(vault, string.concat("CorrFi ETH/BTC ", tag, " Long"), "ETHBTC-L");
+        CorrFiToken(shortToken).initialize(vault, string.concat("CorrFi ETH/BTC ", tag, " Short"), "ETHBTC-S");
         CorrFiVault(vault).initialize(address(this), id, usdc, longToken, shortToken, m.obsEnd);
         m.vault = vault;
 

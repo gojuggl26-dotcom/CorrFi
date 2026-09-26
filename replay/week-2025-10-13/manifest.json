@@ -29,7 +29,7 @@
  },
  "contracts": {
   "buildManifest": "contracts/build-manifest.json",
-  "buildManifestKeccak256": "0xf9c6b0b1b019432a347d2a9477d499f3fe2afcb8ce04eb7de2411f925c7ef038",
+  "buildManifestKeccak256": "0xe2494f92d1423c885a7cf97338984695f4e44e6029ef20551c6fae15247f5bf9",
   "compiler": "0.8.30+commit.73712a01",
   "settings": {
    "remappings": [
@@ -58,7 +58,7 @@
   "creation": {
    "CorrFiEngine": "0xe2e7c6b9f9c19eadd2e825d2687db23fc38a2b285c168c5bba6cc0849947a1f5",
    "CorrFiOrders": "0x3bfbaa1d2447cc7f13bc948559d66b1e43bf13a7c126ed07a52f4dadab73916f",
-   "CorrFiHub": "0x2b5deebfc285f046a1df1abb487ce23b182a4fb4818fbe970eac24bd30d9848e",
+   "CorrFiHub": "0x864919b0ed044e1b067b7c76bd035c68f3c1a79aeee99493e64d6dab829a7c9f",
    "CorrFiRouter": "0x226be6dff849bd2bef419771e9e8f608407f469fa38b7a706ea7abcec929d790",
    "CorrFiLens": "0x76c464b06f82e30c2ba3b64f76fd4ab0da69f443dd58d3f3c4b0ed9485fb5529",
    "CorrFiVault": "0xbab5b36e549e2f92dfd5f72e73b977b23b7986347aa65a94afcf303af63b30cd",
@@ -77,7 +77,7 @@
   },
   "snapshot": {
    "file": "state.hex",
-   "keccak256": "0x2391b9e98a63d4c86c9a38b69e7c162885fa01bfc363fe3bf2c714e1e5d63216",
+   "keccak256": "0x9ef26c986f7ba75c7c608c66b15ab0c6a54d928974ee689daea53b72cc4c83f1",
    "latestBlock": 32
   },
   "anvil": {
@@ -103,10 +103,10 @@
     "--silent"
    ]
   },
-  "addressesKeccak256": "0xd9d9fee8d5cebc95a1cad9107b17f839a8d11f1f1f265fbc0108a808e4dba94b"
+  "addressesKeccak256": "0xb0c4a498c96564d067b76f60ed596ec5944cf25deab9847408a90255fb89b970"
  },
  "reference": {
-  "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
+  "stateRoot": "0x7290f13d7c365de2d6e9481413018b12dd7e6d52e23b220c1f624af069ac55da",
   "block": 226,
   "longT": "926108332093189410",
   "isVoid": false,
@@ -120,7 +120,7 @@
   "maxGasUsed": "872416"
  },
  "referenceVoid": {
-  "stateRoot": "0x7d7fb40335809dfb32099fd7f03d632ae572feff8dae1be9b911ea370f7c6a66",
+  "stateRoot": "0x00528d92445d8c3bae83b77aa332d64012e9c9666e5f45d835bb44b5e6434873",
   "block": 222,
   "longT": "500000000000000000",
   "isVoid": true,

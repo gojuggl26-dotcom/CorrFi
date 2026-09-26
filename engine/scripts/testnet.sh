@@ -45,9 +45,18 @@ fund)
     "$MAKER_ADDRESS" "${FUND_MAKER:-0.01}" "$TAKER_ADDRESS" "${FUND_TAKER:-0.01}"
   ;;
 deploy)
+  cid="$(cast chain-id --rpc-url "$RPC_URL")"
+  # Before sending anything: a full rebuild must equal the pinned manifest, and so must the creation code of a
+  # simulated run. via-IR output can depend on which files an incremental build compiles together (2026-09-26: a
+  # script build differed from out/ by 52 bytes), and a deployed mismatch could only be fixed by redeploying.
+  (cd "$ROOT/contracts" && forge build --force)
+  eng node scripts/build_manifest.ts --check
+  (cd "$ROOT/contracts" && REPORTER="$REPORTER_ADDRESS" PRICE_SIGNER="$PRICE_SIGNER_ADDRESS" TREASURY="$DEPLOYER_ADDRESS" \
+    DEPLOY_NAME="$NAME-dryrun" forge script script/Deploy.s.sol --rpc-url "$RPC_URL" ${FORGE_ARGS:-})
+  rm -f "$ROOT/deployments/$NAME-dryrun.json"
+  eng node scripts/build_manifest.ts --broadcast "$ROOT/contracts/broadcast/Deploy.s.sol/$cid/dry-run/run-latest.json"
   (cd "$ROOT/contracts" && REPORTER="$REPORTER_ADDRESS" PRICE_SIGNER="$PRICE_SIGNER_ADDRESS" TREASURY="$DEPLOYER_ADDRESS" \
     DEPLOY_NAME="$NAME" forge script script/Deploy.s.sol --rpc-url "$RPC_URL" --broadcast --slow ${FORGE_ARGS:-})
-  cid="$(cast chain-id --rpc-url "$RPC_URL")"
   cp "$ROOT/contracts/broadcast/Deploy.s.sol/$cid/run-latest.json" "$ROOT/deployments/$NAME.broadcast.json"
   cat "$DEPLOYMENT"
   ;;

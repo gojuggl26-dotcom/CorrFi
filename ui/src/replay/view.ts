@@ -1,5 +1,6 @@
 // Rendering of the replay state into the six panels of R §8.1 (clock, price chart, weight gauge, inventory and
 // collateral, trade log, verification). Pure DOM / canvas from ReplayState; all look-and-feel lives in replay.css.
+import { LONG, SHORT } from "../core/labels.ts";
 import { DIR_NAMES, LIMIT_MS, PHASE_NAMES, type ReplayState, showVerdict, TARGET_MS, V_ITEMS } from "./state.ts";
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -54,7 +55,7 @@ export function render(s: ReplayState) {
     set("supplyL", s.supply.long);
     set("supplyS", s.supply.short);
     const a1 = s.status !== "settled" && s.status !== "done" ? s.supply.long === s.supply.short && s.supply.short === s.supply.collateral : null;
-    set("a1", a1 === null ? "決済後（担保 ≥ 全払出）" : a1 ? "Long 供給 = Short 供給 = 担保 ✓" : "不一致 ✗");
+    set("a1", a1 === null ? "決済後（担保 ≥ 全払出）" : a1 ? `${LONG} 供給 = ${SHORT} 供給 = 担保 ✓` : "不一致 ✗");
   }
 
   // 5. trade log

@@ -58,10 +58,10 @@
   },
   "CorrFiHub": {
    "source": "src/CorrFiHub.sol",
-   "creationLinked": "0x2b5deebfc285f046a1df1abb487ce23b182a4fb4818fbe970eac24bd30d9848e",
-   "creationSize": 26994,
-   "runtimeMasked": "0x59bfa238dc5e785dc35bfc3ccb6c0f9e78dd9e157ac3b53078397f20738cc048",
-   "runtimeSize": 15079
+   "creationLinked": "0x864919b0ed044e1b067b7c76bd035c68f3c1a79aeee99493e64d6dab829a7c9f",
+   "creationSize": 27046,
+   "runtimeMasked": "0x84ead05eb4c58db6aeffa9d270e006c465a25860b9a453e0b7dc878fba3f7861",
+   "runtimeSize": 15131
   },
   "CorrFiRouter": {
    "source": "src/CorrFiRouter.sol",
@@ -184,7 +184,7 @@
   "lib/swap-vm/contracts/libs/Time.sol": "0xe70273b2c5ef6475d5ff0ad1099e37f230ce0c52fc4d5791b1c8dc8af300d525",
   "lib/swap-vm/contracts/libs/VM.sol": "0x86d5db586c99f3bc83f39c24b59f03b381ed8ec475d4b95b1ad103bc23f13088",
   "lib/swap-vm/contracts/SwapVM.sol": "0x472d8a2642e143092a8819eeb28f5b138f70a2451f5b99e3dd3f6bfa9b98ac21",
-  "src/CorrFiHub.sol": "0x6807bcfbce2003f4bc78640bd545274d6e0ee7f597dbea56aa9582de5371e2ca",
+  "src/CorrFiHub.sol": "0x6155ddf7d2a4af9be9a05a449202e3abae5ff03e545baae37857d3a2cbc7c4a2",
   "src/CorrFiLens.sol": "0x27c5e8d837e328ccd77c415ab94bd89eddc88a0c972db7d68f87ba254264060a",
   "src/CorrFiRouter.sol": "0xc74e7485ce6fd2cbbb82404562fe66097ddc410ccd4ee757d5152a9ea52c2258",
   "src/CorrFiToken.sol": "0x47836324d0c47196c20ea41ff2d58fc624e4a1869c23cd38c9ae44f93df67e43",
