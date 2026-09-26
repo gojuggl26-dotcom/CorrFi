@@ -49,20 +49,24 @@ function render(s: MakerSnapshot, markets: MarketInfo[], f?: FillView) {
     $("fillLine").innerHTML = `${fillIsBuy(f.dir) ? "Buy" : "Sell"} ${amt(f.qty)} ${sideName(fillSide(f.dir))} · ${m ? `${m.tenorDays}D` : `#${f.marketId}`} · ${link}`;
   }
 
+  // the one pool every market draws on: what Aqua may still pull (the approval), within what the wallet holds. A pull
+  // uses up the approval, so the latest fill lowered it for all markets at once (pushes pay the wallet, not the approval).
+  const approvalBinds = s.approval <= s.wallet;
+  const shared = approvalBinds ? s.approval : s.wallet;
+  const sharedDelta = sum ? (approvalBinds ? -sum.pulledUsdc : sum.walletChange) : 0n;
   let html = "";
   for (const m of markets.filter((x) => !x.finalized)) {
     const books = s.books.filter((b) => b.marketId === m.id);
     const long = books.find((b) => b.side === 0);
     const short = books.find((b) => b.side === 1);
-    const lp = books.reduce((x, b) => x + b.usdc, 0n);
     const c = s.custody.find((x) => x.marketId === m.id);
     const touched = f?.marketId === m.id;
     const d = (b?: { hash: string }) => (touched && b ? (sum!.bookDelta.get(b.hash.toLowerCase()) ?? 0n) : 0n);
     html += `<div class="mk-card${touched ? " touched" : ""}">
-      <div class="mk-head"><b>ETH/BTC ${m.tenorDays}D</b>${touched ? `<span class="mk-tag">latest fill</span>` : f ? `<span class="mk-tag quiet">unchanged</span>` : ""}</div>
-      <div class="mk-k">LP'd on Aqua</div>
-      <div class="mk-v">${amt(lp)} <small>${cash}</small> ${delta(d(long) + d(short))}</div>
-      <div class="mk-sub">Long book ${amt(long?.usdc ?? 0n)} ${delta(d(long))}<br>Short book ${amt(short?.usdc ?? 0n)} ${delta(d(short))}</div>
+      <div class="mk-head"><b>ETH/BTC ${m.tenorDays}D</b>${touched ? `<span class="mk-tag">latest fill</span>` : ""}</div>
+      <div class="mk-k">Available (shared)</div>
+      <div class="mk-v">${amt(shared)} <small>${cash}</small> ${delta(sharedDelta)}</div>
+      <div class="mk-sub">Book caps (virtual)<br>Long ${amt(long?.usdc ?? 0n)} ${delta(d(long))} · Short ${amt(short?.usdc ?? 0n)} ${delta(d(short))}</div>
       <div class="mk-k">Holding</div>
       <div class="mk-hold"><span>${LONG} ${amt(c?.long ?? 0n)} ${touched ? delta(sum!.custodyLong) : ""}</span><span>${SHORT} ${amt(c?.short ?? 0n)} ${touched ? delta(sum!.custodyShort) : ""}</span></div>
     </div>`;

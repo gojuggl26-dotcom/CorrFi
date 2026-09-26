@@ -440,3 +440,11 @@ footer { border-top: 1px solid var(--hair-dark); padding: 32px 0 48px; font-size
 .delta.up { background: #e8f6ee; color: #1a7f43; }
 .delta.down { background: var(--t-tint); color: var(--accent); }
 @media (max-width: 720px) { .tiles { grid-template-columns: 1fr; } }
+
+/* "Docs" in the nav: hover or focus (tap) shows the repository link; the top padding bridges the gap for the pointer */
+.nav-docs { position: relative; cursor: pointer; font-size: 14px; font-weight: 500; padding: 4px 8px; color: var(--t-ink, var(--ink)); outline: none; }
+.nav-docs:hover, .nav-docs:focus-within { color: var(--accent); }
+.docs-pop { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 10px; opacity: 0; visibility: hidden; transition: opacity 120ms ease, visibility 120ms; z-index: 40; }
+.nav-docs:hover .docs-pop, .nav-docs:focus-within .docs-pop { opacity: 1; visibility: visible; }
+.docs-pop a { display: block; white-space: nowrap; background: var(--paper, #fff); border: 1px solid var(--t-frost, #e8e8e8); border-radius: 14px; padding: 10px 14px; box-shadow: 0 4px 16px rgba(19, 19, 19, 0.08); font-size: 14px; font-weight: 550; color: var(--accent); border-bottom: 1px solid var(--t-frost, #e8e8e8); }
+.docs-pop a:hover { background: var(--t-tint, #fff3eb); color: var(--accent); }
