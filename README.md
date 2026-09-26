@@ -15,6 +15,8 @@ You can take Long and Short views on future correlation.
 <br>**6.Demo and try it**
 <br>**7.Verification and tests**
 <br>**8.What this does not claim**
+<br>**9.Tech Stack**
+<br>**10.License**
 
 ## 0.For 1inch judges: where to look
 
@@ -401,6 +403,37 @@ Used as deployed on Base Sepolia: Multicall3 [`0xcA11bde05977b3631167028862bE2a1
 ## 8.What this does not claim
 
 <!-- Testnet only; SwapVM main is unaudited; the reporter is trusted for the price points (the contract enforces the math); tUSDC is a test token; the gold pairs are not listed yet. -->
+
+## 9.Tech Stack
+
+| Layer | Stack |
+|---|---|
+| Smart contracts | Solidity 0.8.30 (via-IR, optimizer 700 runs, EVM Cancun) · Foundry v1.8.3 (forge, anvil, cast) |
+| 1inch | SwapVM [`feb1641`](https://github.com/1inch/swap-vm/tree/feb16411738331f7d05ae71d4a664154068018fc) (router base, `Deadline` opcode) · Aqua v1.0.0 [`81c26e4`](https://github.com/1inch/aqua/tree/81c26e4619ce21556ab02b3284ee2685de21fb18) · 1inch solidity-utils |
+| Contract libraries | OpenZeppelin Contracts v5.4.0 · Solady v0.1.26 (`lnWad`) · forge-std v1.11.0 |
+| Off-chain engine | TypeScript on Node.js 24 (run directly, no build step) · viem 2.56.9 — reporter, price engine (EIP-712 signed reports), finalizer, maker tools, replay driver |
+| Frontend | Vite 7.3.6 · TypeScript 5.9.3 · plain DOM (no framework) · viem · MetaMask (EIP-1193 connect and chain switch, EIP-747 add token) |
+| Verifier and research | Python 3.13 · mpmath 1.3.0 (50-digit reference) · NumPy · pytest · pure-Python Keccak-256 |
+| Market data | 1-minute klines from Binance, OKX, Bybit, Bitget and KuCoin (public REST APIs) |
+| Network | Base Sepolia (OP Stack) · Multicall3 · BaseScan |
+| Tests and CI | Foundry unit, fuzz and invariant tests · node:test · pytest · Playwright · GitHub Actions |
+
+## 10.License
+
+| Part | License |
+|---|---|
+| CorrFi code derived from SwapVM: [`CorrFiRouter`](contracts/src/CorrFiRouter.sol), [`CorrFiEngine`](contracts/src/lib/CorrFiEngine.sol), [`CorrFiOrders`](contracts/src/lib/CorrFiOrders.sol), [`CorrFiLens`](contracts/src/CorrFiLens.sol) | `LicenseRef-Degensoft-SwapVM-1.1` — published under the same license with the complete corresponding source (SwapVM-1.1 §3.1 A); changes and their date are marked in the file headers (§3.1 D) |
+| All other CorrFi code (hub, vault, tokens, math and curve libraries, engine, UI, verifier, data and backtest tools) | [MIT](LICENSE) |
+| 1inch SwapVM | `LicenseRef-Degensoft-SwapVM-1.1` © Degensoft Ltd 2025 ([`LICENSES/SwapVM-1.1.txt`](https://github.com/1inch/swap-vm/tree/feb16411738331f7d05ae71d4a664154068018fc)) |
+| 1inch Aqua | `LicenseRef-Degensoft-Aqua-Source-1.1` © Degensoft Ltd 2025 ([`LICENSES/Aqua-Source-1.1.txt`](https://github.com/1inch/aqua/tree/81c26e4619ce21556ab02b3284ee2685de21fb18)) |
+| OpenZeppelin Contracts · Solady · 1inch solidity-utils | MIT |
+| forge-std | MIT / Apache-2.0 |
+
+Some Solidity files under `contracts/src` still read `SPDX-License-Identifier: UNLICENSED`. They are MIT like the rest: the identifiers are left as deployed because the Base Sepolia bytecode embeds a hash of these exact source files (changing a comment would break the reproducible-bytecode check in section 5). They will be updated with the next deployment.
+
+Powered by SwapVM — © Degensoft Ltd 2025. Powered by Aqua — © Degensoft Ltd 2025. The same notices are shown in the UI. CorrFi uses the SwapVM and Aqua names only to state its integration; it is not affiliated with 1inch or Degensoft.
+
+Build and deployment (SwapVM-1.1 §3.1 E): `cd contracts && forge build`, then `ENV_FILE=<keys file> DEPLOY_NAME=base-sepolia engine/scripts/testnet.sh deploy` (checks the build against `contracts/build-manifest.json` before sending), `verify`, `calib`, `markets`, `maker`, `bots`.
 
 ---
 
