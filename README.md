@@ -411,9 +411,9 @@ Every step is one command: `ENV_FILE=<keys file> DEPLOY_NAME=base-sepolia engine
 
 ## 6.Demo and try it
 
-<!-- Demo video: link to be added. -->
-
-**Try it on Base Sepolia.** The committed [`ui/public/config.json`](ui/public/config.json) points at the deployment in section 5.
+<!-- https://youtu.be/PuajSVHl9Os -->　
+https://youtu.be/PuajSVHl9Os
+<br>**Try it on Base Sepolia.** The committed [`ui/public/config.json`](ui/public/config.json) points at the deployment in section 5.
 
 1. `cd engine && npm ci && cd ../ui && npm ci && npm run dev`, then open http://localhost:5173.
 2. Connect MetaMask. The page switches it to Base Sepolia (and adds the network if needed). You need a little Base Sepolia ETH for gas.
