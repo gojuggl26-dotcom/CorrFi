@@ -1,0 +1,50 @@
+# The public site on GitHub Pages: the UI built with ui/public/config.json (Base Sepolia), without the replay page.
+name: pages
+
+on:
+  push:
+    branches: [main]
+    paths: ["ui/**", "engine/src/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: engine dependencies (the UI imports engine/src)
+        working-directory: engine
+        run: npm ci
+      - name: ui dependencies
+        working-directory: ui
+        run: npm ci
+      - name: build the public site
+        working-directory: ui
+        env:
+          CORRFI_SITE: public
+        run: npx vite build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ui/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
