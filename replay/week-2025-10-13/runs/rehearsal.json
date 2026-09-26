@@ -7,9 +7,9 @@
  "runs": 10,
  "AC1": {
   "pass": true,
-  "medianTotalMs": 106561,
-  "maxTotalMs": 106565,
-  "medianVerdictMs": 101560,
+  "medianTotalMs": 106557,
+  "maxTotalMs": 106575,
+  "medianVerdictMs": 101563,
   "note": "totalMs = START to the end of the verification display (R §5.1: 106.6 s); verdictMs = when V1-V8 appear"
  },
  "AC2": {
@@ -17,7 +17,7 @@
  },
  "AC3": {
   "pass": true,
-  "reference": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed"
+  "reference": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f"
  },
  "AC4": {
   "pass": null,
@@ -25,7 +25,7 @@
  },
  "AC5": {
   "pass": true,
-  "maxStepP99Ms": 123.95119999989402
+  "maxStepP99Ms": 270.11239999999816
  },
  "AC6": {
   "pass": true,
@@ -46,101 +46,101 @@
  "results": [
   {
    "run": 1,
-   "verdictMs": 101565,
-   "totalMs": 106563,
-   "stepP99Ms": 116.3705000000009,
+   "verdictMs": 101567,
+   "totalMs": 106557,
+   "stepP99Ms": 270.11239999999816,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   },
   {
    "run": 2,
-   "verdictMs": 101553,
-   "totalMs": 106564,
-   "stepP99Ms": 117.33739999998943,
+   "verdictMs": 101572,
+   "totalMs": 106557,
+   "stepP99Ms": 203.72000000000116,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   },
   {
    "run": 3,
-   "verdictMs": 101554,
-   "totalMs": 106555,
-   "stepP99Ms": 116.59850000002189,
+   "verdictMs": 101562,
+   "totalMs": 106556,
+   "stepP99Ms": 259.44650000002,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   },
   {
    "run": 4,
    "verdictMs": 101558,
-   "totalMs": 106550,
-   "stepP99Ms": 116.87249999999767,
+   "totalMs": 106554,
+   "stepP99Ms": 227.9613000000245,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   },
   {
    "run": 5,
-   "verdictMs": 101569,
-   "totalMs": 106565,
-   "stepP99Ms": 117.49950000003446,
+   "verdictMs": 101563,
+   "totalMs": 106558,
+   "stepP99Ms": 241.12080000003334,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   },
   {
    "run": 6,
-   "verdictMs": 101560,
-   "totalMs": 106559,
-   "stepP99Ms": 116.87489999993704,
+   "verdictMs": 101557,
+   "totalMs": 106556,
+   "stepP99Ms": 240.6760999999242,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   },
   {
    "run": 7,
-   "verdictMs": 101559,
-   "totalMs": 106561,
-   "stepP99Ms": 123.95119999989402,
+   "verdictMs": 101569,
+   "totalMs": 106555,
+   "stepP99Ms": 230.4309999999823,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   },
   {
    "run": 8,
-   "verdictMs": 101556,
-   "totalMs": 106558,
-   "stepP99Ms": 119.16099999996368,
+   "verdictMs": 101566,
+   "totalMs": 106575,
+   "stepP99Ms": 207.88159999996424,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   },
   {
    "run": 9,
-   "verdictMs": 101567,
-   "totalMs": 106564,
-   "stepP99Ms": 116.33770000003278,
+   "verdictMs": 101559,
+   "totalMs": 106567,
+   "stepP99Ms": 202.37679999996908,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   },
   {
    "run": 10,
-   "verdictMs": 101569,
-   "totalMs": 106552,
-   "stepP99Ms": 109.76619999995455,
+   "verdictMs": 101559,
+   "totalMs": 106562,
+   "stepP99Ms": 203.06830000004265,
    "verifierPass": true,
-   "stateRoot": "0xf27f0ab528badee2020696eddea09083f28f37720a62331e37fd0185af18a6ed",
+   "stateRoot": "0xa7b1944f33b7a4682e19f14299ea734760a581b930d297a65406e1a4703bb57f",
    "sameRoot": true,
    "maxGasUsed": "872416"
   }
