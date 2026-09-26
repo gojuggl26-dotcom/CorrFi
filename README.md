@@ -333,7 +333,62 @@ flowchart LR
 
 ## 5.Deployments and on-chain proof
 
-<!-- Base Sepolia addresses with verified explorer links (Aqua official and unmodified, CorrFiRouter, hub, lens, vaults, tUSDC, libraries) and transaction links: ship, the four swap directions, a hook mint, finalize, redeem. -->
+**Network:** Base Sepolia (chain ID 84532) · deployed at block [47,323,906](https://sepolia.basescan.org/block/47323906) on 2026-09-26 · explorer: [BaseScan](https://sepolia.basescan.org)
+
+**Reproducible bytecode.** The creation code of every deployment transaction and the runtime code on chain match the pinned build [`contracts/build-manifest.json`](contracts/build-manifest.json) (compiler, settings and dependency commits). Check it yourself:
+
+```sh
+cd engine
+node scripts/build_manifest.ts --broadcast ../deployments/base-sepolia.broadcast.json
+RPC_URL=https://sepolia.base.org node scripts/build_manifest.ts --deployed ../deployments/base-sepolia.json
+```
+
+Source verification on BaseScan has not been submitted yet.
+
+**Contracts**
+
+| Contract | Role | Address | Deployed in |
+|---|---|---|---|
+| Aqua | 1inch Aqua v1.0.0 ([`81c26e4`](https://github.com/1inch/aqua/tree/81c26e4619ce21556ab02b3284ee2685de21fb18)), unmodified | [`0xfd7d2a5B777b3424eDC41682eA3f93138fCd6B27`](https://sepolia.basescan.org/address/0xfd7d2a5B777b3424eDC41682eA3f93138fCd6B27) | [`0x867d…40bb`](https://sepolia.basescan.org/tx/0x867d8bfd901bcf1c0fdde7752ab47927d56803f9bc403f4ebef20cd789ff40bb) |
+| CorrFiRouter | SwapVM router (inherits `SwapVM.sol` unmodified), Aqua app, maker hooks | [`0x312f064abE74faeC34762C96b100E2CC22b451c1`](https://sepolia.basescan.org/address/0x312f064abE74faeC34762C96b100E2CC22b451c1) | [`0xea63…45c2`](https://sepolia.basescan.org/tx/0xea63b764d5165e6a8aedcc4dece4aced649a16000371f70a93739885f04e45c2) |
+| CorrFiEngine | library: opcodes `0xd0`–`0xd2` and hooks (CREATE2) | [`0xFF00299DC1aB900116d1d5b80e9D7871D2987b8A`](https://sepolia.basescan.org/address/0xFF00299DC1aB900116d1d5b80e9D7871D2987b8A) | [`0x73ed…1ba5`](https://sepolia.basescan.org/tx/0x73edb18e9df3b98b4f2bc2d27629d38286b271cdcef0d2b7ade80447029a1ba5) |
+| CorrFiOrders | library: order registry and trade entry (CREATE2) | [`0x993d625Dbf20FC0e4B4D4BF7f8cd4e53f1d40dc4`](https://sepolia.basescan.org/address/0x993d625Dbf20FC0e4B4D4BF7f8cd4e53f1d40dc4) | [`0xc6fe…af9d`](https://sepolia.basescan.org/tx/0xc6fe182539b681a503b815e8091d4014e59646210e7fc5c0c952ed72fcc2af9d) |
+| CorrFiHub | price points, signed reports, fair value, market factory | [`0x2d6B16B388729a97c09616e112C1409170191f45`](https://sepolia.basescan.org/address/0x2d6B16B388729a97c09616e112C1409170191f45) | [`0x8c81…08b1`](https://sepolia.basescan.org/tx/0x8c816813f7b62ec695de8afb96c347711c4ff3bf478040de0868c6b1deec08b1) |
+| CorrFiLens | quote breakdown (same code path as the swap) | [`0x9d028c604C705DA487C4124934BeD0B140182B8b`](https://sepolia.basescan.org/address/0x9d028c604C705DA487C4124934BeD0B140182B8b) | [`0x08dc…cc09`](https://sepolia.basescan.org/tx/0x08dcb4c257d0544fa5cf6447eef3fb2d6c93c7ec96e92722cbee000ce6efcc09) |
+| tUSDC | Test USDC (6 decimals, no value): owner mint, public faucet 10,000 / wallet / 24 h | [`0x3D39e3b30261FD59D93bDdD24C09C419b3dF8631`](https://sepolia.basescan.org/address/0x3D39e3b30261FD59D93bDdD24C09C419b3dF8631) | [`0x8173…1b3e`](https://sepolia.basescan.org/tx/0x81732f5093066debfd0a354e8c14d4f3aa3789269f965b0d9d9d154429711b3e) |
+| CorrFiVault (implementation) | per-market vault, EIP-1167 clones (created by the hub) | [`0x5F08322F62Beb1af22071D1B73b98a1ada7750EC`](https://sepolia.basescan.org/address/0x5F08322F62Beb1af22071D1B73b98a1ada7750EC) | with the hub |
+| CorrFiToken (implementation) | Long / Short ERC-20, EIP-1167 clones (created by the hub) | [`0x77EcC8fa4f44Ae096Cf9b6E70A2120Fdca2Dd5A5`](https://sepolia.basescan.org/address/0x77EcC8fa4f44Ae096Cf9b6E70A2120Fdca2Dd5A5) | with the hub |
+
+Used as deployed on Base Sepolia: Multicall3 [`0xcA11bde05977b3631167028862bE2a173976CA11`](https://sepolia.basescan.org/address/0xcA11bde05977b3631167028862bE2a173976CA11), WETH [`0x4200000000000000000000000000000000000006`](https://sepolia.basescan.org/address/0x4200000000000000000000000000000000000006).
+
+**Markets** (ETH / BTC, observation from 2026-09-26 10:00 UTC; maturity at 10:00 UTC)
+
+| Market | Vault | Long (ETHBTC-L) | Short (ETHBTC-S) | Maturity | Created in |
+|---|---|---|---|---|---|
+| 7D #0 | [`0x19E985710067694A28252cD5D40a9a47e8c1201C`](https://sepolia.basescan.org/address/0x19E985710067694A28252cD5D40a9a47e8c1201C) | [`0x09d5245828C1CC8fB1Ae0Ae0398A6be73A4CC278`](https://sepolia.basescan.org/address/0x09d5245828C1CC8fB1Ae0Ae0398A6be73A4CC278) | [`0xc3Dd47B4088A8C2Ab457fb353839423e634aAd1d`](https://sepolia.basescan.org/address/0xc3Dd47B4088A8C2Ab457fb353839423e634aAd1d) | 2026-10-03 | [`0x0c4a…f3f6`](https://sepolia.basescan.org/tx/0x0c4a47bb55d6d87ecf2738d796c6c7b9141fa8617043a44faec805392bcbf3f6) |
+| 14D #1 | [`0x9a9dd9AA38ff8D4BF27Fbaf314C0Ea3fe58352A4`](https://sepolia.basescan.org/address/0x9a9dd9AA38ff8D4BF27Fbaf314C0Ea3fe58352A4) | [`0x193DE4A272BEa27B1852284b74Cdf8e285f30115`](https://sepolia.basescan.org/address/0x193DE4A272BEa27B1852284b74Cdf8e285f30115) | [`0x4C53cB023eE33b0D4A680833b00a9b76414B33e8`](https://sepolia.basescan.org/address/0x4C53cB023eE33b0D4A680833b00a9b76414B33e8) | 2026-10-10 | [`0x2669…0a64`](https://sepolia.basescan.org/tx/0x2669a0d87cb3021b4a09adc55a25846592fafc57869aac3619912023f0f20a64) |
+| 28D #2 | [`0x34970193B4c51c955b8e9dF610017F420Bb00640`](https://sepolia.basescan.org/address/0x34970193B4c51c955b8e9dF610017F420Bb00640) | [`0x48080c152116B9c61478805070Ec3d2A1D0AcF8c`](https://sepolia.basescan.org/address/0x48080c152116B9c61478805070Ec3d2A1D0AcF8c) | [`0x37166040D9C5b697808aA9620640b7fD8D942A72`](https://sepolia.basescan.org/address/0x37166040D9C5b697808aA9620640b7fD8D942A72) | 2026-10-24 | [`0xe2f6…f089`](https://sepolia.basescan.org/tx/0xe2f67d74f032341469c5cd12fa93b7099bbcd9a4ae02ff9beceffad5d9bef089) |
+
+**Accounts** (test keys generated for this testnet deployment; never used anywhere else)
+
+| Role | Address |
+|---|---|
+| Deployer (owner, treasury, tUSDC owner) | [`0xd688EF28D1B26337677aE59742C057DC68Ad8EA6`](https://sepolia.basescan.org/address/0xd688EF28D1B26337677aE59742C057DC68Ad8EA6) |
+| Reporter (posts price points and reports every 5 minutes) | [`0xcd81C7339525abD11bcF66eB28f69F0C168A70D7`](https://sepolia.basescan.org/address/0xcd81C7339525abD11bcF66eB28f69F0C168A70D7) |
+| Price engine (EIP-712 signer of the reports) | [`0x6B6F779E4dfCA1FA9E6FFfe90d2aC77B1553CD88`](https://sepolia.basescan.org/address/0x6B6F779E4dfCA1FA9E6FFfe90d2aC77B1553CD88) |
+| Maker (the default maker, 1,000,000 tUSDC) | [`0x4fefEAd860DF1a2E176F43081E07FA2079D0A153`](https://sepolia.basescan.org/address/0x4fefEAd860DF1a2E176F43081E07FA2079D0A153) |
+| Taker (demo) | [`0x494916F5054722CC7e4666Eecb67AeB5A14e87a1`](https://sepolia.basescan.org/address/0x494916F5054722CC7e4666Eecb67AeB5A14e87a1) |
+
+**On-chain proof**
+
+| What | Transactions |
+|---|---|
+| Router registered in the hub (`setRouter`) | [`0xb458…d0be`](https://sepolia.basescan.org/tx/0xb4587fa366be73faf3ad62dbe9a8971be42e7c508f3122a4bbb123fc9490d0be) |
+| Markets created, each with the price engine's signed initial report (7D · 14D · 28D) | [`0x0c4a…f3f6`](https://sepolia.basescan.org/tx/0x0c4a47bb55d6d87ecf2738d796c6c7b9141fa8617043a44faec805392bcbf3f6) · [`0x2669…0a64`](https://sepolia.basescan.org/tx/0x2669a0d87cb3021b4a09adc55a25846592fafc57869aac3619912023f0f20a64) · [`0xe2f6…f089`](https://sepolia.basescan.org/tx/0xe2f67d74f032341469c5cd12fa93b7099bbcd9a4ae02ff9beceffad5d9bef089) |
+| The maker's Long + Short books registered on the router (`registerCorrPair`) | [`0x3821…30ef`](https://sepolia.basescan.org/tx/0x3821f29e2496942e7be305a3cc1a248cdcb58359a4a8f45ef2e56be9322e30ef) · [`0x1062…286c`](https://sepolia.basescan.org/tx/0x1062a6f5205191e78c4aad3395350983d11d615ed5330b686efbb0546b00286c) · [`0xde39…b596`](https://sepolia.basescan.org/tx/0xde39ca1134963959285bf4abc276f22a8364c0a5fb4e443c62c05aaa0917b596) |
+| Six books shipped to Aqua, 55,000 tUSDC virtual each, one approval for all (`Aqua.ship`) | [`0xcb1b…fc0c`](https://sepolia.basescan.org/tx/0xcb1b3488539bc6357acc26977e0adb2157ebb783a245ec9f69177422ce0afc0c) · [`0xe88c…72a5`](https://sepolia.basescan.org/tx/0xe88c675a2d9324dee0ef9840b19893ddd1afa369d6a9a117d2facffb5bd672a5) · [`0x99a2…5e9a`](https://sepolia.basescan.org/tx/0x99a2dfe7e5e8983cf464ad8e6cb9f7f536c6e4e269dc34c337f49a998e8e5e9a) · [`0xda6d…3494`](https://sepolia.basescan.org/tx/0xda6d921dca4f89edac94100fbefa99ecec33b364693aba553289462b74883494) · [`0xce56…9720`](https://sepolia.basescan.org/tx/0xce5663b917f5d0e62cd96546a62403b79cb94221fdb5fe98e61e52a281ba9720) · [`0x9e55…4ed2`](https://sepolia.basescan.org/tx/0x9e5566fb56b74366731742a91d18c2ed7ef96622baeee1d6701a2b77e3004ed2) |
+| First fair-value report accepted by the hub's on-chain recomputation (`postAndReport`, all three markets) | [`0x1a1c…dc07`](https://sepolia.basescan.org/tx/0x1a1c8a5b5bbfa17b384e4d7000cd1f61f32d95c5d076af53ac81de6372a4dc07) |
+| Swaps in the four directions, a mint in the hook, finalize, redeem | to be added (after the demo; finalize and redeem at maturity) |
 
 ## 6.Demo and try it
 
