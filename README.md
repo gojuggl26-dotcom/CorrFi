@@ -215,17 +215,121 @@ T-1 and T-2 clear themselves with the next report; T-4 is permanent (the market 
 
 Code: [`CorrFiMath.sol`](contracts/src/lib/CorrFiMath.sol) (returns, correlation, fair value, spreads), [`CorrFiCurve.sol`](contracts/src/lib/CorrFiCurve.sol) (bid/ask curves and path integrals), [`CorrFiPricing.sol`](contracts/src/lib/CorrFiPricing.sol) (spread assembly, inventory split, risk limits), [`CorrFiHub.sol`](contracts/src/CorrFiHub.sol) (price points, sums, report check), [`CorrFiEngine.sol`](contracts/src/lib/CorrFiEngine.sol) (the three instructions and the hooks).
 
-<!-- Fair value on-chain; bid / ask from the fair value (base spread + risk surcharge); settlement value Long_T = (1 + rho) / 2. Architecture diagram (mermaid): reporter -> hub (fair value); taker -> router (SwapVM program) <-> Aqua <-> maker wallet; hooks -> vault (mint / burn). -->
-
 ## 4.Aqua and SwapVM: why and how
 
 ### Why Aqua and SwapVM
 
-<!-- Why a correlation market needs Aqua's shared liquidity and SwapVM's custom pricing; alternatives we rejected. -->
+**Aqua — one wallet backs every book.** A maker quotes 3 markets × Long / Short = 6 books, each able to fill up to 55,000 USDC.
+
+```mermaid
+flowchart TB
+  subgraph NO["Without Aqua: a pool per book"]
+    direction LR
+    M0["Maker"] -->|"deposit 110,000"| P1["7D pool · locked"]
+    M0 -->|"deposit 110,000"| P2["14D pool · locked"]
+    M0 -->|"deposit 110,000"| P3["28D pool · locked"]
+  end
+  subgraph YES["With Aqua: CorrFi"]
+    direction LR
+    W["Maker wallet<br/>105,000 USDC<br/>never leaves the wallet"] -.->|"virtual 2 × 55,000"| B1["7D Long · Short books"]
+    W -.->|"virtual 2 × 55,000"| B2["14D Long · Short books"]
+    W -.->|"virtual 2 × 55,000"| B3["28D Long · Short books"]
+  end
+  NO ~~~ YES
+```
+
+| | Without Aqua | With Aqua (CorrFi) |
+|---|---|---|
+| USDC committed for 6 books | 330,000, locked in pools | **105,000**, stays in the wallet |
+| Long / Short inventory | minted in advance | minted inside the trade that needs it |
+| Risk across books | each pool on its own | one budget: $\sum RC < 0.9 \times$ RiskBudget |
+
+**SwapVM — the price is a program, not a pool ratio.**
+
+| The market needs | Constant-product AMM | CorrFi on SwapVM |
+|---|---|---|
+| Price anchor | pool ratio $x \cdot y = k$ | on-chain fair value — `0xd0` |
+| Spread | fixed fee | $h_0 + h_M + h_O + h_U$, moves with time, staleness, risk — `0xd0` `0xd1` |
+| Size cost | pool depth | inventory slope $k_q$, path integral — `0xd1` |
+| Risk limits | none | inventory caps, $U_{\max}$, maker funds — `0xd2` |
+| Inventory | deposited in advance | minted / burned in the swap — maker hooks |
 
 ### How we use them
 
-<!-- Custom opcodes 0xd0 CorrReport / 0xd1 CorrCurve / 0xd2 CorrGuard (name, file, role); the program Deadline -> CorrReport -> CorrCurve -> CorrGuard; the router as SwapVM router, Aqua app and maker hook; ship -> pull / push -> dock; pinned versions (Aqua v1.0.0 official and unmodified, SwapVM pinned commit inherited by the router). -->
+**One contract, three roles.**
+
+```mermaid
+flowchart TB
+  RT["CorrFiRouter<br/>one deployed contract"]
+  RT --> R1["as SwapVM router<br/>inherits SwapVM.sol unmodified<br/>runs the program"]
+  RT --> R2["as Aqua app<br/>orders are shipped to it<br/>pulls / pushes the maker's balances"]
+  RT --> R3["as maker hook<br/>preTransferOut · postTransferIn<br/>mint · burn · custody"]
+  RT -.->|"DELEGATECALL<br/>keeps the router under 24 KB"| L["CorrFiEngine: 0xd0 · 0xd1 · 0xd2 + hooks<br/>CorrFiOrders: register · trade entry"]
+```
+
+**The program — 19 bytes, the only one the router accepts.**
+
+```mermaid
+flowchart LR
+  D["0x20 Deadline<br/>obsEnd"] --> CR["0xd0 CorrReport<br/>market · side · generation"]
+  CR -->|"balanceOut = P_fair<br/>balanceIn = h_min"| CC["0xd1 CorrCurve"]
+  CC -->|"amountIn · amountOut<br/>plan Q1 · Q2"| CG["0xd2 CorrGuard"]
+  CG -->|"OK"| HK["maker hooks<br/>settle"]
+```
+
+| Opcode | Args | Reads | Writes | Code |
+|---|---|---|---|---|
+| `0x20` Deadline | `obsEnd` (5 B) | block time | — | SwapVM [`Controls.sol`](https://github.com/1inch/swap-vm/blob/feb16411738331f7d05ae71d4a664154068018fc/contracts/instructions/Controls.sol) |
+| `0xd0` CorrReport | market, side, generation (6 B) | hub: $P_{\text{fair}}$, $h_0$, $\bar\sigma$, report age | `balanceOut` ← $P_{\text{fair}}$, `balanceIn` ← $h_{\min}$, maker lock | [`CorrFiEngine.report`](contracts/src/lib/CorrFiEngine.sol) |
+| `0xd1` CorrCurve | — | custody $N_L, N_S$, utilization $U^{*}$ | `amountIn`, `amountOut`, plan $Q_1, Q_2$, `CorrSwap` event | [`CorrFiEngine.curve`](contracts/src/lib/CorrFiEngine.sol) |
+| `0xd2` CorrGuard | — | post-trade $q$, $U$, maker funds | — (reverts if a limit fails) | [`CorrFiEngine.guard`](contracts/src/lib/CorrFiEngine.sol) |
+
+The lock and the plan live in transient storage and are cleared by the hooks. `quote` runs the same bytes read-only.
+
+**A buy, token by token** (D1: buy $Q$ Long).
+
+```mermaid
+sequenceDiagram
+  actor T as Taker
+  participant R as CorrFiRouter
+  participant V as CorrFiVault
+  participant M as Maker wallet (Aqua)
+  T->>R: trade: buy Q Long
+  Note over R: 0x20 → 0xd0 → 0xd1 → 0xd2<br/>Pay, Q = Q1 + Q2
+  rect rgba(242, 107, 29, 0.12)
+    Note over R,M: preTransferOut hook
+    V->>R: Q1 Long from the maker's custody
+    M->>R: Q2 USDC (Aqua pull)
+    R->>V: mint with Q2 USDC, Q2 Short to the maker's custody
+    V->>R: Q2 Long
+  end
+  R->>T: Q Long (Aqua push → pull)
+  T->>M: Pay USDC (Aqua push)
+```
+
+| | Hook | Tokens |
+|---|---|---|
+| Buy (D1, D3) | `preTransferOut` | $Q_1$ from custody + $Q_2$ minted with USDC pulled from the book; the other side of $Q_2$ goes to custody |
+| Sell (D2, D4) | `postTransferIn` | $Q_1$ burned with the maker's opposite custody, USDC pushed back to the book; $Q_2$ kept in custody |
+
+**The maker's side.**
+
+```mermaid
+flowchart LR
+  C["setMakerConfig<br/>budget · caps"] --> G["registerCorrPair<br/>Long + Short books"]
+  G --> S["Aqua.ship<br/>55,000 USDC virtual · 0 tokens"]
+  S --> TR["trades<br/>router pulls / pushes"]
+  TR -.-> TOP["Aqua.push<br/>top up"]
+  TR -.-> DK["Aqua.dock<br/>stop a book"]
+  TR --> CL["after maturity<br/>claimDeposit"]
+```
+
+**Versions.**
+
+| | Pinned | Modified? |
+|---|---|---|
+| Aqua | v1.0.0 ([`81c26e4`](https://github.com/1inch/aqua/tree/81c26e4619ce21556ab02b3284ee2685de21fb18)) | No — deployed as is |
+| SwapVM | [`feb1641`](https://github.com/1inch/swap-vm/tree/feb16411738331f7d05ae71d4a664154068018fc) | `SwapVM.sol` no; `CorrFiRouter` inherits it and adds `0xd0`–`0xd2` and the hooks (SwapVM-1.1 license) |
 
 ## 5.Deployments and on-chain proof
 
