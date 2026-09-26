@@ -54,6 +54,167 @@ Risk-management controls, including inventory caps and circuit-breaker condition
 
 ## 3.How it works
 
+Every five minutes a reporter posts ETH and BTC prices on-chain, and the hub turns them into the running correlation statistics and a **fair value** for each market. A trade is a SwapVM program run by the CorrFi router: three custom instructions read that fair value, price the trade along the maker's inventory, and check the risk limits; the maker hooks then move the tokens through Aqua. At maturity the realized correlation fixes what each token pays.
+
+```mermaid
+flowchart LR
+  X["5 exchanges<br/>1-min candles"] --> R["Reporter<br/>(off-chain)"]
+  R -->|"price points + signed report"| H["CorrFiHub<br/>points · correlation sums · fair value"]
+  T["Taker"] -->|"trade / swap"| RT["CorrFiRouter (SwapVM)<br/>0x20 → 0xd0 → 0xd1 → 0xd2"]
+  H -->|"P_fair, h_0, σ̄"| RT
+  RT <-->|"pull / push"| A["Aqua<br/>virtual balances"]
+  A <-->|"USDC stays in the wallet"| M["Maker wallet"]
+  RT -->|"hooks: mint / burn / custody"| V["CorrFiVault<br/>Long · Short · collateral"]
+```
+
+### 3.1 One trade, step by step
+
+| Step | Instruction | What it does |
+|---|---|---|
+| 1 | `0x20` Deadline (standard SwapVM) | rejects an expired order |
+| 2 | `0xd0` **CorrReport** | checks the market is trading (halts T-1…T-4, §3.7), reads $P_{\text{fair}}$ and $h_0$, adds the maker and staleness spreads → $h_{\min}$ (§3.4). Passes $P_{\text{fair}}$ and $h_{\min}$ to the next instruction in the SwapVM registers |
+| 3 | `0xd1` **CorrCurve** | adds the utilization surcharge → $h$, prices the trade along the inventory path (§3.5), splits the quantity into inventory ($Q_1$) and new mint ($Q_2$) (§3.6) |
+| 4 | `0xd2` **CorrGuard** | checks the post-trade inventory, utilization and the maker's funds (§3.7) |
+| 5 | maker hooks `preTransferOut` / `postTransferIn` | mint or burn Long + Short pairs in the vault and move the tokens through Aqua (§3.6) |
+
+The same program runs in the read-only `quote` and in the real `swap`, so a quote and its fill use identical math. Details of the instructions: [chapter 4](#4aqua-and-swapvm-why-and-how).
+
+### 3.2 Price data
+
+Every $\Delta = 300$ s (at $t_k = t_{\text{start}} + k\Delta$) the reporter takes, for ETH and for BTC, the volume-weighted average price of the 1-minute candle $[t_k - 60\,\text{s},\, t_k)$ on five exchanges (Binance, Bybit, OKX, KuCoin, Bitget) and posts the **median**:
+
+$$
+P_k = \operatorname{median}_{v \in \text{valid}} \mathrm{VWAP}_v\left([t_k - 60,\ t_k)\right) \qquad \text{(needs at least 3 valid venues, otherwise the bar is invalid)}
+$$
+
+The hub rejects a point whose log return is implausible, $|\ln(P_k/P_{k-1})| > 0.5$.
+
+### 3.3 Settlement value (the realized correlation)
+
+For each asset $i \in \{A, B\}$ (A = ETH, B = BTC) and each valid bar $k$, the log return is winsorized with a scale $s_i$ fixed when the market is created ($c = 4$):
+
+$$
+r_{i,k} = \ln\frac{P_{i,k}}{P_{i,k-1}}, \qquad \tilde r_{i,k} = \min\left(c\,s_i,\ \max\left(-c\,s_i,\ r_{i,k}\right)\right)
+$$
+
+The hub keeps the running sums on-chain:
+
+$$
+C = \sum_k \tilde r_{A,k}\,\tilde r_{B,k}, \qquad V_A = \sum_k \tilde r_{A,k}^2, \qquad V_B = \sum_k \tilde r_{B,k}^2
+$$
+
+At maturity ($N = 288 \times \text{tenor in days}$ bars) the realized correlation and the settlement value of Long are
+
+$$
+\rho_T = \frac{C}{\sqrt{V_A V_B}} \in [-1, 1], \qquad \mathrm{Long}_T = \frac{1 + \rho_T}{2} \in [0, 1]
+$$
+
+If fewer than $N_{\min} = \lceil 0.99N \rceil$ bars are valid, or a variance is zero, the market is **VOID** and $\mathrm{Long}_T = \tfrac12$. Anyone can call `finalize()` once the last bar is in. Holders redeem
+
+$$
+\mathrm{Payout} = \left\lfloor q_L \cdot \mathrm{Long}_T \right\rfloor + \left\lfloor q_S \cdot (1 - \mathrm{Long}_T) \right\rfloor \quad \text{USDC}
+$$
+
+so a Long + Short pair always pays 1 USDC — the collateral it was minted from.
+
+### 3.4 Fair value before maturity
+
+With $n_{\text{obs}}$ bars observed and $n_{\text{rem}} = N - n_{\text{obs}}$ remaining, the expected settlement fills the remaining bars with a per-bar covariance forecast $\hat\Sigma = \begin{pmatrix}\hat\sigma_A^2 & \hat\sigma_{AB} \\ \hat\sigma_{AB} & \hat\sigma_B^2\end{pmatrix}$:
+
+$$
+\hat\rho_T = \frac{C + n_{\text{rem}}\,\hat\sigma_{AB}}{\sqrt{\left(V_A + n_{\text{rem}}\,\hat\sigma_A^2\right)\left(V_B + n_{\text{rem}}\,\hat\sigma_B^2\right)}}, \qquad P_{\text{fair}} = \frac{1 + \hat\rho_T}{2}
+$$
+
+$\hat\Sigma$ is fixed at creation from data before the start only: $\hat\Sigma = w\,\hat\Sigma_{\text{long}} + (1 - w)\,\hat\Sigma_{\text{recent}}$ (90-day and recent 5-minute covariances; $w = 0.3 / 0.5 / 0.6$ for 7D / 14D / 28D). At the start $P_{\text{fair}}$ is a classic correlation forecast; as bars accumulate it converges to the realized value.
+
+**Trustless update.** With each report the reporter signs $(k, P_{\text{fair}}, h_0)$; the hub recomputes both from its own sums and **rejects the report unless they match exactly**. The reporter can feed prices but cannot change the math. The price engine (TypeScript), the contracts (Solidity) and the verifier (Python) share one fixed-point specification and agree to the bit.
+
+### 3.5 Spread: base spread and risk surcharges
+
+The half-spread has a floor $h_{\min}$ and a utilization surcharge on top:
+
+$$
+h_{\min} = h_0 + h_M + h_O, \qquad h = h_{\min} + h_U(U^{*})
+$$
+
+| Term | Formula | Meaning |
+|---|---|---|
+| Base spread $h_0$ | $h_0 = \max\left(h_{\text{floor}},\ c_h\,\sigma_P(\tau)\right)$, $\ \tau = n_{\text{obs}}/N$ | forecast uncertainty: $\sigma_P(\tau)$ is a backtested error table that falls to 0 at maturity |
+| Maker spread $h_M$ | set by the maker | optional extra margin (0 in the MVP) |
+| Staleness $h_O$ | $h_O = c_O\,\bar\sigma\,\sqrt{\text{age}/\Delta}$ | risk that the fair value moved since the last report; $\text{age} = \text{now} - t_{\text{ref}}$ |
+| Utilization $h_U$ | $h_U = h_{U,\max}\,x^2$, $\ x = \dfrac{U^{*} - U_0}{U_{\max} - U_0}$ for $U^{*} > U_0$, else 0 | the maker's capital filling up ($U^{*}$ = utilization before the trade) |
+
+$\bar\sigma$ is the typical move of $P_{\text{fair}}$ per bar, an EMA updated with each report that advanced $\Delta k$ bars and moved the fair value by $\Delta P$:
+
+$$
+\bar\sigma^2 \leftarrow \lambda\,\bar\sigma^2 + (1 - \lambda)\,\frac{(\Delta P)^2}{\Delta k}, \qquad \lambda = 2^{-1/72}
+$$
+
+Utilization counts the risk capital of the maker's inventory in every market ($q_m$ = Long-equivalent inventory, §3.6):
+
+$$
+RC_m = \begin{cases} q_m\,P_{\text{fair},m} & q_m > 0 \\ |q_m|\,(1 - P_{\text{fair},m}) & q_m < 0 \end{cases}, \qquad U = \frac{\sum_m RC_m}{\text{RiskBudget}}
+$$
+
+### 3.6 Bid, ask and execution price
+
+Let $q = N_L - N_S$ be the maker's inventory in Long-equivalent tokens (its Long minus Short custody in the vault). The maker's **ask for Long** $\alpha(q)$ and **bid for Long** $\beta(q)$ lean against the inventory with slope $k_q$ over the market cap $q_{\max}$:
+
+$$
+\alpha(q) = \min\left(1,\ \max\left(P_{\text{fair}} + h_{\min},\ P_{\text{fair}} + h - k_q\frac{q}{q_{\max}}\right)\right)
+$$
+
+$$
+\beta(q) = \max\left(0,\ \min\left(P_{\text{fair}} - h_{\min},\ P_{\text{fair}} - h - k_q\frac{q}{q_{\max}}\right)\right)
+$$
+
+Short is the other side of the same book: its ask is $1 - \beta$ and its bid $1 - \alpha$. A trade of $Q$ tokens moves the inventory from $q_0$ and is priced as the **integral along that path**, rounded in the maker's favor:
+
+| Direction | Inventory | Taker pays / receives (USDC) |
+|---|---|---|
+| D1 buy Long | $q_0 \to q_0 - Q$ | $\text{Pay} = \left\lceil \int_{q_0 - Q}^{q_0} \alpha(q)\,dq \right\rceil$ |
+| D2 sell Long | $q_0 \to q_0 + Q$ | $\text{Receive} = \left\lfloor \int_{q_0}^{q_0 + Q} \beta(q)\,dq \right\rfloor$ |
+| D3 buy Short | $q_0 \to q_0 + Q$ | $\text{Pay} = Q - \left\lfloor \int_{q_0}^{q_0 + Q} \beta(q)\,dq \right\rfloor$ |
+| D4 sell Short | $q_0 \to q_0 - Q$ | $\text{Receive} = Q - \left\lceil \int_{q_0 - Q}^{q_0} \alpha(q)\,dq \right\rceil$ |
+
+A larger trade walks further along the curve, so size costs come from $k_q$ alone. For an amount given in USDC (exact-in buys, exact-out sells) the router solves the integral for $Q$ in closed form. The average price is $\text{Pay}/Q$ (or $\text{Receive}/Q$); the deviation from $P_{\text{fair}}$ splits into the minimum spread, the utilization surcharge and the inventory slope, as shown on the trade page.
+
+**Where the tokens come from.** The maker never pre-mints. For a buy, $Q_1 = \min(Q, \text{custody})$ comes from the maker's custody in the vault and $Q_2 = Q - Q_1$ is **minted in the same transaction**: the hook pulls $Q_2$ USDC from the maker's wallet through Aqua and mints $Q_2$ Long + $Q_2$ Short (1 USDC each pair), keeping the other side in custody. For a sell, tokens that pair with the maker's opposite custody are **burned back into USDC** and pushed to the maker's Aqua balance; the rest is bought into custody.
+
+### 3.7 Risk limits and halts
+
+`0xd2` CorrGuard accepts a trade only if, after it:
+
+- $Q_{\min} \le Q \le Q_{\max}$;
+- a fill that increases $|q_m|$ keeps $|q_m| \le q_{\max}$ and $\sum_m |q_m| \le q_{\text{grp}}$;
+- a fill that increases $RC_m$ keeps $U < U_{\max}$;
+- the order's Aqua allocation, the maker's wallet balance and its approvals cover the USDC and tokens the fill moves.
+
+`0xd0` CorrReport halts trading while any of these fails:
+
+| | Condition to trade |
+|---|---|
+| T-1 sync | every accumulated bar has a confirmed report |
+| T-2 freshness | $\text{age} \le \Delta + g$ |
+| T-3 expiry | $\text{now} < \text{obsEnd}$ |
+| T-4 data quality | invalid bars $\le (N - N_{\min})/2$ |
+
+T-1 and T-2 clear themselves with the next report; T-4 is permanent (the market will settle VOID).
+
+### 3.8 Parameters
+
+| Symbol | Value | | Symbol | Value |
+|---|---|---|---|---|
+| $\Delta$ | 300 s | | $c_h$, $h_{\text{floor}}$ | 0.30, 0.005 |
+| $N$ | 2,016 / 4,032 / 8,064 | | $c_O$, $g$ | 1.5, 60 s |
+| $N_{\min}$ | $\lceil 0.99N \rceil$ | | $h_{U,\max}$, $U_0$, $U_{\max}$ | 0.02, 0.6, 0.9 |
+| $c$ (winsorize) | 4 | | $k_q$ | 1/6 |
+| $w$ | 0.3 / 0.5 / 0.6 | | $q_{\max}$, $q_{\text{grp}}$ | 50,000, 100,000 tokens |
+| $\lambda$ | $2^{-1/72}$ | | $Q_{\min}$, $Q_{\max}$ | 1, 5,000 tokens |
+| | | | RiskBudget | 100,000 USDC |
+
+Code: [`CorrFiMath.sol`](contracts/src/lib/CorrFiMath.sol) (returns, correlation, fair value, spreads), [`CorrFiCurve.sol`](contracts/src/lib/CorrFiCurve.sol) (bid/ask curves and path integrals), [`CorrFiPricing.sol`](contracts/src/lib/CorrFiPricing.sol) (spread assembly, inventory split, risk limits), [`CorrFiHub.sol`](contracts/src/CorrFiHub.sol) (price points, sums, report check), [`CorrFiEngine.sol`](contracts/src/lib/CorrFiEngine.sol) (the three instructions and the hooks).
+
 <!-- Fair value on-chain; bid / ask from the fair value (base spread + risk surcharge); settlement value Long_T = (1 + rho) / 2. Architecture diagram (mermaid): reporter -> hub (fair value); taker -> router (SwapVM program) <-> Aqua <-> maker wallet; hooks -> vault (mint / burn). -->
 
 ## 4.Aqua and SwapVM: why and how
