@@ -50,10 +50,12 @@ async function waitRpc(url: string) {
   throw new Error("anvil did not start");
 }
 
-export async function startChain(opts: { genesis: number; port?: number }): Promise<Chain> {
+/** `blockTime` (seconds): mine on an interval, so the clock runs in real time after `setTime` (local preview). */
+export async function startChain(opts: { genesis: number; port?: number; blockTime?: number }): Promise<Chain> {
   const port = opts.port ?? 18_545 + Math.floor(Math.random() * 1000);
   const rpc = `http://127.0.0.1:${port}`;
-  const anvil: ChildProcess = spawn(bin("anvil"), ["--port", String(port), "--timestamp", String(opts.genesis), "--silent", "--gas-limit", "60000000"], { stdio: "ignore" });
+  const interval = opts.blockTime ? ["--block-time", String(opts.blockTime)] : [];
+  const anvil: ChildProcess = spawn(bin("anvil"), ["--port", String(port), "--timestamp", String(opts.genesis), "--silent", "--gas-limit", "60000000", ...interval], { stdio: "ignore" });
   const stop = () => anvil.kill();
   try {
     await waitRpc(rpc);
