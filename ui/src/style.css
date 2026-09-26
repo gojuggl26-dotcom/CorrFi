@@ -411,3 +411,15 @@ footer { border-top: 1px solid var(--hair-dark); padding: 32px 0 48px; font-size
   .big { font-size: 36px; }
   .unav-links { display: none; }
 }
+
+/* maker page: the books table (one row per Aqua book) */
+.book-wrap { overflow-x: auto; background: var(--paper); border: 1px solid var(--t-frost); border-radius: 20px; padding: 8px 16px; }
+.book-table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.book-table th, .book-table td { padding: 10px 8px; border-bottom: 1px solid var(--t-frost); text-align: right; white-space: nowrap; }
+.book-table tr:last-child td { border-bottom: 0; }
+.book-table th { color: var(--t-slate); font-weight: 500; font-size: 13px; }
+.book-table td:first-child, .book-table th:first-child, .book-table td:nth-child(2), .book-table th:nth-child(2) { text-align: left; }
+.book-table .row-changed td { background: var(--t-tint); color: var(--accent); font-weight: 550; }
+.book-table .row-dim td { color: var(--t-ash); }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
+.maker-how { margin-top: 24px; }

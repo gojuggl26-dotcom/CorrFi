@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maker — CorrFi (testnet)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..600&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="/src/assets/favicon.png" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="trade-page">
+    <div class="orbs" aria-hidden="true"><span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span><span class="orb o4"></span><span class="orb o5"></span></div>
+
+    <header class="unav">
+      <div class="unav-row">
+        <div class="unav-left">
+          <a class="brand" href="./"><img class="logo" src="/src/assets/corrfi-mark-96.png" alt="" width="60" height="24" />CorrFi</a>
+          <nav class="unav-links"><a href="./">Home</a><a href="trade.html">Trade</a><a href="faucet.html">Get tUSDC</a><a href="redeem.html">Redeem</a><a href="maker.html" class="active" aria-current="page">Maker</a></nav>
+        </div>
+        <div class="unav-right">
+          <span id="network" class="chip-net">—</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="redeem-wrap">
+      <div class="redeem-top">
+        <section class="swap-card">
+          <div class="card-head"><span class="tab">Maker</span><span id="makerAddr" class="muted"></span></div>
+          <div class="panel">
+            <div class="leg-label">In the maker's own wallet</div>
+            <div class="leg-row"><span id="wallet" class="big big-static">—</span><span class="token token-static"><span class="coin coin-cash">$</span><span class="cash">tUSDC</span></span></div>
+            <div class="leg-sub">Aqua never takes custody: books hold virtual balances of this wallet.</div>
+          </div>
+          <dl class="facts">
+            <div class="fact"><dt>Approval to Aqua</dt><dd id="approval">—</dd></div>
+            <div class="fact"><dt>Books</dt><dd id="bookCount">—</dd></div>
+            <div class="fact"><dt>Virtual allocations, all books</dt><dd id="allocTotal">—</dd></div>
+            <div class="fact"><dt>Risk budget · capital utilization U</dt><dd id="util">—</dd></div>
+          </dl>
+        </section>
+
+        <section class="swap-card">
+          <div class="card-head"><span class="tab">Latest fill</span><span id="fillWhen" class="muted"></span></div>
+          <div class="panel">
+            <div class="leg-label">Pulled from the maker's wallet by Aqua</div>
+            <div class="leg-row"><span id="pulled" class="big big-static">—</span><span class="token token-static"><span class="coin coin-cash">$</span><span class="cash">tUSDC</span></span></div>
+            <div class="leg-sub"><span id="pulledSub">No fill yet. Trade on the Trade page, then come back.</span></div>
+          </div>
+          <dl class="facts">
+            <div class="fact"><dt>Trade</dt><dd id="fillTrade">—</dd></div>
+            <div class="fact"><dt>Quantity</dt><dd id="fillQty">—</dd></div>
+            <div class="fact"><dt>Taker paid into the book</dt><dd id="fillPushed">—</dd></div>
+            <div class="fact"><dt>Kept in the maker's custody</dt><dd id="fillCustody">—</dd></div>
+            <div class="fact"><dt>Maker wallet, net</dt><dd id="fillWallet">—</dd></div>
+            <div class="fact"><dt>Books that moved</dt><dd id="fillBooks">—</dd></div>
+            <div class="fact"><dt>Transaction</dt><dd id="fillTx" class="mono">—</dd></div>
+          </dl>
+        </section>
+      </div>
+
+      <h2 class="redeem-heading">Books on Aqua</h2>
+      <div class="book-wrap"><table id="books" class="book-table"></table></div>
+
+      <section class="note how maker-how">
+        <h3>How one wallet backs every book</h3>
+        <p>The maker approves Aqua once and ships a Long and a Short book to every market. Each book gets a <b>virtual</b> allocation: nothing leaves the wallet when a book is shipped, so the allocations together can exceed the approval.</p>
+        <p>When a taker trades, Aqua moves only what that fill needs — for a buy, the taker's payment in and the tUSDC to mint the new Long + Short pair out. The other books are not touched. Risk across all markets is capped by one budget (capital utilization U).</p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div id="testToken" class="warn-line"></div>
+        <div>Powered by SwapVM — © Degensoft Ltd 2025 · Aqua — © Degensoft Ltd 2025</div>
+        <div class="muted">CorrFi is a testnet MVP built on 1inch Aqua / SwapVM and is not affiliated with 1inch or Degensoft.</div>
+      </div>
+    </footer>
+    <script type="module" src="/src/maker.ts"></script>
+  </body>
+</html>

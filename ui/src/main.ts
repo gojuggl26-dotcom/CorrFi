@@ -6,7 +6,7 @@
 // Layout: one swap column. Typing in the top field fixes what you pay / sell (exact-in); typing in the bottom field
 // fixes what you receive (exact-out). The flip button switches between buying and selling the chosen token.
 
-import { type Address, createPublicClient, createWalletClient, custom, defineChain, http, type PublicClient, type WalletClient } from "viem";
+import { type Address, createPublicClient, defineChain, http, type PublicClient, type WalletClient } from "viem";
 import { erc20Abi } from "../../engine/src/abi.ts";
 import type { Deployment } from "../../engine/src/chain.ts";
 import { CorrFiApp, type MarketInfo, type Position, type Quoted } from "./core/app.ts";
@@ -14,6 +14,8 @@ import { fmtFixed, fmtPct, fmtSec, fmtUnits, fmtUtc, fmtWad, parseDecimal } from
 import { CAUSE_TEXT, DELTA_DEFAULT, QuoteController, type QuoteInput, sameInput } from "./core/quote.ts";
 import { LONG, SHORT, sideName } from "./core/labels.ts";
 import { openPicker, type PickOption } from "./picker.ts";
+import { connectWallet, walletError, watchToken } from "./core/wallet.ts";
+import { REASONS } from "../../engine/src/taker.ts";
 
 interface UiConfig {
   chainId: number;
@@ -37,6 +39,7 @@ const state = {
   exactIn: true, // true: the top field is fixed; false: the bottom field is fixed
   wc: undefined as WalletClient | undefined,
   account: undefined as Address | undefined,
+  wallet: false, // an injected wallet (MetaMask), not a dev account
   positions: [] as Position[],
   cashBal: undefined as bigint | undefined,
   confirmPending: false,
@@ -51,6 +54,17 @@ let ctl: QuoteController<Quoted>;
 let unwatch: (() => void) | undefined;
 
 const tokenName = sideName; // "ETH/BTC Long" / "ETH/BTC Short" (DEC-31)
+
+/** A failed transaction in words: the router's CorrReject reason when viem decoded it, else the wallet's message. */
+function failure(e: unknown): string {
+  for (let x = e as { data?: { errorName?: string; args?: readonly unknown[] }; cause?: unknown } | undefined; x; x = x.cause as typeof x) {
+    if (x.data?.errorName === "CorrReject") {
+      const code = Number(x.data.args?.[0]);
+      return `not tradable now — ${REASONS[code]?.en ?? `reason ${code}`}. Check the quote and try again.`;
+    }
+  }
+  return walletError(e);
+}
 const payToken = () => (state.isBuy ? state.cash : tokenName(state.side));
 const getToken = () => (state.isBuy ? tokenName(state.side) : state.cash);
 /** Shrink a big amount field so long numbers stay inside it (44px up to 9 characters, then proportionally). */
@@ -330,7 +344,11 @@ function renderPositions() {
     b.onclick = async () => {
       const m = state.markets.find((x) => x.id === Number(b.dataset.redeem))!;
       const p = state.positions.find((x) => x.marketId === m.id)!;
-      await app.redeem(state.wc!, m, p.long, p.short);
+      try {
+        await app.redeem(state.wc!, m, p.long, p.short);
+      } catch (e) {
+        $("result").textContent = `Failed: ${failure(e)}`;
+      }
       await refreshData();
     };
   });
@@ -379,12 +397,31 @@ async function execute() {
     }
     state.confirmPending = false;
     sent = true;
-    const { fill, causes } = await app.execute(state.wc, pre.quote!.input, pre.quote!.b);
+    const q = pre.quote!;
+    const { fill, causes } = await app.execute(state.wc, q.input, q.b);
     const lines = [`Filled: in ${fmtUnits(fill.amountIn)} · out ${fmtUnits(fill.amountOut)} (Q1 ${fmtUnits(fill.q1)} · Q2 ${fmtUnits(fill.q2)})`];
     for (const c of causes) lines.push(`Differs from the quote: ${CAUSE_TEXT[c]}`);
+    lines.push(`<span class="muted">Transaction ${fill.hash} · block ${fill.block}</span>`);
     $("result").innerHTML = lines.join("<br>");
+    // a bought side token can be added to the wallet's asset list (EIP-747), so the wallet shows it arriving
+    const m = state.markets.find((x) => x.id === q.input.marketId);
+    if (state.wallet && q.input.isBuy && m) {
+      const token = q.input.side === 0 ? m.longToken : m.shortToken;
+      const add = document.createElement("button");
+      add.className = "btn-primary";
+      add.textContent = `Add ${tokenName(q.input.side)} (${m.tenorDays}D #${m.id}) to wallet`;
+      add.onclick = async () => {
+        try {
+          const symbol = await pc.readContract({ address: token, abi: erc20Abi, functionName: "symbol" }); // ETHBTC-L / -S (DEC-31)
+          await watchToken(state.wc!, token, symbol, 6);
+        } catch (e) {
+          $("result").append(` ${walletError(e)}`);
+        }
+      };
+      $("result").append(document.createElement("br"), add);
+    }
   } catch (e) {
-    $("result").textContent = `Failed: ${(e as Error).message.split("\n")[0]}`;
+    $("result").textContent = `Failed: ${failure(e)}`;
   } finally {
     state.busy = false;
     renderStatus();
@@ -395,21 +432,19 @@ async function execute() {
   }
 }
 
-async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>) {
-  if (cfg.devAccount) {
-    state.wc = createWalletClient({ chain, transport: http(cfg.rpcUrl), account: cfg.devAccount });
-    state.account = cfg.devAccount;
-  } else {
-    const eth = (window as unknown as { ethereum?: Parameters<typeof custom>[0] }).ethereum;
-    if (!eth) {
-      state.message = "No wallet found";
-      return renderStatus();
-    }
-    const wc = createWalletClient({ chain, transport: custom(eth) });
-    const [addr] = await wc.requestAddresses();
-    state.wc = createWalletClient({ chain, transport: custom(eth), account: addr });
-    state.account = addr;
+async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>, silent = false) {
+  let c;
+  try {
+    c = await connectWallet(chain, cfg.devAccount, silent, pc);
+  } catch (e) {
+    $("result").textContent = walletError(e);
+    return renderStatus();
   }
+  if (!c) return;
+  $("result").textContent = "";
+  state.wc = c.wc;
+  state.account = c.account;
+  state.wallet = c.wallet;
   $("account").textContent = `${state.account.slice(0, 6)}…${state.account.slice(-4)}`;
   $("connect").hidden = true;
   await refreshData();
@@ -490,6 +525,7 @@ async function main() {
   };
   $("execute").onclick = () => void (state.wc ? execute() : connect(cfg, chain));
   $("connect").onclick = () => void connect(cfg, chain);
+  if (!cfg.devAccount) await connect(cfg, chain, true); // a wallet that already allowed this site reconnects by itself
   await refreshData();
   if (state.markets.length) {
     // the market in ?market= if it still trades, else the first one that does

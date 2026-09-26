@@ -8,12 +8,17 @@
 //      time and the reporter posts the local store's data every 5 minutes as chain time passes.
 // The pages are served with the taker as a dev account (unlocked on Anvil); its tUSDC goes into the settled week's
 // positions, so it starts at zero — use Get tUSDC. Ctrl+C stops everything.
-//   node scripts/live.ts [--port 5173] [--calib <dir>] [--store <dir>] [--no-settled]
+// --metamask: for a demo with a browser wallet instead. The chain listens on a fixed port (--rpc-port, 8545) so the
+// wallet's network keeps working, config.json has no dev account, and the wallet's account (--taker <address>, or
+// Anvil's public test account #8, which no role here uses) gets 100 ETH for gas and 10,000 tUSDC.
+//   node scripts/live.ts [--port 5173] [--calib <dir>] [--store <dir>] [--no-settled] [--metamask [--rpc-port 8545] [--taker <address>]]
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { bytesToHex } from "viem";
+import { mnemonicToAccount } from "viem/accounts";
 import { createServer } from "vite";
 import { erc20Abi, testUsdcAbi } from "../../engine/src/abi.ts";
 import { createMarket, marketInputFromCalib } from "../../engine/src/createMarket.ts";
@@ -33,6 +38,8 @@ const arg = (k: string) => {
 };
 const port = Number(arg("port") ?? 5173);
 const settledWeek = !process.argv.includes("--no-settled");
+const metamask = process.argv.includes("--metamask");
+const rpcPort = Number(arg("rpc-port") ?? 8545);
 const store = arg("store") ?? join(ROOT, "data", "store", "1m");
 if (!existsSync(store)) throw new Error(`${store} is missing: the reporter reads the local 1-minute store (data/fetch_klines.py)`);
 
@@ -50,7 +57,7 @@ const calib = (tenor: number, cutoff: string) => {
 };
 
 const log = (s: string) => console.log(`${new Date().toISOString().slice(11, 19)} ${s}`);
-const c = await startChain({ genesis: (settledWeek ? T_OLD : T0) - 3600, blockTime: 2 });
+const c = await startChain({ genesis: (settledWeek ? T_OLD : T0) - 3600, blockTime: 2, port: metamask ? rpcPort : undefined });
 let server: Awaited<ReturnType<typeof createServer>> | undefined;
 const stop = async () => {
   await server?.close();
@@ -129,11 +136,29 @@ try {
   const json = (x: unknown) => JSON.stringify(x, (_, v) => (typeof v === "bigint" ? v.toString() : v), 2);
   writeFileSync(
     join(pub, "config.json"),
-    json({ chainId: c.dep.chainId, chainName: "Anvil (local)", rpcUrl: c.rpc, deployment: c.dep, defaultMaker: c.account("maker").address, devAccount: c.account("taker").address }),
+    json({
+      chainId: c.dep.chainId,
+      chainName: "Anvil (local)",
+      rpcUrl: c.rpc,
+      deployment: c.dep,
+      defaultMaker: c.account("maker").address,
+      devAccount: metamask ? undefined : c.account("taker").address,
+    }),
   );
   server = await createServer({ root: fileURLToPath(new URL("..", import.meta.url)), publicDir: pub, server: { port, strictPort: true }, logLevel: "error" });
   await server.listen();
-  log(`open http://localhost:${port}/  (trade: /trade.html, Get tUSDC: /faucet.html, redeem: /redeem.html) — Ctrl+C stops`);
+  if (metamask) {
+    // the wallet's account: gas and tUSDC (Anvil's test key #8 is public — never send real funds to it)
+    const test8 = mnemonicToAccount("test test test test test test test test test test test junk", { addressIndex: 8 });
+    const who = (arg("taker") as `0x${string}` | undefined) ?? test8.address;
+    await c.rpcCall("anvil_setBalance", [who, "0x56bc75e2d63100000"]); // 100 ETH
+    await mint(who, 10_000n * U);
+    log(`MetaMask: add a network — name "Anvil (local)", RPC URL ${c.rpc}, chain ID ${c.dep.chainId}, currency ETH`);
+    if (arg("taker")) log(`MetaMask: account ${who} funded with 100 ETH and 10,000 tUSDC`);
+    else log(`MetaMask: import Anvil's public test account #8 ${who} (private key ${bytesToHex(test8.getHdKey().privateKey!)}); funded with 100 ETH and 10,000 tUSDC`);
+    log("MetaMask: after every restart of this script use Settings → Advanced → Clear activity tab data (old nonces and blocks)");
+  }
+  log(`open http://localhost:${port}/  (trade: /trade.html, Get tUSDC: /faucet.html, redeem: /redeem.html, maker: /maker.html) — Ctrl+C stops`);
   setInterval(() => void tick(), 5_000);
 } catch (e) {
   await server?.close();

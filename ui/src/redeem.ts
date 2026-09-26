@@ -2,7 +2,8 @@
 // tUSDC). Lists every market with the connected wallet's holdings; settled markets can be redeemed one by one or all at
 // once, and a market past maturity whose final report is in can be settled by anyone (vault.finalize).
 
-import { type Address, createPublicClient, createWalletClient, custom, defineChain, http, type PublicClient, type WalletClient } from "viem";
+import { type Address, createPublicClient, defineChain, http, type PublicClient, type WalletClient } from "viem";
+import { connectWallet, walletError } from "./core/wallet.ts";
 import { erc20Abi, vaultAbi } from "../../engine/src/abi.ts";
 import type { Deployment } from "../../engine/src/chain.ts";
 import { CorrFiApp, type MarketInfo, type Position } from "./core/app.ts";
@@ -193,20 +194,18 @@ async function finalize(id: number) {
   await refresh();
 }
 
-async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>) {
-  if (cfg.devAccount) {
-    state.wc = createWalletClient({ chain, transport: http(cfg.rpcUrl), account: cfg.devAccount });
-    state.account = cfg.devAccount;
-  } else {
-    const eth = (window as unknown as { ethereum?: Parameters<typeof custom>[0] }).ethereum;
-    if (!eth) {
-      state.message = "No wallet found";
-      return render();
-    }
-    const [addr] = await createWalletClient({ chain, transport: custom(eth) }).requestAddresses();
-    state.wc = createWalletClient({ chain, transport: custom(eth), account: addr });
-    state.account = addr;
+async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>, silent = false) {
+  let c;
+  try {
+    c = await connectWallet(chain, cfg.devAccount, silent, pc);
+  } catch (e) {
+    state.message = walletError(e);
+    return render();
   }
+  if (!c) return;
+  state.message = "";
+  state.wc = c.wc;
+  state.account = c.account;
   $("account").textContent = `${state.account.slice(0, 6)}…${state.account.slice(-4)}`;
   $("connect").hidden = true;
   await refresh();
@@ -233,6 +232,7 @@ async function main() {
   document.querySelectorAll(".cash").forEach((e) => (e.textContent = sym));
   $("testToken").textContent = `${sym} (${name}) is a test token. It is not Circle USDC and has no value.`;
   $("connect").onclick = () => void connect(cfg, chain);
+  if (!cfg.devAccount) await connect(cfg, chain, true); // a wallet that already allowed this site reconnects by itself
   $("redeemAll").onclick = () => void (state.wc ? redeem(state.markets.filter((m) => redeemable(m)).map((m) => m.id)) : connect(cfg, chain));
   await refresh();
   setInterval(tick, 1000);

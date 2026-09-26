@@ -16,6 +16,7 @@ import { FixtureSource } from "../../../engine/test/anvil/fixtureSource.ts";
 import { type Chain, ROOT, startChain } from "../../../engine/test/anvil/harness.ts";
 import { CorrFiApp, type Quoted } from "../../src/core/app.ts";
 import { DELTA_DEFAULT, QuoteController, type QuoteInput } from "../../src/core/quote.ts";
+import { MakerView, summarizeFill } from "../../src/core/makerView.ts";
 
 const T0 = 1_789_689_600;
 const U = 10n ** 6n;
@@ -100,6 +101,26 @@ test("execution: the fill is within the limit and any difference is explained", 
   const stale = pre.before!;
   const r = await app.execute(c.wallet("taker"), BUY_LONG, { ...stale, limit: 0n });
   assert.ok(r.causes.includes("new-bar"));
+});
+
+test("maker page: Aqua pulled exactly the mint from the maker's wallet, and only the traded book moved", async () => {
+  const maker = c.account("maker").address;
+  const view = new MakerView(c.pc, c.dep, maker);
+  const f = (await view.latestFill())!;
+  const s = summarizeFill(f, c.dep.usdc);
+  assert.equal(f.dir, 1); // the last buy of the test above
+  assert.ok(f.q2 > 0n);
+  assert.equal(s.pulledUsdc, f.q2, "pulled from the maker's wallet = the tUSDC minted into the new pair");
+  assert.equal(s.pushedUsdc, f.amountIn, "the taker's payment went to the maker's wallet");
+  assert.equal(s.walletChange, f.amountIn - f.q2);
+  assert.equal(s.custodyShort, f.q2, "the new pair's Short stays in the maker's custody");
+  assert.equal(s.custodyLong, -f.q1);
+  assert.deepEqual(s.changed.map((b) => [b.side, b.after - b.before]), [[0, f.amountIn - f.q2]]);
+  assert.equal(s.unchanged.length, 1, "the Short book did not move");
+  const snap = await view.snapshot(await app.markets());
+  assert.equal(snap.books.length, 2);
+  assert.equal(snap.wallet, await c.pc.readContract({ address: c.dep.usdc, abi: erc20Abi, functionName: "balanceOf", args: [maker] }));
+  assert.ok(snap.utilization > 0n);
 });
 
 test("stops: T-2 disables execution and the next report re-enables it; T-4 is not lifted by a report", async () => {

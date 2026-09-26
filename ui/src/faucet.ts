@@ -2,7 +2,8 @@
 // Reads the same ./config.json as the other pages; with devAccount (a local Anvil account) transactions go through the
 // node. Times are chain times (local chains may run on a replayed clock).
 
-import { type Address, createPublicClient, createWalletClient, custom, defineChain, formatEther, http, type PublicClient, type WalletClient } from "viem";
+import { type Address, createPublicClient, defineChain, formatEther, http, type PublicClient, type WalletClient } from "viem";
+import { connectWallet, walletError } from "./core/wallet.ts";
 import { testUsdcAbi } from "../../engine/src/abi.ts";
 import type { Deployment } from "../../engine/src/chain.ts";
 import { fmtFixed, fmtSec, fmtUnits, fmtUtc, parseDecimal } from "./core/format.ts";
@@ -159,20 +160,18 @@ async function claim() {
   await refresh();
 }
 
-async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>) {
-  if (cfg.devAccount) {
-    state.wc = createWalletClient({ chain, transport: http(cfg.rpcUrl), account: cfg.devAccount });
-    state.account = cfg.devAccount;
-  } else {
-    const eth = (window as unknown as { ethereum?: Parameters<typeof custom>[0] }).ethereum;
-    if (!eth) {
-      state.message = "No wallet found";
-      return render();
-    }
-    const [addr] = await createWalletClient({ chain, transport: custom(eth) }).requestAddresses();
-    state.wc = createWalletClient({ chain, transport: custom(eth), account: addr });
-    state.account = addr;
+async function connect(cfg: UiConfig, chain: ReturnType<typeof defineChain>, silent = false) {
+  let c;
+  try {
+    c = await connectWallet(chain, cfg.devAccount, silent, pc);
+  } catch (e) {
+    state.message = walletError(e);
+    return render();
   }
+  if (!c) return;
+  state.message = "";
+  state.wc = c.wc;
+  state.account = c.account;
   $("account").textContent = `${state.account.slice(0, 6)}…${state.account.slice(-4)}`;
   $("connect").hidden = true;
   await refresh();
@@ -209,6 +208,7 @@ async function main() {
     render();
   };
   $("connect").onclick = () => void connect(cfg, chain);
+  if (!cfg.devAccount) await connect(cfg, chain, true); // a wallet that already allowed this site reconnects by itself
   $("claim").onclick = () => void (state.wc ? claim() : connect(cfg, chain));
   await refresh();
   setInterval(render, 1000);
