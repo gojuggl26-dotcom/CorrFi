@@ -91,11 +91,13 @@ export function render(s: ReplayState) {
 
 function drawChart(cv: HTMLCanvasElement, s: ReplayState) {
   const dpr = window.devicePixelRatio || 1;
-  const W = cv.clientWidth;
-  const H = cv.clientHeight;
-  if (cv.width !== W * dpr) {
-    cv.width = W * dpr;
-    cv.height = H * dpr;
+  const box = cv.parentElement!;
+  const W = box.clientWidth;
+  const H = box.clientHeight;
+  if (W === 0 || H === 0) return;
+  if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) {
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
   }
   const g = cv.getContext("2d")!;
   g.setTransform(dpr, 0, 0, dpr, 0, 0);

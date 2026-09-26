@@ -25,7 +25,7 @@
       </section>
       <section class="panel chart">
         <h2>公正価格（Long）<small class="note">Fair value: hourly in replay — 決済値はこの簡略化の影響を受けない</small></h2>
-        <canvas id="chart"></canvas>
+        <div class="plot"><canvas id="chart"></canvas></div>
         <div class="legend">
           <span class="k fair">P_fair</span><span class="k band">bid / ask 帯</span><span class="k forecast">τ = 0 の予測 (1+ρ̂₀)/2</span>
           <span class="k realized">観測済みの実現 (1+ρ_obs)/2</span><span class="k buy">買い</span><span class="k sell">売り</span><span class="k settle">Long_T</span>

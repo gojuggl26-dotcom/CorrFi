@@ -45,7 +45,9 @@ main {
 .weight { grid-area: weight; } .inventory { grid-area: inventory; } .log { grid-area: log; } .verify { grid-area: verify; }
 dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: 14px; }
 dt { color: var(--muted); } dd { margin: 0; font-variant-numeric: tabular-nums; }
-#chart { flex: 1; width: 100%; min-height: 0; }
+/* the canvas is sized by its container: its own height attribute must not feed back into the layout */
+.plot { flex: 1; position: relative; min-height: 0; }
+#chart { position: absolute; inset: 0; width: 100%; height: 100%; }
 .chart { min-height: 0; }
 .log { max-height: 270px; overflow: auto; }
 .legend { font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px; }
@@ -73,6 +75,6 @@ footer .stage { color: var(--forecast); font-size: 12px; margin-bottom: 2px; }
 body[data-status="failed"] #status { color: var(--ng); font-weight: 700; }
 @media (max-width: 1100px) {
   body { height: auto; overflow: auto; }
-  #chart { min-height: 320px; }
+  .plot { min-height: 320px; }
   main { grid-template-columns: 1fr; grid-template-areas: "clock" "chart" "verify" "inventory" "weight" "log"; }
 }
