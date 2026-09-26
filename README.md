@@ -129,8 +129,6 @@ $$
 
 $\hat\Sigma$ is fixed at creation from data before the start only: $\hat\Sigma = w\,\hat\Sigma_{\text{long}} + (1 - w)\,\hat\Sigma_{\text{recent}}$ (90-day and recent 5-minute covariances; $w = 0.3 / 0.5 / 0.6$ for 7D / 14D / 28D). At the start $P_{\text{fair}}$ is a classic correlation forecast; as bars accumulate it converges to the realized value.
 
-**Trustless update.** With each report the reporter signs $(k, P_{\text{fair}}, h_0)$; the hub recomputes both from its own sums and **rejects the report unless they match exactly**. The reporter can feed prices but cannot change the math. The price engine (TypeScript), the contracts (Solidity) and the verifier (Python) share one fixed-point specification and agree to the bit.
-
 ### 3.5 Spread: base spread and risk surcharges
 
 The half-spread has a floor $h_{\min}$ and a utilization surcharge on top:
